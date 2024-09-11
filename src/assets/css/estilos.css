@@ -34,3 +34,22 @@
 .hidden {
     display: none;
 }
+
+.Ayllu-Logo {
+    width: 115px;
+    height: 20px;
+    margin-left: 3px;
+}
+
+.nav-link {
+    background-color: #FFFFFF;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    box-shadow: inset;
+    background-color: rgb(238, 238, 238);
+    border-color: none;
+    border-radius: 4%;
+}

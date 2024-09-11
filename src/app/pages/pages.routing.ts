@@ -7,10 +7,13 @@ import { NotFoundComponentComponent } from "../handle-errors/not-found-component
 
 const routes: Routes = [
     {
+        path: 'login', component: LoginComponent
+    },
+    {
         path: '', component: PagesComponent,
         children: [
-            {path:'dashboar', component:DashboardComponent},
-            {path:'', redirectTo:'/dashboar', pathMatch:'full'}
+            {path:'dashboard', component:DashboardComponent},
+            {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },
     {

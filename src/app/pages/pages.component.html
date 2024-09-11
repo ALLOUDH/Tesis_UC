@@ -1,11 +1,16 @@
 <!-- BEGIN #app -->
 <div id="app" class="app">
-    <app-header></app-header>
-    <app-sidebar></app-sidebar>
+    <aside id="left-panel" class="left-panel">
+        <app-sidebar></app-sidebar>
+    </aside>
     <!-- BEGIN #content -->
     <div id="content">
-        <router-outlet />
-        <app-footer></app-footer>
+        <div id="right-panel" class="right-panel">
+            <app-header></app-header>
+            <router-outlet />
+            <div class="clearfix"></div>
+            <app-footer></app-footer>
+        </div>
     </div>
     <!-- END #content -->
 </div>

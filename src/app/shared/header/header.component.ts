@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  constructor(
+    private router: Router,
+    private bsModalRecoverPass: BsModalRef,
+    private modalService: BsModalService,
+  ) {
 
+  }
+  CerrarSesion() {
+    this.router.navigate(['/login']);
+  }
 }
