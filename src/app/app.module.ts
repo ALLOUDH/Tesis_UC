@@ -7,6 +7,8 @@ import { PagesModule } from './pages/pages.module';
 import { RouterModule } from '@angular/router';
 import { ComponentsModule } from './components/components.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { AuthModule } from './auth/auth.module';
+import { HandleErrorsModule } from './handle-errors/handle-errors.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     PagesModule,
     RouterModule,
     ComponentsModule,
+    AuthModule,
+    HandleErrorsModule,
     ModalModule.forRoot(),
   ],
   providers: [],

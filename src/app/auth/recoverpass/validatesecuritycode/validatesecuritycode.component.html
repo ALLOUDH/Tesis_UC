@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <h4 class="modal-title fw-bold">Introduce tu código de seguridad</h4>
+</div>
+<div class="modal-body">
+    <section id="seccion-buscador">
+        <form>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label fw-semibold">Ingrese su código de seguridad, este debe contener 6 caracteres</label>
+              <div class="row">
+                <div class="col-lg-6">
+                    <br>
+                    <div class="mb-3 input-group-lg">
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Indroducir Código">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <br>
+                    <div class="mb-0">
+                        <label for="exampleTextarea" class="form-label fw-semibold">Se envio el código al número telefonico +519****45</label>
+
+                    </div>
+                </div>
+              </div>
+            </div>
+        </form>
+    </section>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary button-color-primary" (click)="AbrirModalRecoverPass()">
+        <i class="fa fa-lg fa-fw fa-save"></i> Continuar
+    </button>
+    <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
+        <i class="fa fa-lg fa-fw fa-times"></i> Cancelar
+    </button>
+</div>
