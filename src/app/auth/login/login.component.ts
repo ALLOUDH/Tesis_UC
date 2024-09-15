@@ -19,7 +19,9 @@ export class LoginComponent {
   }
 
   Login() {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/dashboard']).then(() => {
+      window.location.reload();
+    });
   }
 
   AbrirModalRecoverPass() {
