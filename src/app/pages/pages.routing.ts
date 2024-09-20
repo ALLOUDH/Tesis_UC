@@ -7,13 +7,18 @@ import { NotFoundComponentComponent } from "../handle-errors/not-found-component
 import { RegistroAlumnoComponent } from "../components/registro-alumno/registroalumno.component";
 import { RegistrodocenteComponent } from "../components/registrodocente/registrodocente.component";
 import { RegistropadreComponent } from "../components/registropadre/registropadre.component";
+import { AuthGuard } from "../guards/auth.guard";
 
 const routes: Routes = [
+    {
+        path: '', redirectTo:'login', pathMatch:'full'
+    },
     {
         path: 'login', component: LoginComponent
     },
     {
         path: '', component: PagesComponent,
+        canActivate: [AuthGuard],
         children: [
             {path:'dashboard', component:DashboardComponent},
             { path: 'registroalumno', component: RegistroAlumnoComponent },

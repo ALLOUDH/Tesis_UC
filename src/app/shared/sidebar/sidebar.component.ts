@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import { AccesoService } from '../../services/acceso.service';
 import { Router } from '@angular/router';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,25 +9,40 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 export class SidebarComponent {
 
+  userRole: string | null = null;
 
   constructor(
-    private router: Router,
-    private bsModalRecoverPass: BsModalRef,
-    private modalService: BsModalService,
-  ) {
-
+    private accesoService: AccesoService,
+    private router: Router
+  )  
+  {
+    this.userRole = this.accesoService.getUserRole();
   }
 
+  ngOnInit(): void {}
 
-RegistrarAlumno() {
-  this.router.navigate(['/registroalumno']);
-}
-
-RegistrarDocente() {
-  this.router.navigate(['/registrodocente']);
+  isAdmin(): boolean {
+    return this.userRole === 'Admin';
   }
 
-RegistrarPadre() {
-  this.router.navigate(['/registropadre']);
+  isDocente(): boolean {
+    return this.userRole === 'Docente';
   }
+
+  isAlumnoOrPadre(): boolean {
+    const role = this.userRole;
+    return role === 'Estudiante' || role === 'Padre';
+  }
+
+  RegistrarAlumno() {
+    this.router.navigate(['/registroalumno']);
+  }
+  
+  RegistrarDocente() {
+    this.router.navigate(['/registrodocente']);
+    }
+  
+  RegistrarPadre() {
+    this.router.navigate(['/registropadre']);
+    }
 }

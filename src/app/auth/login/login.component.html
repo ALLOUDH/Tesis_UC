@@ -11,18 +11,30 @@
                   <img class="logo_icon" src="./assets/images/SanCarlos_Icon_Logo.png" alt="logo">
                 </div>
 
-                <form>
+                <form autocomplete="off" novalidate="novalidate" [formGroup]="dataFormGroup">
                   <div class="text-font-size-welcome">
                     <p>Bienvenido de vuelta</p>
                   </div>
                   <div data-mdb-input-init class="form-outline mb-4">
                     <label class="form-label" for="form2Example11">Usuario</label>
-                    <input type="email" id="form2Example11" class="form-control" placeholder="Introduce tu DNI" />
+                    <input type="text" class="form-control text-input-opacity" id="exampleFormControlInput1"
+                      formControlName="inputUsuario" placeholder="Ingrese su usuario.">
+                    <div
+                      *ngIf="Controls['inputUsuario'].invalid && (Controls['inputUsuario'].dirty || Controls['inputUsuario'].touched) "
+                      class="text-error">
+                      <div>Campo obligatorio.</div>
+                    </div>
                   </div>
 
                   <div data-mdb-input-init class="form-outline mb-4">
                     <label class="form-label" for="form2Example22">Contraseña</label>
-                    <input type="password" class="form-control custom-input" placeholder="Introduce tu contraseña">
+                    <input type="text" class="form-control text-input-opacity" id="exampleFormControlInput1"
+                      formControlName="inputPassword" placeholder="Ingrese su contraseña.">
+                    <div
+                      *ngIf="Controls['inputPassword'].invalid && (Controls['inputPassword'].dirty || Controls['inputPassword'].touched) "
+                      class="text-error">
+                      <div>Campo obligatorio.</div>
+                    </div>
                   </div>
 
                   <div class="text-center pt-1 mb-5 pb-1">
@@ -30,7 +42,7 @@
                       class="btn btn-primary btn-size gradient-custom-2 mb-3" type="button"
                       (click)="Login()">Ingresar</button>
                     <br>
-                    <a class="text-muted" (click)="AbrirModalRecoverPass()">Olvidaste tu contraseña?</a>
+                    <a class="text-muted text-decoration-underline link-pointer"  (click)="AbrirModalRecoverPass()">Olvidaste tu contraseña?</a>
                   </div>
                 </form>
               </div>

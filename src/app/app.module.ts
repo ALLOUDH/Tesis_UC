@@ -9,6 +9,7 @@ import { ComponentsModule } from './components/components.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AuthModule } from './auth/auth.module';
 import { HandleErrorsModule } from './handle-errors/handle-errors.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { HandleErrorsModule } from './handle-errors/handle-errors.module';
     ComponentsModule,
     AuthModule,
     HandleErrorsModule,
+    HttpClientModule,
     ModalModule.forRoot(),
   ],
   providers: [],
