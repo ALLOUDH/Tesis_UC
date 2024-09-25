@@ -36,62 +36,74 @@
                                     <!-- input del DNI -->
                                     <div class="form-group mb-4">
                                         <strong for="exampleFormControlInput1" class="form-label label">DNI: </strong>
-                                        <input type="text" class="form-control" id="DNI"
-                                            formControlName="inputDNI" placeholder="Ingrese nro. de DNI"
+                                        <input type="text" class="form-control" id="DNI" formControlName="inputDNI"
+                                            placeholder="Ingrese nro. de DNI"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="8">
                                         <div *ngIf="Controls['inputDNI'].invalid && (Controls['inputDNI'].dirty || Controls['inputDNI'].touched)"
-                                            style="color: red; font-size: 0.8em; margin-top: 5px;">
+                                            class="text-error">
                                             <div *ngIf="Controls['inputDNI']?.errors?.['required']">
                                                 <div>Campo obligatorio.</div>
                                             </div>
                                             <div *ngIf="Controls['inputDNI']?.errors?.['minlength']">
-                                                <div>El número de documento debe contar con un mínimo de 8 caracteres.</div>
+                                                <div>El número de documento debe contar con un mínimo de 8 caracteres.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- input del apellido paterno -->
                                     <div class="form-group mb-4">
-                                        <strong for="exampleFormControlInput1" class="form-control-label">Apellido Paterno:</strong>
-                                        <input type="text" id="apellido-paterno" placeholder="Ingrese apellido paterno" class="form-control" formControlName="inputApellidoPaterno">
-                                        <div *ngIf="Controls['inputApellidoPaterno'].invalid && (Controls['inputApellidoPaterno'].dirty || Controls['inputApellidoPaterno'].touched)"style="color: red; font-size: 0.8em; margin-top: 5px;">
+                                        <strong for="exampleFormControlInput1" class="form-control-label">Apellido
+                                            Paterno:</strong>
+                                        <input type="text" id="apellido-paterno" placeholder="Ingrese apellido paterno"
+                                            class="form-control" formControlName="inputApellidoPaterno">
+                                        <div *ngIf="Controls['inputApellidoPaterno'].invalid && (Controls['inputApellidoPaterno'].dirty || Controls['inputApellidoPaterno'].touched)"
+                                            class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
                                     </div>
                                     <!-- input de contraseña -->
                                     <div class="form-group mb-4">
-                                        <strong for="exampleFormControlInput1" class="form-control-label">Contraseña:</strong>
-                                        <input type="password" id="contrasena" placeholder="Ingrese contraseña" class="form-control" formControlName="inputPassword">
+                                        <strong for="exampleFormControlInput1"
+                                            class="form-control-label">Contraseña:</strong>
+                                        <input type="password" id="contrasena" placeholder="Ingrese contraseña"
+                                            class="form-control" formControlName="inputPassword">
                                         <div *ngIf="Controls['inputPassword'].invalid && (Controls['inputPassword'].dirty || Controls['inputPassword'].touched)"
-                                            style="color: red; font-size: 0.8em; margin-top: 5px;">
-                                            <div *ngIf="Controls['inputPassword']?.errors?.['required']" >
-                                            Campo obligatorio.
+                                            class="text-error">
+                                            <div *ngIf="Controls['inputPassword']?.errors?.['required']">
+                                                Campo obligatorio.
                                             </div>
-                                            <div *ngIf="Controls['inputPassword']?.errors?.['minlength']" >
-                                            La contraseña debe tener al menos 6 caracteres.
+                                            <div *ngIf="Controls['inputPassword']?.errors?.['minlength']">
+                                                La contraseña debe tener al menos 6 caracteres.
                                             </div>
-                                            <div *ngIf="Controls['inputPassword']?.errors?.['pattern']" >
-                                            La contraseña debe contener al menos una letra y un número.
+                                            <div *ngIf="Controls['inputPassword']?.errors?.['pattern']">
+                                                La contraseña debe contener al menos una letra y un número.
                                             </div>
                                         </div>
                                     </div>
                                     <!-- input de email -->
                                     <div class="form-group mb-4">
                                         <strong for="email" class="form-control-label">Email</strong>
-                                        <input type="email" id="email" placeholder="Ingrese email" class="form-control" formControlName="inputEmail">
+                                        <input type="email" id="email" placeholder="Ingrese email" class="form-control"
+                                            formControlName="inputEmail">
                                         <div *ngIf="Controls['inputEmail'].invalid && (Controls['inputEmail'].dirty || Controls['inputEmail'].touched)"
-                                        style="color: red; font-size: 0.8em; margin-top: 5px;">
-                                        <div *ngIf="Controls['inputEmail']?.errors?.['required']">Campo obligatorio.</div>
-                                        <div *ngIf="Controls['inputEmail']?.errors?.['email']">Debe ingresar un email válido.</div>
+                                            class="text-error">
+                                            <div *ngIf="Controls['inputEmail']?.errors?.['required']">Campo obligatorio.
+                                            </div>
+                                            <div *ngIf="Controls['inputEmail']?.errors?.['email']">Debe ingresar un
+                                                email válido.</div>
                                         </div>
                                     </div>
                                     <!-- input de sexo -->
                                     <div class="form-group mb-4">
                                         <strong for="sexo" class="form-control-label">Sexo</strong>
-                                        <select name="select" id="select" class="form-control">
-                                            <option value="0">Seleccione una opción</option>
-                                            <option value="1">Femenino</option>
-                                            <option value="2">Masculino</option>
-                                        </select>
+                                        <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre"
+                                            valueExpr="id" [dataSource]="otherSexo"
+                                            [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+                                            [showClearButton]="true" formControlName="selectSexo"></dx-select-box>
+                                        <div *ngIf="Controls['selectSexo'].invalid && (Controls['selectSexo'].dirty || Controls['selectSexo'].touched) "
+                                            class="text-error">
+                                            <div>Campo obligatorio.</div>
+                                        </div>
                                     </div>
                                     <div class="form-group mb-4">
                                         <strong for="confirmar-contraseña" class="form-control-label">Celular</strong>
@@ -100,7 +112,7 @@
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                             formControlName="inputCelular">
                                         <div *ngIf="Controls['inputCelular'].invalid && (Controls['inputCelular'].dirty || Controls['inputCelular'].touched) "
-                                        style="color: red; font-size: 0.8em; margin-top: 5px;">
+                                            class="text-error">
                                             <div *ngIf="Controls['inputCelular']?.errors?.['required']">
                                                 <div>Campo obligatorio.</div>
                                             </div>
@@ -110,9 +122,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group mb-4">
-                                        <strong for="sexo" class="form-control-label">Institución de procedencia</strong>
-                                        <input type="text" id="procedencia" placeholder="ingrese Institución de procedencia" class="form-control" formControlName="instprocedencia">
-                                        <div *ngIf="Controls['instprocedencia'].invalid && (Controls['instprocedencia'].dirty || Controls['instprocedencia'].touched)"style="color: red; font-size: 0.8em; margin-top: 5px;">
+                                        <strong for="sexo" class="form-control-label">Institución de
+                                            procedencia</strong>
+                                        <input type="text" id="procedencia"
+                                            placeholder="ingrese Institución de procedencia" class="form-control"
+                                            formControlName="inputInstitucionProcedencia">
+                                        <div *ngIf="Controls['inputInstitucionProcedencia'].invalid && (Controls['inputInstitucionProcedencia'].dirty || Controls['inputInstitucionProcedencia'].touched)"
+                                            class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
                                     </div>
@@ -122,59 +138,78 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="nombres" class="form-control-label">Nombres:</strong>
-                                        <input type="text" id="email" placeholder="Ingrese nombres" class="form-control" formControlName="nombrealumno" >
-                                        <div *ngIf="Controls['nombrealumno'].invalid && (Controls['nombrealumno'].dirty || Controls['nombrealumno'].touched)"style="color: red; font-size: 0.8em; margin-top: 5px;">
+                                        <input type="text" id="nombres" placeholder="Ingrese nombres" class="form-control"
+                                            formControlName="inputNombreAlumno">
+                                        <div *ngIf="Controls['inputNombreAlumno'].invalid && (Controls['inputNombreAlumno'].dirty || Controls['inputNombreAlumno'].touched)"
+                                            class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
                                     </div>
                                     <div class="form-group mb-4">
-                                        <strong for="apellido materno" class="form-control-label">Apellido Materno:</strong>
-                                        <input type="apellido-materno" id="apellido materno" placeholder="Ingrese apellido materno" class="form-control" formControlName="apellidomaterno">
-                                        <div *ngIf="Controls['apellidomaterno'].invalid && (Controls['apellidomaterno'].dirty || Controls['apellidomaterno'].touched)"style="color: red; font-size: 0.8em; margin-top: 5px;">
+                                        <strong for="apellido materno" class="form-control-label">Apellido
+                                            Materno:</strong>
+                                        <input type="apellido-materno" id="apellido materno"
+                                            placeholder="Ingrese apellido materno" class="form-control"
+                                            formControlName="inputApellidoMaterno">
+                                        <div *ngIf="Controls['inputApellidoMaterno'].invalid && (Controls['inputApellidoMaterno'].dirty || Controls['inputApellidoMaterno'].touched)"
+                                            class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
                                     </div>
                                     <div class="form-group mb-4">
-                                        <strong for="confirmar-contrasena" class="form-control-label">Confirmar contraseña:</strong>
-                                        <input type="password" id="confirmar-contrasena" placeholder="Confirme contraseña" class="form-control" formControlName="inputConfirmPassword" >
-                                        <div *ngIf="Controls['inputConfirmPassword'].invalid && (Controls['inputConfirmPassword'].dirty || Controls['inputConfirmPassword'].touched)" style="color: red; font-size: 0.8em;">
+                                        <strong for="confirmar-contrasena" class="form-control-label">Confirmar
+                                            contraseña:</strong>
+                                        <input type="password" id="confirmar-contrasena"
+                                            placeholder="Confirme contraseña" class="form-control"
+                                            formControlName="inputConfirmPassword">
+                                        <div *ngIf="Controls['inputConfirmPassword'].invalid && (Controls['inputConfirmPassword'].dirty || Controls['inputConfirmPassword'].touched)"
+                                            class="text-error">
                                             <div>Campo obligatorio.</div>
-                                          </div>
-                                        <div *ngIf="passwordMismatch" style="color: red; font-size: 0.8em; margin-top: 5px;">
+                                        </div>
+                                        <div *ngIf="passwordMismatch" class="text-error">
                                             Las contraseñas no coinciden
                                         </div>
                                     </div>
                                     <div class="form-group mb-4">
-                                        <strong for="activo" class="form-control-label">Activo</strong>
-                                        <select id="activo" class="form-control">
-                                            <option value="1">Seleccione una opción</option>
-                                            <option value="1">Si</option>
-                                            <option value="2">No</option>
-                                        </select>
+                                        <strong for="activo" class="form-control-label">Estado del alumno:</strong>
+                                        <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre"
+                                            valueExpr="id" [dataSource]="otherEstadoUsuario"
+                                            [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+                                            [showClearButton]="true"
+                                            formControlName="selectEstadoUsuario"></dx-select-box>
+                                        <div *ngIf="Controls['selectEstadoUsuario'].invalid && (Controls['selectEstadoUsuario'].dirty || Controls['selectEstadoUsuario'].touched) "
+                                            class="text-error">
+                                            <div>Campo obligatorio.</div>
+                                        </div>
                                     </div>
                                     <div class="form-group mb-4">
                                         <strong for="codigo-alumno" class="form-control-label">Código de Alumno</strong>
-                                        <input type="text" id="codigo-alumno" placeholder="Ingrese código de alumno" class="form-control" formControlName="inputcodigoalumno">
-                                        <div *ngIf="Controls['inputcodigoalumno'].invalid && (Controls['inputcodigoalumno'].dirty || Controls['inputcodigoalumno'].touched)"style="color: red; font-size: 0.8em; margin-top: 5px;">
+                                        <input type="text" id="codigo-alumno" placeholder="Ingrese código de alumno"
+                                            class="form-control" formControlName="inputCodigoAlumno">
+                                        <div *ngIf="Controls['inputCodigoAlumno'].invalid && (Controls['inputCodigoAlumno'].dirty || Controls['inputCodigoAlumno'].touched)"
+                                            class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
                                     </div>
                                     <div class="form-group mb-4">
                                         <strong for="grado" class="form-control-label">Grado</strong>
-                                        <select id="grado" class="form-control">
-                                            <option value="1">Seleccione una opción</option>
-                                            <option value="1">1ro</option>
-                                            <option value="2">2do</option>
-                                            <option value="3">3ro</option>
-                                            <option value="4">4to</option>
-                                            <option value="5">5to</option>
-                                        </select>
+                                        <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre"
+                                            valueExpr="id" [dataSource]="otherGradoAcademico"
+                                            [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+                                            [showClearButton]="true"
+                                            formControlName="selectGradoAcademico"></dx-select-box>
+                                        <div *ngIf="Controls['selectGradoAcademico'].invalid && (Controls['selectGradoAcademico'].dirty || Controls['selectGradoAcademico'].touched) "
+                                            class="text-error">
+                                            <div>Campo obligatorio.</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group d-flex justify-content-end">
-                                <button type="button" class="btn btn-primary mx-2" (click)="limpiarFormulario()"><i class="fa fa-eraser"></i>&nbsp; Limpiar</button>
-                                <button type="button" class="btn btn-success"><i class="fa fa-check"></i>&nbsp; Registrar</button>
+                                <button type="button" class="btn btn-primary mx-2" (click)="limpiarFormulario()"><i
+                                        class="fa fa-eraser"></i>&nbsp; Limpiar</button>
+                                <button type="button" class="btn btn-success" (click)="RegistrarAlumno()"><i class="fa fa-check"></i>&nbsp;
+                                    Registrar</button>
                             </div>
                         </form>
                     </div>
