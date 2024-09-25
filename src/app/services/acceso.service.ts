@@ -36,5 +36,17 @@ export class AccesoService {
     }
     return null;
   }
+
+  registrarAlumno(objeto: any): Observable<ResponseAppDTO> {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroAlumnos`, objeto);
+  }
+
+  registrarDocente(objeto: any): Observable<ResponseAppDTO> {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroDocentes`, objeto);
+  }
+
+  registrarPadre(objeto: any): Observable<ResponseAppDTO> {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroPadres`, objeto);
+  }
   
 }

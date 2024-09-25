@@ -7,6 +7,7 @@ import { RegistrodocenteComponent } from './registrodocente/registrodocente.comp
 import { RegistropadreComponent } from './registropadre/registropadre.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DxAutocompleteModule, DxDateBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 
 
 @NgModule({
@@ -20,7 +21,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule, 
+    FormsModule,
+    DxSelectBoxModule,
+    DxDateBoxModule,
+    DxAutocompleteModule,
     ReactiveFormsModule 
   ]
 })

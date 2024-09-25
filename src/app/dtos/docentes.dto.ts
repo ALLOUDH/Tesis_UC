@@ -1,6 +1,6 @@
-export class PadresAlumnosDTO {
+export class UsuarioDTO{
     UsDni!: string;
-    UsContrasena!: string;
+    UsContrasena! : string;
     UsRol!: string;
     UsEmail?: string;
     UsNombre!: string;
@@ -8,6 +8,6 @@ export class PadresAlumnosDTO {
     UsApellidoMaterno!: string;
     UsSexo!: boolean;
     UsCelular?: string;
-    PaOcupacion!: string;
-    PaPension!: string;
+    DoEspecialidad!: string;
+    DoGradoAcademico!: string;
 }
