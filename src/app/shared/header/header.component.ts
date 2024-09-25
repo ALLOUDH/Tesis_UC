@@ -16,6 +16,7 @@ export class HeaderComponent {
 
   }
   CerrarSesion() {
+    localStorage.removeItem('usertoken');
     this.router.navigate(['/login']);
   }
 }

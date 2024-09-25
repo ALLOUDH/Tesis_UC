@@ -1,100 +1,112 @@
-    <!-- Left Panel -->
-        <nav class="navbar navbar-expand-sm navbar-default">
-            
-            <div id="main-menu" class="main-menu collapse navbar-collapse"><!-- Sidebar Administrador -->
-                <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard</a>
-                    </li>
-                    <li class="menu-title">Usuarios</li><!-- /.menu-title -->
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Registrar Usuario</a>
-                        <ul class="sub-menu children dropdown-menu">                            
-                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Alumno</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Docente</a></li>
-                            <li><i class="fa fa-bars"></i><a href="ui-tabs.html">Padre Responsable</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-users"></i>Usuarios</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-user"></i><a href="tables-basic.html">Alumno</a></li>
-                            <li><i class="fa fa-user"></i><a href="tables-data.html">Docente</a></li>
-                            <li><i class="fa fa-user"></i><a href="tables-data.html">Padre Responsable</a></li>
-                        </ul>
-                    </li>
+<!-- Left Panel -->
+<nav class="navbar navbar-expand-sm navbar-default">
 
-                    <li class="menu-title">Notas</li><!-- /.menu-title -->
-                    <li>
-                        <a href="#"> <i class="menu-icon ti-email"></i>Notas alumno</a>
-                    </li>
-                    <li>
-                        <a href="#"> <i class="menu-icon fa fa-tasks"></i>Notas Comportamiento</a>
-                    </li>
-                    <li>
-                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Notas Padre</a>
-                    </li>
+    <ng-container *ngIf="isAdmin()">
+        <div id="main-menu" class="main-menu collapse navbar-collapse"><!-- Sidebar Administrador -->
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard</a>
+                </li>
+                <li class="menu-title">Usuarios</li><!-- /.menu-title -->
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Registrar Usuario</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li class="link-pointer"><i class="fa fa-puzzle-piece"></i><a (click)="RegistrarAlumno()">Alumno</a></li>
+                        <li class="link-pointer"><i class="fa fa-id-badge"></i><a (click)="RegistrarDocente()">Docente</a></li>
+                        <li class="link-pointer"><i class="fa fa-bars"></i><a (click)="RegistrarPadre()">Padre Responsable</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"> <i class="menu-icon fa fa-users"></i>Usuarios</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-user"></i><a href="tables-basic.html">Alumno</a></li>
+                        <li><i class="fa fa-user"></i><a href="tables-data.html">Docente</a></li>
+                        <li><i class="fa fa-user"></i><a href="tables-data.html">Padre Responsable</a></li>
+                    </ul>
+                </li>
 
-                    <li class="menu-title">Asistencia</li><!-- /.menu-title -->
-                    <li>
-                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Asistencia Alumnos</a>
-                    </li>
+                <li class="menu-title">Notas</li><!-- /.menu-title -->
+                <li>
+                    <a href="#"> <i class="menu-icon ti-email"></i>Notas alumno</a>
+                </li>
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-tasks"></i>Notas Comportamiento</a>
+                </li>
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Notas Padre</a>
+                </li>
 
-                    <li class="menu-title">Cursos</li><!-- /.menu-title -->
-                    <li>
-                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Administrar Cursos</a>
-                    </li>
-                    
-                </ul>
-            </div><!-- Sidebar Administrador --> 
+                <li class="menu-title">Asistencia</li><!-- /.menu-title -->
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Asistencia Alumnos</a>
+                </li>
 
-            <div id="main-menu" class="main-menu collapse navbar-collapse"><!-- Sidebar Docente-->
+                <li class="menu-title">Cursos</li><!-- /.menu-title -->
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Agregar Curso</a>
+                </li>
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Editar Cursos</a>
+                </li>
 
-                <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard</a>
-                    </li>
-                    <li class="menu-title">Notas</li><!-- /.menu-title -->
+            </ul>
+        </div><!-- Sidebar Administrador -->
+    </ng-container>
+
+    <ng-container *ngIf="isDocente()">
+        <div id="main-menu" class="main-menu collapse navbar-collapse"><!-- Sidebar Docente-->
+
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard</a>
+                </li>
+                <li class="menu-title">Notas</li><!-- /.menu-title -->
 
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Administar Notas</a>
                         <ul class="sub-menu children dropdown-menu">                            
                             <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Notas Cursos</a></li>
                             <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Notas Conducta</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Notas Padre</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Asistencia</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Ver Notas</a>
                         <ul class="sub-menu children dropdown-menu">                            
-                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Asistencia</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Editar Asistencia</a></li>
+                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Notas Cursos</a></li>
+                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Notas Conducta</a></li>
                         </ul>
                     </li>
                     
                 </ul>
 
-            </div><!-- Sidebar Docente -->
+        </div><!-- Sidebar Docente -->
+    </ng-container>
 
-            <div id="main-menu" class="main-menu collapse navbar-collapse"><!-- Sidebar Alumno-Padre-->
-                <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard</a>
-                    </li>
-                    
-                    <li class="menu-title">Notas</li><!-- /.menu-title -->
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Notas Alumno</a>
-                        <ul class="sub-menu children dropdown-menu">                            
-                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Cursos</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Conducta</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"> <i class="menu-icon fa fa-tasks"></i>Notas del padre</a>
-                    </li>
- 
-                </ul>
-            </div><!-- Sidebar Alumno-Padre -->
-        </nav>
-    <!-- /#left-panel -->
+    <ng-container *ngIf="isAlumnoOrPadre()">
+        <div id="main-menu" class="main-menu collapse navbar-collapse"><!-- Sidebar Alumno-Padre-->
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard</a>
+                </li>
+
+                <li class="menu-title">Notas</li><!-- /.menu-title -->
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="menu-icon fa fa-cogs"></i>Notas Alumno</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Cursos</a></li>
+                        <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Conducta</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-tasks"></i>Notas del padre</a>
+                </li>
+
+            </ul>
+        </div><!-- Sidebar Alumno-Padre -->
+    </ng-container>
+</nav>
+<!-- /#left-panel -->

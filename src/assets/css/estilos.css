@@ -53,3 +53,21 @@
     border-color: none;
     border-radius: 4%;
 }
+
+.text-error {
+    color: #D45454;
+    font-size: 11px;
+}
+
+.text-input-opacity {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.link-pointer {
+    cursor: pointer;
+    color: inherit;
+}
+
+.link-pointer:hover {
+    color: #007bff !important;
+}
