@@ -75,11 +75,6 @@ export class RegistroAlumnoComponent {
     return this.alumnoForm?.controls;
   }
 
-  //Funcion para limpiar datos del form
-  limpiarFormulario() {
-    this.alumnoForm.reset();
-  }
-
   AsignarAlumno(alumno: AlumnosDTO) {
     this.AsignarValoresAControles(alumno);
   }
