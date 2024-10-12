@@ -37,6 +37,24 @@ export class AccesoService {
     return null;
   }
 
+  getUserName(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']; // Cambia aquí
+    }
+    return null;
+  }
+  
+  getUserSurname(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']; // Cambia aquí
+    }
+    return null;
+  }
+
   registrarAlumno(objeto: any): Observable<ResponseAppDTO> {
     return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroAlumnos`, objeto);
   }
@@ -45,8 +63,6 @@ export class AccesoService {
     return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroDocentes`, objeto);
   }
 
-  registrarPadre(objeto: any): Observable<ResponseAppDTO> {
-    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroPadres`, objeto);
-  }
+
   
 }
