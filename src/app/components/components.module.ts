@@ -7,6 +7,7 @@ import { RegistrodocenteComponent } from './registrodocente/registrodocente.comp
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DxAutocompleteModule, DxDateBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { PeriodoAcademicoComponent } from './periodo-academico/periodo-academico.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { DxAutocompleteModule, DxDateBoxModule, DxSelectBoxModule } from 'devext
     ListaDocentesComponent,
     RegistroAlumnoComponent,
     RegistrodocenteComponent,
+    PeriodoAcademicoComponent
   ],
   imports: [
     CommonModule,

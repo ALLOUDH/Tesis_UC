@@ -7,6 +7,7 @@ import { NotFoundComponentComponent } from "../handle-errors/not-found-component
 import { RegistroAlumnoComponent } from "../components/registro-alumno/registroalumno.component";
 import { RegistrodocenteComponent } from "../components/registrodocente/registrodocente.component";
 import { AuthGuard } from "../guards/auth.guard";
+import { PeriodoAcademicoComponent } from "../components/periodo-academico/periodo-academico.component";
 
 const routes: Routes = [
     {
@@ -22,6 +23,7 @@ const routes: Routes = [
             {path:'dashboard', component:DashboardComponent},
             { path: 'registroalumno', component: RegistroAlumnoComponent },
             { path: 'registrodocente', component: RegistrodocenteComponent },
+            { path: 'periodoacademico', component: PeriodoAcademicoComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },

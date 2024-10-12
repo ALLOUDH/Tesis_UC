@@ -44,10 +44,7 @@ export class SidebarComponent {
       window.location.reload();
     });
   }
-
-  RegistrarPadre() {
-    this.router.navigate(['/registropadre']).then(() => {
-      window.location.reload();
-    });
-  }
+  RegistrarPeriodoAcademico() {
+    this.router.navigate(['/periodoacademico']);
+    }
 }
