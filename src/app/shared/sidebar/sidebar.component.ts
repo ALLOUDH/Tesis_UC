@@ -35,14 +35,17 @@ export class SidebarComponent {
   }
 
   RegistrarAlumno() {
-    this.router.navigate(['/registroalumno']);
+    this.router.navigate(['/registroalumno']) .then(() => {
+      window.location.reload();});
   }
   
   RegistrarDocente() {
-    this.router.navigate(['/registrodocente']);
+    this.router.navigate(['/registrodocente']).then(() => {
+      window.location.reload();});
     }
   
   RegistrarPadre() {
-    this.router.navigate(['/registropadre']);
+    this.router.navigate(['/registropadre']).then(() => {
+      window.location.reload();});
     }
 }

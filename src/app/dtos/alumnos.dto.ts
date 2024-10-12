@@ -11,5 +11,11 @@ export class AlumnosDTO {
     UsEstado!: boolean;
     AlInstitucion!: string;
     AlCodigoAlumno!: string;
+    AlDireccion!: string;
+    AlApellidoPaternoApoderado!: string;
+    AlApellidoMaternoApoderado!: string;
+    AlNombreApoderado!: string;
+    AlOcupacionApoderado!: string;
+    AlPensionApoderado!: number;
     Idgrado!: number;
 }

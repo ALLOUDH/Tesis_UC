@@ -52,6 +52,13 @@ export class RegistroAlumnoComponent {
       inputApellidoMaterno: new FormControl('', Validators.required),
       inputConfirmPassword: new FormControl('', [Validators.required]),
       inputCodigoAlumno: new FormControl('', [Validators.required]),
+      inputDireccionAlumno: new FormControl('', [Validators.required]),
+      
+      inputApellidoPaternoApoderado: new FormControl('', Validators.required),
+      inputApellidoMaternoApoderado: new FormControl('', Validators.required),
+      inputNombreApoderado: new FormControl('', Validators.required),
+      inputOcupacionApoderado: new FormControl('', Validators.required),
+      inputPensionApoderado: new FormControl('', [Validators.required,Validators.pattern(/^\d+(\.\d{1,2})?$/)])
     }, { validators: this.passwordMatchValidator as ValidatorFn });
   }
 
@@ -96,10 +103,17 @@ export class RegistroAlumnoComponent {
     this.alumnoForm.get('selectEstadoUsuario')?.setValue(alumno.UsEstado);
     this.alumnoForm.get('selectGradoAcademico')?.setValue(alumno.Idgrado);
     this.alumnoForm.get('inputCelular')?.setValue(alumno.UsCelular);
-    this.alumnoForm.get('inputInstitutcionProcedencia')?.setValue(alumno.AlInstitucion);
+    this.alumnoForm.get('inputInstitucionProcedencia')?.setValue(alumno.AlInstitucion);
     this.alumnoForm.get('inputNombreAlumno')?.setValue(alumno.UsNombre);
     this.alumnoForm.get('inputApellidoMaterno')?.setValue(alumno.UsApellidoMaterno);
     this.alumnoForm.get('inputCodigoAlumno')?.setValue(alumno.AlCodigoAlumno);
+    this.alumnoForm.get('inputDireccionAlumno')?.setValue(alumno.AlDireccion);
+
+    this.alumnoForm.get('inputApellidoPaternoApoderado')?.setValue(alumno.AlApellidoPaternoApoderado);
+    this.alumnoForm.get('inputApellidoMaternoApoderado')?.setValue(alumno.AlApellidoMaternoApoderado);
+    this.alumnoForm.get('inputNombreApoderado')?.setValue(alumno.AlNombreApoderado);
+    this.alumnoForm.get('inputOcupacionApoderado')?.setValue(alumno.AlOcupacionApoderado);
+    this.alumnoForm.get('inputPensionApoderado')?.setValue(alumno.AlPensionApoderado);
   }
 
   RegistrarAlumno() {
@@ -123,6 +137,13 @@ export class RegistroAlumnoComponent {
         alumno.UsNombre = this.alumnoForm.controls['inputNombreAlumno'].value;
         alumno.UsApellidoMaterno = this.alumnoForm.controls['inputApellidoMaterno'].value;
         alumno.AlCodigoAlumno = this.alumnoForm.controls['inputCodigoAlumno'].value;
+        alumno.AlDireccion = this.alumnoForm.controls['inputDireccionAlumno'].value;
+
+        alumno.AlApellidoPaternoApoderado = this.alumnoForm.controls['inputApellidoPaternoApoderado'].value;
+        alumno.AlApellidoMaternoApoderado = this.alumnoForm.controls['inputApellidoMaternoApoderado'].value;
+        alumno.AlNombreApoderado = this.alumnoForm.controls['inputNombreApoderado'].value;
+        alumno.AlOcupacionApoderado = this.alumnoForm.controls['inputOcupacionApoderado'].value;
+        alumno.AlPensionApoderado = this.alumnoForm.controls['inputPensionApoderado'].value;
         console.log(alumno);
 
         this.AccesoService.registrarAlumno(alumno).subscribe(

@@ -45,8 +45,6 @@ export class AccesoService {
     return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroDocentes`, objeto);
   }
 
-  registrarPadre(objeto: any): Observable<ResponseAppDTO> {
-    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroPadres`, objeto);
-  }
+
   
 }
