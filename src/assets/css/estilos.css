@@ -71,3 +71,41 @@
 .link-pointer:hover {
     color: #007bff !important;
 }
+
+.user-area {
+    display: flex;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right; /* Alinea el texto a la derecha */
+}
+
+.user-name-txt{
+    font-style: bold;
+    margin: 0;
+    line-height: 1;
+    font-size: 16px; /* Ajusta el tamaño de texto según sea necesario */
+    color: #78909cfd;
+}
+.user-surname-txt {
+    margin-top: 1px;
+    line-height: 1;
+    font-size: 14px; /* Ajusta el tamaño de texto según sea necesario */
+    color: #99afbdaf;
+}
+
+.mr-3 {
+    margin-right: 1rem; /* Ajusta el espaciado entre el texto y el avatar */
+}
+
+.text-color-white {
+    color: #ffffffd7 !important;
+}
+
+.text-color-white::placeholder {
+    color: rgba(255, 255, 255, 0.486) !important; /* Cambia el color del placeholder a blanco */
+}

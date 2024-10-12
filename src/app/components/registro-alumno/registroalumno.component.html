@@ -75,7 +75,7 @@
                                                 Campo obligatorio.
                                             </div>
                                             <div *ngIf="Controls['inputPassword']?.errors?.['minlength']">
-                                                La contraseña debe tener al menos 6 caracteres.
+                                                La contraseña debe tener al menos 8 caracteres.
                                             </div>
                                             <div *ngIf="Controls['inputPassword']?.errors?.['pattern']">
                                                 La contraseña debe contener al menos una letra y un número.
@@ -282,7 +282,7 @@
                                 </div>
                             </div>
                             <div class="form-group d-flex justify-content-end">
-                                <button type="button" class="btn btn-primary mx-2" (click)="limpiarFormulario()"><i
+                                <button type="button" class="btn btn-primary mx-2" (click)="LimpiarFormulario()"><i
                                         class="fa fa-eraser"></i>&nbsp; Limpiar</button>
                                 <button type="button" class="btn btn-success" (click)="RegistrarAlumno()"><i class="fa fa-check"></i>&nbsp;
                                     Registrar</button>
