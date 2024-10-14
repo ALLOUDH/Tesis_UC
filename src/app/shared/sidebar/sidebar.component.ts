@@ -44,7 +44,46 @@ export class SidebarComponent {
       window.location.reload();
     });
   }
-  RegistrarPeriodoAcademico() {
+  ListaAlumnos() {
+    this.router.navigate(['/listaalumnos']);
+    };
+  ListaDocentes() {
+    this.router.navigate(['/listadocentes']);
+    };
+  AdministrarNotasRegistroAuxiliar() {
+    this.router.navigate(['/administracionnotasregistroauxiliar']);
+    };
+  AdministrarNotasConducta() {
+    this.router.navigate(['/administracionnotasconducta']);
+    };
+  AdministrarNotasPadre() {
+    this.router.navigate(['/administracionnotaspadre']);
+    };
+  EditarAsistencia() {
+    this.router.navigate(['/editarasistencia']);
+    };
+  VerFaltasTardanzas() {
+    this.router.navigate(['/verfaltastardanzas']);
+    };
+  ListaPeriodoAcademico() {
     this.router.navigate(['/periodoacademico']);
+    };
+  ListaUnidadesAcademicas() {
+    this.router.navigate(['/unidadesacademicas']);
     }
+  ListaBimestresAcademicos() {
+    this.router.navigate(['/bimestresacademicos']);
+    };
+  ListaAreaAsignaturas() {
+    this.router.navigate(['/areaasignaturas']);
+    };
+  ListaAsignaturas() {
+    this.router.navigate(['/asignaturas']);
+    };
+  ListaCategoriaNotas() {
+    this.router.navigate(['/categorianotas']);
+    };
+  ListaTiposNotas() {
+    this.router.navigate(['/tiposnotas']);
+    };
 }
