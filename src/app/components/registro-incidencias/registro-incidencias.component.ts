@@ -1,5 +1,4 @@
 import { Component, input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { IncidenciaDTO } from '../../dtos/incidencias.dto';
 import { AccesoService } from '../../services/acceso.service';
@@ -7,6 +6,7 @@ import { AuditoriaDTO } from '../../dtos/auditoria.dto';
 import Swal from 'sweetalert2';
 import { OthersDTO } from '../../dtos/other.dto';
 import { AuditoriaTipoEventoService } from '../../services/auditoria-tipo-evento.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-registro-incidencias',

@@ -26,6 +26,8 @@ import { AgregarAreaAcademicaComponent } from './lista-area-cursos/agregar-area-
 import { AgregarAsignaturaComponent } from './lista-asignaturas/agregar-asignatura/agregar-asignatura.component';
 import { AgregarCategoriaNotaComponent } from './lista-categoria-notas/agregar-categoria-nota/agregar-categoria-nota.component';
 import { AgregarTipoNotaComponent } from './lista-tipos-notas/agregar-tipo-nota/agregar-tipo-nota.component';
+import { RegistroIncidenciasComponent } from './registro-incidencias/registro-incidencias.component';
+import { RegistroComentarioComponent } from './registro-comentario/registro-comentario.component';
 
 
 @NgModule({
@@ -52,7 +54,9 @@ import { AgregarTipoNotaComponent } from './lista-tipos-notas/agregar-tipo-nota/
     AgregarAreaAcademicaComponent,
     AgregarAsignaturaComponent,
     AgregarCategoriaNotaComponent,
-    AgregarTipoNotaComponent
+    AgregarTipoNotaComponent,
+    RegistroIncidenciasComponent,
+    RegistroComentarioComponent
   ],
   imports: [
     CommonModule,

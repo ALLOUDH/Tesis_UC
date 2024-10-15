@@ -180,7 +180,7 @@
 .footer-comment {
     display: block; /* Asegúrate de que esté en bloque */
     width: 100%; /* Ocupa todo el ancho del sidebar */
-    margin-top: 100px; /* Espaciado superior */
+    margin-top: 10px; /* Espaciado superior */
     text-align: center; /* Centrar texto */
 }
 

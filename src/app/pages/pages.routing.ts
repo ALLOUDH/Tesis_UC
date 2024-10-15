@@ -52,6 +52,8 @@ const routes: Routes = [
             { path: 'asignaturas', component: ListaAsignaturasComponent},
             { path: 'categorianotas', component: ListaCategoriaNotasComponent},
             { path: 'tiposnotas', component: ListaTiposNotasComponent},
+            { path: 'registroincidencia', component: RegistroIncidenciasComponent},
+            { path: 'registrocomentario', component: RegistroComentarioComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },
