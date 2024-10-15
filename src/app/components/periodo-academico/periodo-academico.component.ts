@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import Swal from 'sweetalert2';
-import { AgregarPeriodoAcademicoComponent } from '../agregar-periodo-academico/agregar-periodo-academico.component';
+import { AgregarPeriodoAcademicoComponent } from './agregar-periodo-academico/agregar-periodo-academico.component';
 
 @Component({
   selector: 'app-periodo-academico',

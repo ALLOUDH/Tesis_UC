@@ -10,24 +10,25 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class AgregarPeriodoAcademicoComponent {
 
   formGroup: FormGroup
+  fechaActual: Date = new Date();
 
   constructor(
     private modalService: BsModalService,
-    private bsModalRecoverPass: BsModalRef,
+    private bsAgregarPeriodoAcademico: BsModalRef,
 
   ) { this.formGroup = new FormGroup({
-      nombre: new FormControl('', [Validators.required]),
-      fechaInicio: new FormControl('', [Validators.required]),
-      fechaFin: new FormControl('', [Validators.required])
+      NombrePeriodoAcademico: new FormControl('', [Validators.required]),
+      inputFechaInicioPeriodoAcademico: new FormControl('', [Validators.required]),
+      inputFechaFinPeriodoAcademico: new FormControl('', [Validators.required])
   });
   }
 
   AgregarPeriodoAcademico() {
-    this.bsModalRecoverPass.hide();
+    this.bsAgregarPeriodoAcademico.hide();
   }
   
   CerrarModal() {
-    this.bsModalRecoverPass.hide();
+    this.bsAgregarPeriodoAcademico.hide();
   }
 
 }

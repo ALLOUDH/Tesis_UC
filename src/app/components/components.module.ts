@@ -19,7 +19,13 @@ import { AdministracionNotasConductaComponent } from './administracion-notas-con
 import { AdministracionNotasPadreComponent } from './administracion-notas-padre/administracion-notas-padre.component';
 import { EditarAsistenciaComponent } from './editar-asistencia/editar-asistencia.component';
 import { VerFaltasTardanzasComponent } from './ver-faltas-tardanzas/ver-faltas-tardanzas.component';
-import { AgregarPeriodoAcademicoComponent } from './agregar-periodo-academico/agregar-periodo-academico.component';
+import { AgregarPeriodoAcademicoComponent } from './periodo-academico/agregar-periodo-academico/agregar-periodo-academico.component';
+import { AgregarUnidadAcademicaComponent } from './lista-unidades-academicas/agregar-unidad-academica/agregar-unidad-academica.component';
+import { AgregarBimestreAcademicoComponent } from './lista-bimestres-academicos/agregar-bimestre-academico/agregar-bimestre-academico.component';
+import { AgregarAreaAcademicaComponent } from './lista-area-cursos/agregar-area-academica/agregar-area-academica.component';
+import { AgregarAsignaturaComponent } from './lista-asignaturas/agregar-asignatura/agregar-asignatura.component';
+import { AgregarCategoriaNotaComponent } from './lista-categoria-notas/agregar-categoria-nota/agregar-categoria-nota.component';
+import { AgregarTipoNotaComponent } from './lista-tipos-notas/agregar-tipo-nota/agregar-tipo-nota.component';
 
 
 @NgModule({
@@ -40,7 +46,13 @@ import { AgregarPeriodoAcademicoComponent } from './agregar-periodo-academico/ag
     AdministracionNotasPadreComponent,
     EditarAsistenciaComponent,
     VerFaltasTardanzasComponent,
-    AgregarPeriodoAcademicoComponent
+    AgregarPeriodoAcademicoComponent,
+    AgregarUnidadAcademicaComponent,
+    AgregarBimestreAcademicoComponent,
+    AgregarAreaAcademicaComponent,
+    AgregarAsignaturaComponent,
+    AgregarCategoriaNotaComponent,
+    AgregarTipoNotaComponent
   ],
   imports: [
     CommonModule,

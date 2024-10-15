@@ -109,3 +109,15 @@
 .text-color-white::placeholder {
     color: rgba(255, 255, 255, 0.486) !important; /* Cambia el color del placeholder a blanco */
 }
+
+.widthtablas{
+    width: 60px;
+}
+
+.text-color-titulos{
+    color: #78909cfd;
+}
+
+.text-color-placeholder::placeholder{
+    color: #99afbdaf;  
+}

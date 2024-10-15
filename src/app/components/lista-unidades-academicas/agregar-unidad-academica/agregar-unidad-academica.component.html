@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h4 class="modal-title fw-bold text-center text-color-titulos">Agregar Unidad Académica</h4>
+</div>
+<div class="modal-body">
+    <section id="seccion-unidad-academico">
+        <form [formGroup]="formGroup">
+            <!-- Campo para el nombre del unidad académico -->
+            <div class="mb-3">
+                <label for="nombre" class="form-label fw-semibold text-color-titulos">Nombre</label>
+                <input type="text" class="form-control text-color-placeholder" id="NombreUnidadAcademico" formControlName="NombreUnidadAcademico" placeholder="Nombre de la unidad académica">
+            </div>
+        </form>
+    </section>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary button-color-primary" (click)="AgregarUnidadAcademico()">
+        <i class="fa fa-lg fa-fw fa-plus"></i> Añadir
+    </button>
+    <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
+        <i class="fa fa-lg fa-fw fa-times"></i> Cancelar
+    </button>
+</div>
