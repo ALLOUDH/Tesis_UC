@@ -107,22 +107,22 @@
                                 <div class="card-body">
                                     <div class="progress-box progress-1">
                                         <h4 class="por-title">Total Accesos</h4>
-                                        <div class="por-txt">{{ this.totalAccesos === 1 ? ' Acceso en Total' : this.totalAccesos + ' Accesos en Total' }}</div>
+                                        <div class="por-txt">{{ this.totalAccesos }} Acceso{{ this.totalAccesos > 1 ? 's' : '' }} en Total</div>
                                         <ngb-progressbar class="pb-color-1" [value]="this.totalAccesos"></ngb-progressbar>
                                     </div>
                                     <div class="progress-box progress-2">
                                         <h4 class="por-title">Total Acceso Exitosos</h4>
-                                        <div class="por-txt">{{ this.totalAccesosExitosos === 1 ? ' Acceso Exitoso' : this.totalAccesosExitosos + ' Accesos Exitosos' }}</div>
+                                        <div class="por-txt">{{ this.totalAccesosExitosos }} Acceso{{ this.totalAccesosExitosos > 1 ? 's' : '' }} Exitoso{{ this.totalAccesosExitosos > 1 ? 's' : '' }}</div>
                                         <ngb-progressbar class="pb-color-2" [value]="this.totalAccesosExitosos"></ngb-progressbar>
                                     </div>
                                     <div class="progress-box progress-3">
                                         <h4 class="por-title">Total Comentarios</h4>
-                                        <div class="por-txt">{{ this.totalComentarios === 1 ? ' Comentario' : this.totalComentarios + ' Comentarios'}}</div>
+                                        <div class="por-txt">{{ this.totalComentarios }} Comentario{{ this.totalComentarios > 1 ? 's' : '' }}</div>
                                         <ngb-progressbar class="pb-color-3" [value]="this.totalComentarios"></ngb-progressbar>
                                     </div>
                                     <div class="progress-box progress-4">
                                         <h4 class="por-title">Total Incidencias</h4>
-                                        <div class="por-txt">{{ this.totalIncidencias === 1 ? ' Incidencia' : this.totalIncidencias + ' Incidencias' }}</div>
+                                        <div class="por-txt">{{ this.totalIncidencias }} Incidencia{{ this.totalIncidencias > 1 ? 's' : '' }}</div>
                                         <ngb-progressbar class="pb-color-4" [value]="this.totalIncidencias"></ngb-progressbar>
                                     </div>
                                 </div> <!-- /.card-body -->
