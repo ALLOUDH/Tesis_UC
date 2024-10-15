@@ -1,0 +1,59 @@
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Registrar Comentario</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb d-flex justify-content-end">
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#">Registrar Comentario</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body card-block">
+                        <form autocomplete="off" novalidate="novalidate" [formGroup]="ComentarioForm">
+                            <!-- input de contraseña -->
+                            <div class="form-group mb-4">
+                                <p class="fs-5">Envianos un Comentario</p>
+                                <textarea id="descripcion-comentario" placeholder="Escriba su comentario..."
+                                    class="form-control" formControlName="inputComentario" rows="6"
+                                    maxlength="1000"></textarea>
+                                <div *ngIf="Controls['inputComentario'].invalid && (Controls['inputComentario'].dirty || Controls['inputComentario'].touched) "
+                                    class="text-error">
+                                    <div *ngIf="Controls['inputComentario']?.errors?.['required']">
+                                        <div>Campo obligatorio.</div>
+                                    </div>
+                                    <div *ngIf="Controls['inputComentario']?.errors?.['inputComentario']">
+                                        <div>El comentario no puede ser mayor a los 1000 caracteres.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group d-flex justify-content-end">
+                                <button type="button" class="btn btn-success" (click)="registrarComentario()"><i
+                                        class="fa fa-check"></i>&nbsp;
+                                    Enviar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

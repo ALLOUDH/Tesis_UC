@@ -1394,7 +1394,7 @@ header .form-inline {
 .traffic-chart .ct-series-a .ct-area,
 .traffic-chart .ct-series-a .ct-slice-donut-solid,
 .traffic-chart .ct-series-a .ct-slice-pie {
-  fill: #66bb6a; }
+  fill: #66aabb; }
 
 .traffic-chart .ct-series-b .ct-area,
 .traffic-chart .ct-series-b .ct-slice-donut-solid,
@@ -1410,7 +1410,7 @@ header .form-inline {
   height: 445px; }
 
 .traffic-chart {
-  height: 34vh; }
+  height: 60vh; }
 
 #flotBar2 {
   height: 168px; }

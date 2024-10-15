@@ -4,10 +4,11 @@ import { ListaAlumnosComponent } from './lista-alumnos/lista-alumnos.component';
 import { ListaDocentesComponent } from './lista-docentes/lista-docentes.component';
 import { RegistroAlumnoComponent } from './registro-alumno/registroalumno.component';
 import { RegistrodocenteComponent } from './registrodocente/registrodocente.component';
-import { RegistropadreComponent } from './registropadre/registropadre.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DxAutocompleteModule, DxDateBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { RegistroComentarioComponent } from './registro-comentario/registro-comentario.component';
+import { RegistroIncidenciasComponent } from './registro-incidencias/registro-incidencias.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { DxAutocompleteModule, DxDateBoxModule, DxSelectBoxModule } from 'devext
     ListaDocentesComponent,
     RegistroAlumnoComponent,
     RegistrodocenteComponent,
-    RegistropadreComponent
+    RegistroComentarioComponent,
+    RegistroIncidenciasComponent
   ],
   imports: [
     CommonModule,

@@ -46,6 +46,8 @@ export class LoginComponent {
     if (this.dataFormGroup.valid) {
       this.LoginDTO.DNI = this.Controls['inputUsuario'].value;
       this.LoginDTO.password = this.Controls['inputPassword'].value;
+      this.LoginDTO.AuditoriaDTO.AudTipoEvento = 'Inicio de sesión';
+
       this.AccesoService.login(this.LoginDTO).subscribe(
         (response: any) => {
           console.log(response); // Verificar la respuesta completa del servidor

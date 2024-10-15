@@ -50,4 +50,16 @@ export class SidebarComponent {
       window.location.reload();
     });
   }
+
+  EnviarComentarios() {
+    this.router.navigate(['/registrocomentario']).then(() => {
+      window.location.reload();
+    });
+  }
+
+  EnviarReportes() {
+    this.router.navigate(['/registroincidencia']).then(() => {
+      window.location.reload();
+    });
+  }
 }

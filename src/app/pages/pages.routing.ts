@@ -6,8 +6,9 @@ import { LoginComponent } from "../auth/login/login.component";
 import { NotFoundComponentComponent } from "../handle-errors/not-found-component/not-found-component.component";
 import { RegistroAlumnoComponent } from "../components/registro-alumno/registroalumno.component";
 import { RegistrodocenteComponent } from "../components/registrodocente/registrodocente.component";
-import { RegistropadreComponent } from "../components/registropadre/registropadre.component";
 import { AuthGuard } from "../guards/auth.guard";
+import { RegistroComentarioComponent } from "../components/registro-comentario/registro-comentario.component";
+import { RegistroIncidenciasComponent } from "../components/registro-incidencias/registro-incidencias.component";
 
 const routes: Routes = [
     {
@@ -23,7 +24,8 @@ const routes: Routes = [
             {path:'dashboard', component:DashboardComponent},
             { path: 'registroalumno', component: RegistroAlumnoComponent },
             { path: 'registrodocente', component: RegistrodocenteComponent },
-            { path: 'registropadre', component: RegistropadreComponent},
+            { path: 'registrocomentario', component: RegistroComentarioComponent},
+            { path: 'registroincidencia', component: RegistroIncidenciasComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },

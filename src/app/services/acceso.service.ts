@@ -28,6 +28,21 @@ export class AccesoService {
     return localStorage.getItem('usertoken');
   }
 
+  getUserID(): number | null {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      const UserIDString = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']; // Cambia aquí
+      if (UserIDString) {
+        const userID = parseInt(UserIDString, 10); // Convierte el string a número entero
+        if (!isNaN(userID)) {
+          return userID; // Si la conversión fue exitosa, retornamos el ID como número
+        }
+      }
+    }
+    return null;
+  }
+
   getUserRole():string | null{
     const token = this.getToken();
     if (token) {
@@ -65,6 +80,10 @@ export class AccesoService {
 
   registrarPadre(objeto: any): Observable<ResponseAppDTO> {
     return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroPadres`, objeto);
+  }
+  
+  obtenerAccesos(): Observable<{ totalAccesos: number; totalAccesosExitosos: number }> {
+    return this.http.get<{ totalAccesos: number; totalAccesosExitosos: number }>(`${this.baseUrl}Acceso/ContadorAccesos`);
   }
   
 }

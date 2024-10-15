@@ -1,4 +1,4 @@
-export class UsuarioDTO{
+export class DocenteDTO {
     UsDni!: string;
     UsContrasena! : string;
     UsRol!: string;
