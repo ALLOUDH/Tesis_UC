@@ -5,14 +5,18 @@
     <section id="seccion-buscador">
         <form>
             <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label fw-semibold">Ingrese su correo electrónico o número de celular para buscar la cuenta</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Correo electrónico o número de celular">
+              <label for="newPassword" class="form-label fw-semibold">Ingrese su nueva contraseña</label>
+              <input type="password" class="form-control" id="newPassword" [(ngModel)]="nuevaContrasena" name="newPassword" placeholder="Nueva contraseña" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label fw-semibold">Confirmar su contraseña</label>
+                <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="confirmarContrasena" name="confirmPassword" placeholder="Confirma nueva contraseña" required>
             </div>
         </form>
     </section>
 </div>
 <div class="modal-footer">
-    <button type="submit" class="btn btn-primary button-color-primary" (click)="GuardarNewPass()">
+    <button type="button" class="btn btn-primary button-color-primary" (click)="GuardarNewPass()">
         <i class="fa fa-lg fa-fw fa-save"></i> Guardar
     </button>
     <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">

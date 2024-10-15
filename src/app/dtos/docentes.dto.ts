@@ -1,4 +1,4 @@
-export class DocenteDTO {
+export class DocentesDTO{
     UsDni!: string;
     UsContrasena! : string;
     UsRol!: string;
@@ -8,6 +8,8 @@ export class DocenteDTO {
     UsApellidoMaterno!: string;
     UsSexo!: boolean;
     UsCelular?: string;
+    UsEstado!: boolean;
     DoEspecialidad!: string;
     DoGradoAcademico!: string;
+    DoEsAuxiliar!: boolean;
 }

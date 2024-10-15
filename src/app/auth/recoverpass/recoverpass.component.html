@@ -1,21 +1,23 @@
 <div class="modal-header">
     <h4 class="modal-title fw-bold">Encuentra tu cuenta</h4>
-</div>
-<div class="modal-body">
+  </div>
+  <div class="modal-body">
     <section id="seccion-buscador">
-        <form>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label fw-semibold">Ingrese su correo electrónico o número de celular para buscar la cuenta</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Correo electrónico o número de celular">
-            </div>
-        </form>
+      <form (ngSubmit)="solicitarRecuperacion()">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label fw-semibold">Ingrese su correo electrónico</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Correo electrónico" [(ngModel)]="email" name="email" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary button-color-primary">
+            <i class="fa fa-lg fa-fw fa-send"></i> Enviar código
+          </button>
+          <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
+            <i class="fa fa-lg fa-fw fa-times"></i> Cancelar
+          </button>
+        </div>
+      </form>
     </section>
-</div>
-<div class="modal-footer">
-    <button type="submit" class="btn btn-primary button-color-primary" (click)="AbrirModalOptionSelect()">
-        <i class="fa fa-lg fa-fw fa-save"></i> Buscar
-    </button>
-    <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
-        <i class="fa fa-lg fa-fw fa-times"></i> Cancelar
-    </button>
-</div>
+  </div>
+  
+  

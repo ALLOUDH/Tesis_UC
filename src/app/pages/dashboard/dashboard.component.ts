@@ -6,9 +6,9 @@ import { AccesoService } from '../../services/acceso.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
   progressBarAcceso: number = 0;
   progressBarAccesoExitoso: number = 0;

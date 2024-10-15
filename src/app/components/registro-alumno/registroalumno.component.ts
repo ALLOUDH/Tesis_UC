@@ -41,28 +41,45 @@ export class RegistroAlumnoComponent {
     this.alumnoForm = new FormGroup({
       inputDNI: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^[0-9]*$')]), // Solo números
       inputApellidoPaterno: new FormControl('', Validators.required),
-      inputPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.pattern('^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$')]), // Letras mayúsculas, minúsculas, números y caracteres especiales
-      inputEmail: new FormControl('', [Validators.required, Validators.email]),
+      inputPassword: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(8), Validators.pattern('^[0-9]*$')]), // VALIDAR
       selectSexo: new FormControl('', Validators.required),
       selectEstadoUsuario: new FormControl('', Validators.required),
       selectGradoAcademico: new FormControl('', Validators.required),
-      inputCelular: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]),
       inputInstitucionProcedencia: new FormControl('', Validators.required),
       inputNombreAlumno: new FormControl('', Validators.required),
       inputApellidoMaterno: new FormControl('', Validators.required),
       inputConfirmPassword: new FormControl('', [Validators.required]),
       inputCodigoAlumno: new FormControl('', [Validators.required]),
-    }, { validators: this.passwordMatchValidator as ValidatorFn });
+      inputDireccionAlumno: new FormControl('', [Validators.required]),
+      
+      inputApellidoPaternoApoderado: new FormControl('', Validators.required),
+      inputApellidoMaternoApoderado: new FormControl('', Validators.required),
+      inputNombreApoderado: new FormControl('', Validators.required),
+      inputOcupacionApoderado: new FormControl('', Validators.required),
+      inputPensionApoderado: new FormControl('', [Validators.required,Validators.pattern(/^(?!0\d)\d{1,4}([.,]\d{1,2})?$|^(\d{1,4})$/)]),
+      inputCelular: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(15)]),
+      inputEmail: new FormControl('', [Validators.required, Validators.email])
+    }, { validators: [this.passwordMatchValidator, this.passwordMatchesDNI] });
   }
 
 
 
-  //Metodo para validación de que la contraseña ingresada es igual al de confirmar contraseña
+  // Método para validar que la contraseña ingresada es igual a la de confirmar contraseña
   passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const group = control as FormGroup;
     const password = group.get('inputPassword')?.value;
     const confirmPassword = group.get('inputConfirmPassword')?.value;
+
     return password === confirmPassword ? null : { mismatch: true };
+  }
+
+  // Método para validar que la contraseña ingresada es igual al DNI
+  passwordMatchesDNI: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const group = control as FormGroup;
+    const dni = group.get('inputDNI')?.value;
+    const password = group.get('inputPassword')?.value;
+
+    return password === dni ? null : { dniMismatch: true };
   }
 
   // Método para verificar si hay un error de coincidencia de contraseñas
@@ -91,10 +108,17 @@ export class RegistroAlumnoComponent {
     this.alumnoForm.get('selectEstadoUsuario')?.setValue(alumno.UsEstado);
     this.alumnoForm.get('selectGradoAcademico')?.setValue(alumno.Idgrado);
     this.alumnoForm.get('inputCelular')?.setValue(alumno.UsCelular);
-    this.alumnoForm.get('inputInstitutcionProcedencia')?.setValue(alumno.AlInstitucion);
+    this.alumnoForm.get('inputInstitucionProcedencia')?.setValue(alumno.AlInstitucion);
     this.alumnoForm.get('inputNombreAlumno')?.setValue(alumno.UsNombre);
     this.alumnoForm.get('inputApellidoMaterno')?.setValue(alumno.UsApellidoMaterno);
     this.alumnoForm.get('inputCodigoAlumno')?.setValue(alumno.AlCodigoAlumno);
+    this.alumnoForm.get('inputDireccionAlumno')?.setValue(alumno.AlDireccion);
+
+    this.alumnoForm.get('inputApellidoPaternoApoderado')?.setValue(alumno.AlApellidoPaternoApoderado);
+    this.alumnoForm.get('inputApellidoMaternoApoderado')?.setValue(alumno.AlApellidoMaternoApoderado);
+    this.alumnoForm.get('inputNombreApoderado')?.setValue(alumno.AlNombreApoderado);
+    this.alumnoForm.get('inputOcupacionApoderado')?.setValue(alumno.AlOcupacionApoderado);
+    this.alumnoForm.get('inputPensionApoderado')?.setValue(alumno.AlPensionApoderado);
   }
 
   RegistrarAlumno() {
@@ -118,6 +142,13 @@ export class RegistroAlumnoComponent {
         alumno.UsNombre = this.alumnoForm.controls['inputNombreAlumno'].value;
         alumno.UsApellidoMaterno = this.alumnoForm.controls['inputApellidoMaterno'].value;
         alumno.AlCodigoAlumno = this.alumnoForm.controls['inputCodigoAlumno'].value;
+        alumno.AlDireccion = this.alumnoForm.controls['inputDireccionAlumno'].value;
+
+        alumno.AlApellidoPaternoApoderado = this.alumnoForm.controls['inputApellidoPaternoApoderado'].value;
+        alumno.AlApellidoMaternoApoderado = this.alumnoForm.controls['inputApellidoMaternoApoderado'].value;
+        alumno.AlNombreApoderado = this.alumnoForm.controls['inputNombreApoderado'].value;
+        alumno.AlOcupacionApoderado = this.alumnoForm.controls['inputOcupacionApoderado'].value;
+        alumno.AlPensionApoderado = this.alumnoForm.controls['inputPensionApoderado'].value;
         console.log(alumno);
 
         this.AccesoService.registrarAlumno(alumno).subscribe(

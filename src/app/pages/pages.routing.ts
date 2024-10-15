@@ -9,6 +9,20 @@ import { RegistrodocenteComponent } from "../components/registrodocente/registro
 import { AuthGuard } from "../guards/auth.guard";
 import { RegistroComentarioComponent } from "../components/registro-comentario/registro-comentario.component";
 import { RegistroIncidenciasComponent } from "../components/registro-incidencias/registro-incidencias.component";
+import { PeriodoAcademicoComponent } from "../components/periodo-academico/periodo-academico.component";
+import { ListaUnidadesAcademicasComponent } from "../components/lista-unidades-academicas/lista-unidades-academicas.component";
+import { ListaBimestresAcademicosComponent } from "../components/lista-bimestres-academicos/lista-bimestres-academicos.component";
+import { ListaAreaCursosComponent } from "../components/lista-area-cursos/lista-area-cursos.component";
+import { ListaAsignaturasComponent } from "../components/lista-asignaturas/lista-asignaturas.component";
+import { ListaCategoriaNotasComponent } from "../components/lista-categoria-notas/lista-categoria-notas.component";
+import { ListaTiposNotasComponent } from "../components/lista-tipos-notas/lista-tipos-notas.component";
+import { ListaAlumnosComponent } from "../components/lista-alumnos/lista-alumnos.component";
+import { ListaDocentesComponent } from "../components/lista-docentes/lista-docentes.component";
+import { AdministracionNotasRegistroAuxiliarComponent } from "../components/administracion-notas-registro-auxiliar/administracion-notas-registro-auxiliar.component";
+import { AdministracionNotasConductaComponent } from "../components/administracion-notas-conducta/administracion-notas-conducta.component";
+import { AdministracionNotasPadreComponent } from "../components/administracion-notas-padre/administracion-notas-padre.component";
+import { EditarAsistenciaComponent } from "../components/editar-asistencia/editar-asistencia.component";
+import { VerFaltasTardanzasComponent } from "../components/ver-faltas-tardanzas/ver-faltas-tardanzas.component";
 
 const routes: Routes = [
     {
@@ -24,8 +38,20 @@ const routes: Routes = [
             {path:'dashboard', component:DashboardComponent},
             { path: 'registroalumno', component: RegistroAlumnoComponent },
             { path: 'registrodocente', component: RegistrodocenteComponent },
-            { path: 'registrocomentario', component: RegistroComentarioComponent},
-            { path: 'registroincidencia', component: RegistroIncidenciasComponent},
+            { path: 'listaalumnos', component: ListaAlumnosComponent },
+            { path: 'listadocentes', component: ListaDocentesComponent },
+            { path: 'administracionnotasregistroauxiliar', component: AdministracionNotasRegistroAuxiliarComponent },
+            { path: 'administracionnotasconducta', component: AdministracionNotasConductaComponent },
+            { path: 'administracionnotaspadre', component: AdministracionNotasPadreComponent },
+            { path: 'editarasistencia', component: EditarAsistenciaComponent },
+            { path: 'verfaltastardanzas', component: VerFaltasTardanzasComponent },
+            { path: 'periodoacademico', component: PeriodoAcademicoComponent},
+            { path: 'unidadesacademicas', component: ListaUnidadesAcademicasComponent},
+            { path: 'bimestresacademicos', component: ListaBimestresAcademicosComponent},
+            { path: 'areaasignaturas', component: ListaAreaCursosComponent},
+            { path: 'asignaturas', component: ListaAsignaturasComponent},
+            { path: 'categorianotas', component: ListaCategoriaNotasComponent},
+            { path: 'tiposnotas', component: ListaTiposNotasComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },
