@@ -41,12 +41,10 @@ export class RegistroAlumnoComponent {
     this.alumnoForm = new FormGroup({
       inputDNI: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^[0-9]*$')]), // Solo números
       inputApellidoPaterno: new FormControl('', Validators.required),
-      inputPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.pattern('^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$')]), // Letras mayúsculas, minúsculas, números y caracteres especiales
-      inputEmail: new FormControl('', [Validators.required, Validators.email]),
+      inputPassword: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(8), Validators.pattern('^[0-9]*$')]), // VALIDAR
       selectSexo: new FormControl('', Validators.required),
       selectEstadoUsuario: new FormControl('', Validators.required),
       selectGradoAcademico: new FormControl('', Validators.required),
-      inputCelular: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]),
       inputInstitucionProcedencia: new FormControl('', Validators.required),
       inputNombreAlumno: new FormControl('', Validators.required),
       inputApellidoMaterno: new FormControl('', Validators.required),
@@ -58,18 +56,30 @@ export class RegistroAlumnoComponent {
       inputApellidoMaternoApoderado: new FormControl('', Validators.required),
       inputNombreApoderado: new FormControl('', Validators.required),
       inputOcupacionApoderado: new FormControl('', Validators.required),
-      inputPensionApoderado: new FormControl('', [Validators.required,Validators.pattern(/^\d+(\.\d{1,2})?$/)])
-    }, { validators: this.passwordMatchValidator as ValidatorFn });
+      inputPensionApoderado: new FormControl('', [Validators.required,Validators.pattern(/^(?!0\d)\d{1,4}([.,]\d{1,2})?$|^(\d{1,4})$/)]),
+      inputCelular: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(15)]),
+      inputEmail: new FormControl('', [Validators.required, Validators.email])
+    }, { validators: [this.passwordMatchValidator, this.passwordMatchesDNI] });
   }
 
 
 
-  //Metodo para validación de que la contraseña ingresada es igual al de confirmar contraseña
+  // Método para validar que la contraseña ingresada es igual a la de confirmar contraseña
   passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const group = control as FormGroup;
     const password = group.get('inputPassword')?.value;
     const confirmPassword = group.get('inputConfirmPassword')?.value;
+
     return password === confirmPassword ? null : { mismatch: true };
+  }
+
+  // Método para validar que la contraseña ingresada es igual al DNI
+  passwordMatchesDNI: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const group = control as FormGroup;
+    const dni = group.get('inputDNI')?.value;
+    const password = group.get('inputPassword')?.value;
+
+    return password === dni ? null : { dniMismatch: true };
   }
 
   // Método para verificar si hay un error de coincidencia de contraseñas

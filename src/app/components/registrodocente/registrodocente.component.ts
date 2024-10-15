@@ -48,7 +48,7 @@ export class RegistrodocenteComponent {
     this.docenteForm = new FormGroup({
       inputDNI: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8),Validators.pattern('^[0-9]*$')]), // Solo números
       inputApellidoPaterno: new FormControl('', Validators.required),
-      inputPassword: new FormControl('', [Validators.required,Validators.minLength(6),Validators.pattern('^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$')]), // Letras mayúsculas, minúsculas, números y caracteres especiales
+      inputPassword: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(8), Validators.pattern('^[0-9]*$')]), // igual al DNI
       inputEmail: new FormControl('', [Validators.required, Validators.email]),
       inputCelular: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]),
       selectSexo: new FormControl('', Validators.required),
@@ -60,7 +60,7 @@ export class RegistrodocenteComponent {
       inputEspecialidad: new FormControl('', [Validators.required]),
       selectAuxiliar: new FormControl('', Validators.required),
 
-    }, { validators: this.passwordMatchValidator as ValidatorFn });
+    }, { validators: [this.passwordMatchValidator, this.passwordMatchesDNI] });
   }
 
 
@@ -70,6 +70,15 @@ passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErro
   const password = group.get('inputPassword')?.value;
   const confirmPassword = group.get('inputConfirmPassword')?.value;
   return password === confirmPassword ? null : { mismatch: true };
+}
+
+// Método para validar que la contraseña ingresada es igual al DNI
+passwordMatchesDNI: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const group = control as FormGroup;
+  const dni = group.get('inputDNI')?.value;
+  const password = group.get('inputPassword')?.value;
+
+  return password === dni ? null : { dniMismatch: true };
 }
 
 // Método para verificar si hay un error de coincidencia de contraseñas

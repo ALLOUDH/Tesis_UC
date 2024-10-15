@@ -98,6 +98,14 @@
     color: #99afbdaf;
 }
 
+.text-color-titulos{
+    color: #78909cfd;
+}
+
+.text-color-placeholder::placeholder{
+    color: #99afbdaf;  
+}
+
 .mr-3 {
     margin-right: 1rem; /* Ajusta el espaciado entre el texto y el avatar */
 }
