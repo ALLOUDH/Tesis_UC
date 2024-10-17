@@ -8,45 +8,54 @@
                     <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Dashboard</a>
                 </li>
 
-                
+
                 <li class="menu-title">Usuarios</li><!-- /.menu-title -->
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Registrar Usuario</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li class="link-pointer"><i class="fa fa-puzzle-piece"></i><a (click)="RegistrarAlumno()">Alumno</a></li>
-                        <li class="link-pointer"><i class="fa fa-id-badge"></i><a (click)="RegistrarDocente()">Docente</a></li>
-                        
+                        <li class="link-pointer"><i class="fa fa-puzzle-piece"></i><a
+                                (click)="RegistrarAlumno()">Alumno</a></li>
+                        <li class="link-pointer"><i class="fa fa-id-badge"></i><a
+                                (click)="RegistrarDocente()">Docente</a></li>
+
                     </ul>
                 </li>
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"> <i class="menu-icon fa fa-users"></i>Usuarios</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li class="link-pointer"><i class="fa fa-puzzle-piece"></i><a (click)="ListaAlumnos()">Alumno</a></li>
-                        <li class="link-pointer"><i class="fa fa-puzzle-piece"></i><a (click)="ListaDocentes()">Docente</a></li>
+                        <li class="link-pointer"><i class="fa fa-puzzle-piece"></i><a
+                                (click)="ListaAlumnos()">Alumno</a></li>
+                        <li class="link-pointer"><i class="fa fa-puzzle-piece"></i><a
+                                (click)="ListaDocentes()">Docente</a></li>
                     </ul>
                 </li>
 
 
                 <li class="menu-title">Notas</li><!-- /.menu-title -->
                 <li>
-                    <a (click)="AdministrarNotasRegistroAuxiliar()" style="cursor: pointer;"><i class="menu-icon fa fa-bar-chart"></i>Notas Registro Auxiliar</a>
+                    <a (click)="AdministrarNotasRegistroAuxiliar()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Notas Registro Auxiliar</a>
                 </li>
                 <li>
-                    <a (click)="AdministrarNotasConducta()" style="cursor: pointer;"><i class="menu-icon fa fa-bar-chart"></i>Notas Conducta</a>
+                    <a (click)="AdministrarNotasConducta()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Notas Conducta</a>
                 </li>
                 <li>
-                    <a (click)="AdministrarNotasPadre()" style="cursor: pointer;"><i class="menu-icon fa fa-bar-chart"></i>Notas del Padre</a>
+                    <a (click)="AdministrarNotasPadre()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Notas del Padre</a>
                 </li>
 
 
                 <li class="menu-title">Asistencia</li><!-- /.menu-title -->
                 <li>
-                    <a (click)="EditarAsistencia()" style="cursor: pointer;"><i class="menu-icon fa fa-bar-chart"></i>Editar Asistencia</a>
+                    <a (click)="EditarAsistencia()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Editar Asistencia</a>
                 </li>
                 <li>
-                    <a (click)="VerFaltasTardanzas()" style="cursor: pointer;"><i class="menu-icon fa fa-bar-chart"></i>Ver Faltas y Tardanzas</a>
+                    <a (click)="VerFaltasTardanzas()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Ver Faltas y Tardanzas</a>
                 </li>
 
 
@@ -56,25 +65,32 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Ciclo Académico</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a (click)="ListaPeriodoAcademico()">Periodo Académico</a></li>
-                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a (click)="ListaBimestresAcademicos()">Bimestre Académico</a></li>
-                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a (click)="ListaUnidadesAcademicas()">Unidad Académica</a></li>
+                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a
+                                (click)="ListaPeriodoAcademico()">Periodo Académico</a></li>
+                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a
+                                (click)="ListaBimestresAcademicos()">Bimestre Académico</a></li>
+                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a
+                                (click)="ListaUnidadesAcademicas()">Unidad Académica</a></li>
                     </ul>
                 </li>
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Plan de Estudio</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a (click)="ListaAreaAsignaturas()">Área de Asignaturas</a></li>
-                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a (click)="ListaAsignaturas()">Asignaturas</a></li>
+                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a
+                                (click)="ListaAreaAsignaturas()">Área de Asignaturas</a></li>
+                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a
+                                (click)="ListaAsignaturas()">Asignaturas</a></li>
                     </ul>
                 </li>
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Esquema de Evaluación</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a (click)="ListaCategoriaNotas()">Categoría de Notas</a></li>
-                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a (click)="ListaTiposNotas()">Tipos de Notas</a></li>
+                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a
+                                (click)="ListaCategoriaNotas()">Categoría de Notas</a></li>
+                        <li class="link-pointer"><i class="menu-icon fa fa-bar-chart"></i><a
+                                (click)="ListaTiposNotas()">Tipos de Notas</a></li>
                     </ul>
                 </li>
 
@@ -123,39 +139,46 @@
                     </p>
                     <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarReportes()">Reportar Errores</p>
                 </div>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Registro Auxiliar</a>
-                        <ul class="sub-menu children dropdown-menu">                            
-                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Notas de Padre</a>
-                        <ul class="sub-menu children dropdown-menu">                            
-                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas </a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Comportamiento</a>
-                        <ul class="sub-menu children dropdown-menu">                            
-                            <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Ver Boleta de Notas</a>
-                    </li>
-                
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Registro Auxiliar</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
+                        <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Notas de Padre</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
+                        <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas </a></li>
+                    </ul>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Comportamiento</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
+                        <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Ver Boleta de Notas</a>
+                </li>
+
                 <li class="menu-title">Asistencia</li><!-- /.menu-title -->
-                    <li>
-                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Registrar Asistencia</a>
-                    </li>
-                    <li>
-                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Ver Faltas y Tardanzas</a>
-                    </li>
-                    
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Registrar Asistencia</a>
+                </li>
+                <li>
+                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Ver Faltas y Tardanzas</a>
+                </li>
+                <div class="footer-comment">
+                    <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarComentarios()">Enviar Comentarios
+                    </p>
+                    <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarReportes()">Reportar Errores</p>
+                </div>
             </ul>
 
         </div><!-- Sidebar Docente -->
@@ -178,17 +201,16 @@
                 <li>
                     <a href="#"> <i class="menu-icon fa fa-tasks"></i>Notas del padre</a>
                 </li>
-                <div class="footer-comment">
-                    <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarComentarios()">Enviar Comentarios
-                    </p>
-                    <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarReportes()">Reportar Errores</p>
-                </div>
 
                 <li class="menu-title">Asistencia</li><!-- /.menu-title -->
                 <li>
                     <a href="#"> <i class="menu-icon fa fa-tasks"></i>Ver asistencia</a>
                 </li>
-
+                <div class="footer-comment">
+                    <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarComentarios()">Enviar Comentarios
+                    </p>
+                    <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarReportes()">Reportar Errores</p>
+                </div>
             </ul>
         </div><!-- Sidebar Alumno-Padre -->
     </ng-container>
