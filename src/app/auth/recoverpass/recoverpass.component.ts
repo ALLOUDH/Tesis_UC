@@ -54,15 +54,9 @@ export class RecoverpassComponent {
             icon: 'success',
             title: '¡Éxito!',
             text: 'Código enviado exitosamente a tu correo. Revise su bandeja de entrada.',
-            showCancelButton: true,
-            confirmButtonText: 'Abrir Gmail',
-            cancelButtonText: 'Continuar'
+            showCancelButton: false,
+            confirmButtonText: 'Continuar',
           }).then((result) => {
-            // Verifica si se presionó "Abrir Gmail"
-            if (result.isConfirmed) {
-              // Abrir Gmail en una nueva pestaña
-              window.open(`https://mail.google.com/mail/u/0/#search/${this.email}`, '_blank');
-            }
             // Siempre abrir el modal de validación después de la respuesta
             this.AbrirModalValidatesecuritycode();
           });

@@ -37,7 +37,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="DNI" class="form-label label user-name-txt">DNI:</strong>
-                                        <input type="text" class="form-control user-surname-txt" id="DNI" formControlName="inputDNI" placeholder="Ingrese nro. de DNI" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="8">
+                                        <input type="text" class="form-control text-color-placeholder" id="DNI" formControlName="inputDNI" placeholder="Ingrese nro. de DNI" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="8">
                                         <div *ngIf="Controls['inputDNI'].invalid && (Controls['inputDNI'].dirty || Controls['inputDNI'].touched)" class="text-error">
                                             <div *ngIf="Controls['inputDNI']?.errors?.['required']">Campo obligatorio.</div>
                                             <div *ngIf="Controls['inputDNI']?.errors?.['minlength']">El número de documento debe contar con un mínimo de 8 caracteres.</div>
@@ -47,7 +47,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="nombreDocente" class="form-control-label user-name-txt">Nombres:</strong>
-                                        <input type="text" id="nombreDocente" placeholder="Ingrese nombres" class="form-control user-surname-txt" formControlName="inputNombreDocente">
+                                        <input type="text" id="nombreDocente" placeholder="Ingrese nombres" class="form-control text-color-placeholder" formControlName="inputNombreDocente">
                                         <div *ngIf="Controls['inputNombreDocente'].invalid && (Controls['inputNombreDocente'].dirty || Controls['inputNombreDocente'].touched)" class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
@@ -58,7 +58,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="apellido-paterno" class="form-control-label user-name-txt">Apellido Paterno:</strong>
-                                        <input type="text" id="apellido-paterno" placeholder="Ingrese apellido paterno" class="form-control user-surname-txt" formControlName="inputApellidoPaterno">
+                                        <input type="text" id="apellido-paterno" placeholder="Ingrese apellido paterno" class="form-control text-color-placeholder" formControlName="inputApellidoPaterno">
                                         <div *ngIf="Controls['inputApellidoPaterno'].invalid && (Controls['inputApellidoPaterno'].dirty || Controls['inputApellidoPaterno'].touched)" class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
@@ -67,7 +67,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="apellido-materno" class="form-control-label user-name-txt">Apellido Materno:</strong>
-                                        <input type="text" id="apellido-materno" placeholder="Ingrese apellido materno" class="form-control user-surname-txt" formControlName="inputApellidoMaterno">
+                                        <input type="text" id="apellido-materno" placeholder="Ingrese apellido materno" class="form-control text-color-placeholder" formControlName="inputApellidoMaterno">
                                         <div *ngIf="Controls['inputApellidoMaterno'].invalid && (Controls['inputApellidoMaterno'].dirty || Controls['inputApellidoMaterno'].touched)" class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
@@ -78,7 +78,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="contrasena" class="form-control-label user-name-txt user-name-txt">Contraseña:</strong>
-                                        <input type="password" id="contrasena" placeholder="Ingrese contraseña" class="form-control user-surname-txt" formControlName="inputPassword" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="8">
+                                        <input type="password" id="contrasena" placeholder="Ingrese contraseña" class="form-control text-color-placeholder" formControlName="inputPassword" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="8">
                                         <div *ngIf="Controls['inputPassword'].invalid && (Controls['inputPassword'].dirty || Controls['inputPassword'].touched)" class="text-error">
                                           <div *ngIf="Controls['inputPassword']?.errors?.['required']">Campo obligatorio.</div>
                                           <div *ngIf="Controls['inputPassword']?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres.</div>
@@ -92,7 +92,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="confirmar-contrasena" class="form-control-label user-name-txt">Confirmar contraseña:</strong>
-                                        <input type="password" id="confirmar-contrasena" placeholder="Confirme contraseña" class="form-control user-surname-txt" formControlName="inputConfirmPassword" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="8">
+                                        <input type="password" id="confirmar-contrasena" placeholder="Confirme contraseña" class="form-control text-color-placeholder" formControlName="inputConfirmPassword" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="8">
                                         <div *ngIf="Controls['inputConfirmPassword'].invalid && (Controls['inputConfirmPassword'].dirty || Controls['inputConfirmPassword'].touched)" class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
@@ -104,7 +104,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="email" class="form-control-label user-name-txt">Email:</strong>
-                                        <input type="email" id="email" placeholder="Ingrese email" class="form-control user-surname-txt" formControlName="inputEmail">
+                                        <input type="email" id="email" placeholder="Ingrese email" class="form-control text-color-placeholder" formControlName="inputEmail">
                                         <div *ngIf="Controls['inputEmail'].invalid && (Controls['inputEmail'].dirty || Controls['inputEmail'].touched)" class="text-error">
                                             <div *ngIf="Controls['inputEmail']?.errors?.['required']">Campo obligatorio.</div>
                                             <div *ngIf="Controls['inputEmail']?.errors?.['email']">Debe ingresar un email válido.</div>
@@ -114,7 +114,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="selectEstadoUsuario" class="form-control-label user-name-txt">Estado del Docente:</strong>
-                                        <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre" valueExpr="id" class="user-surname-txt" [dataSource]="otherEstadoUsuario" [inputAttr]="{ 'aria-label': 'Product With Placeholder' }" [showClearButton]="true" formControlName="selectEstadoUsuario"></dx-select-box>
+                                        <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre" valueExpr="id" class="text-color-placeholder" [dataSource]="otherEstadoUsuario" [inputAttr]="{ 'aria-label': 'Product With Placeholder' }" [showClearButton]="true" formControlName="selectEstadoUsuario"></dx-select-box>
                                         <div *ngIf="Controls['selectEstadoUsuario'].invalid && (Controls['selectEstadoUsuario'].dirty || Controls['selectEstadoUsuario'].touched)" class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
@@ -125,7 +125,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="sexo" class="form-control-label user-name-txt">Sexo:</strong>
-                                        <dx-select-box placeholder="Seleccione una opción." class="user-surname-txt" displayExpr="nombre" valueExpr="id" [dataSource]="otherSexo" [inputAttr]="{ 'aria-label': 'Product With Placeholder' }" [showClearButton]="true" formControlName="selectSexo"></dx-select-box>
+                                        <dx-select-box placeholder="Seleccione una opción." class="text-color-placeholder" displayExpr="nombre" valueExpr="id" [dataSource]="otherSexo" [inputAttr]="{ 'aria-label': 'Product With Placeholder' }" [showClearButton]="true" formControlName="selectSexo"></dx-select-box>
                                         <div *ngIf="Controls['selectSexo'].invalid && (Controls['selectSexo'].dirty || Controls['selectSexo'].touched)" class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
@@ -134,7 +134,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="especialidad" class="form-control-label user-name-txt">Especialidad:</strong>
-                                        <input type="text" id="especialidad" placeholder="Ingrese especialidad" class="form-control user-surname-txt" formControlName="inputEspecialidad">
+                                        <input type="text" id="especialidad" placeholder="Ingrese especialidad" class="form-control text-color-placeholder" formControlName="inputEspecialidad">
                                         <div *ngIf="Controls['inputEspecialidad'].invalid && (Controls['inputEspecialidad'].dirty || Controls['inputEspecialidad'].touched)" class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
@@ -145,7 +145,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="celular" class="form-control-label user-name-txt">Celular:</strong>
-                                        <input type="text" class="form-control user-surname-txt" id="celular" placeholder="Ingrese un número de contacto." oninput="this.value = this.value.replace(/[^0-9]/g, '')" formControlName="inputCelular">
+                                        <input type="text" class="form-control text-color-placeholder" id="celular" placeholder="Ingrese un número de contacto." oninput="this.value = this.value.replace(/[^0-9]/g, '')" formControlName="inputCelular">
                                         <div *ngIf="Controls['inputCelular'].invalid && (Controls['inputCelular'].dirty || Controls['inputCelular'].touched)" class="text-error">
                                             <div *ngIf="Controls['inputCelular']?.errors?.['required']">Campo obligatorio.</div>
                                             <div *ngIf="Controls['inputCelular']?.errors?.['minlength']">El celular debe contar con un mínimo de 4 caracteres.</div>
@@ -155,7 +155,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <strong for="selectGradoAcademicoDocente" class="form-control-label user-name-txt">Grado académico:</strong>
-                                        <dx-select-box placeholder="Seleccione una opción." class="user-surname-txt" displayExpr="nombre" valueExpr="id" [dataSource]="otherGradoAcademicoDocente" [inputAttr]="{ 'aria-label': 'Product With Placeholder' }" [showClearButton]="true" formControlName="selectGradoAcademicoDocente"></dx-select-box>
+                                        <dx-select-box placeholder="Seleccione una opción." class="text-color-placeholder" displayExpr="nombre" valueExpr="id" [dataSource]="otherGradoAcademicoDocente" [inputAttr]="{ 'aria-label': 'Product With Placeholder' }" [showClearButton]="true" formControlName="selectGradoAcademicoDocente"></dx-select-box>
                                         <div *ngIf="Controls['selectGradoAcademicoDocente'].invalid && (Controls['selectGradoAcademicoDocente'].dirty || Controls['selectGradoAcademicoDocente'].touched)" class="text-error">
                                             <div>Campo obligatorio.</div>
                                         </div>
@@ -166,7 +166,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-4">
                                     <strong for="auxiliar" class="form-control-label user-name-txt">Auxiliar</strong>
-                                    <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre" class="user-surname-txt"
+                                    <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre" class="text-color-placeholder"
                                         valueExpr="id" [dataSource]="otherAuxiliarDocente"
                                         [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
                                         [showClearButton]="true" formControlName="selectAuxiliar"></dx-select-box>
