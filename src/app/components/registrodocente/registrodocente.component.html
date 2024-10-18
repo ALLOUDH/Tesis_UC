@@ -27,9 +27,9 @@
     <div class="animated fadeIn">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body card-block">
-                        <form autocomplete="off" novalidate="novalidate" [formGroup]="docenteForm">
+                    <form autocomplete="off" novalidate="novalidate" [formGroup]="docenteForm">
+                        <div class="card">
+                            <div class="card-body card-block">
                             <strong for="exampleFormControlInput1" class="form-label label fs-5 user-name-txt" >DATOS DOCENTE </strong>
                             <hr>
                             <div class="row">
@@ -176,14 +176,50 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <!-- Asignar curso y grado a docente-->
+                    <div class="card">
+                        <div class="card-body card-block">
+                            <strong for="exampleFormControlInput1" class="form-label label fs-5 user-name-txt" >DATOS ADICIONALES  </strong>
+                            <hr>
+                            <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group mb-4">
+                                    <strong for="auxiliar" class="form-control-label user-name-txt">CURSOS</strong>
+                                    <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre" class="text-color-placeholder"
+                                        valueExpr="id" [dataSource]="otherAuxiliarDocente"
+                                        [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+                                        [showClearButton]="true" formControlName="selectAuxiliar"></dx-select-box>
+                                    <div *ngIf="Controls['selectAuxiliar'].invalid && (Controls['selectAuxiliar'].dirty || Controls['selectAuxiliar'].touched) "
+                                        class="text-error">
+                                        <div>Campo obligatorio.</div>
+                                    </div>
+                                </div>
+                            </div>
                             
+                            <!-- Asignar grado a docente-->
+                            <div class="col-lg-6">
+                                <div class="form-group mb-4">
+                                    <strong for="auxiliar" class="form-control-label user-name-txt">GRADO</strong>
+                                    <dx-select-box placeholder="Seleccione una opción." displayExpr="nombre" class="text-color-placeholder"
+                                        valueExpr="id" [dataSource]="otherAuxiliarDocente"
+                                        [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+                                        [showClearButton]="true" formControlName="selectAuxiliar"></dx-select-box>
+                                    <div *ngIf="Controls['selectAuxiliar'].invalid && (Controls['selectAuxiliar'].dirty || Controls['selectAuxiliar'].touched) "
+                                        class="text-error">
+                                        <div>Campo obligatorio.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
                             <div class="form-group d-flex justify-content-end">
                                 <button type="button" class="btn btn-primary mx-2" (click)="LimpiarFormulario()"><i class="fa fa-eraser"></i>&nbsp; Limpiar</button>
                                 <button type="button" class="btn btn-success" (click)="RegistrarDocente()" ><i class="fa fa-check"></i>&nbsp; Registrar</button>
                             </div>
-                        </form>
-                    </div>
-                </div>
+                        </div>
+                    </div>   
+                </form>
             </div>
         </div>
     </div>

@@ -1,62 +1,89 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+// src/app/components/area.component.ts
+import { Component, OnInit } from '@angular/core';
+import { AreaService } from '../../services/area.service';
+import { AreaDTO } from '../../dtos/area.dto';
+
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { AgregarAreaAcademicaComponent } from './agregar-area-academica/agregar-area-academica.component'; // Asegúrate de que la ruta sea correcta
+
 import Swal from 'sweetalert2';
-import { AgregarAreaAcademicaComponent } from './agregar-area-academica/agregar-area-academica.component';
 
 @Component({
   selector: 'app-lista-area-cursos',
   templateUrl: './lista-area-cursos.component.html',
   styleUrl: './lista-area-cursos.component.css'
 })
-export class ListaAreaCursosComponent {
+export class ListaAreaCursosComponent implements OnInit {
+  areas: AreaDTO[] = [];
+  error: string | null = null;
+  modalRef?: BsModalRef;
 
   constructor(
-    private router: Router,
-    private bsModalAgregarArea: BsModalRef,
+    private areaService: AreaService,
     private modalService: BsModalService,
+  
+  ) {}
 
-  ) {
+  ngOnInit(): void {
+    this.cargarAreas();
   }
 
-  areas = [
-    { nombre: 'MATEMÁTICA'},
-    { nombre: 'COMUNICACIÓN'}
-  ];
+ 
+  cargarAreas(): void {
+  this.areaService.getAreas().subscribe(
+    (data: AreaDTO[]) => {
+      this.areas = data;
+      console.log('Áreas cargadas:', this.areas);
+    },
+    (error) => {
+      this.error = 'Error al cargar las áreas: ' + error.message;
+      console.error('Error al cargar las áreas:', error);
+    }
+  );
+}
 
-  ModalAgregarArea() {
-    this.bsModalAgregarArea = this.modalService.show(AgregarAreaAcademicaComponent, { backdrop: 'static', class: 'modal-dialog-centered' });
-    console.log('Agregar nueva area');
-  }
+abrirModalAgregarArea(area?: AreaDTO): void {
+  const initialState = {
+    area // Pasar el área al modal si está definida (para edición)
+  };
 
-  EditarArea(index: number) {
-    // Aquí puedes abrir un modal para editar el area seleccionado
-    console.log('Editar area', this.areas[index]);
-  }
+  const modalRef: BsModalRef = this.modalService.show(AgregarAreaAcademicaComponent, { initialState,backdrop: 'static',keyboard: false  });
 
-  EliminarArea(index: number) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "No podrás revertir esta acción",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        //Logica de programación
-        this.areas.splice(index, 1); //Eliminación a nivel interfaz
-        Swal.fire(
-          '¡Eliminado!',
-          'El área ha sido eliminada.',
-          'success'
-        );
-      }
-    });
+  // Suscribirse al evento 'areaGuardada' para recargar la lista de áreas cuando se guarde o actualice
+  modalRef.content.areaGuardada.subscribe(() => {
+    this.cargarAreas(); // Recargar la lista de áreas
+  });
+}
 
-  }
+// Método para eliminar un área
+eliminarArea(id: number): void {
+  // Mostrar alerta de confirmación antes de proceder a eliminar
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'No, cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) { // Solo proceder si el usuario confirmó
+      this.areaService.deleteArea(id).subscribe(
+        () => {
+          this.cargarAreas(); // Recargar áreas después de eliminar
+          Swal.fire('Eliminado', 'Área eliminada correctamente', 'success'); // Mensaje de éxito
+        },
+        (error) => {
+          console.error('Error al eliminar el área:', error);
+          Swal.fire('Error', 'No se pudo eliminar el área', 'error'); // Mensaje de error
+        }
+      );
+    } else {
+      Swal.fire('Cancelado', 'La eliminación ha sido cancelada', 'info'); // Mensaje de cancelación
+    }
+  });
+}
 
 
 }

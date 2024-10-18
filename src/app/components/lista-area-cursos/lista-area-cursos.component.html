@@ -1,20 +1,20 @@
-<div class="breadcrumbs" >
+  <div class="breadcrumbs" >
     <div class="breadcrumbs-inner">
         <div class="row">
             <div class="col-sm-4">
                 <div class="page-header float-left">
-                    <div class="page-title">
-                        <h1>Áreas de Asignaturas</h1>
+                    <div class="page-title user-name-txt">
+                        <h1>Areas Académicas</h1>
                     </div>
                 </div>
             </div>
             <div class="col-sm-8">
                 <div class="page-header float-right">
                     <div class="page-title">
-                        <ol class="breadcrumb d-flex justify-content-end">
+                        <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
                             <li><a href="#">Inicio</a></li>
                             <li><a href="#">Plan de Estudio</a></li>
-                            <li class="active">Área de Asignaturas</li>
+                            <li class="active">Area</li>
                         </ol>
                     </div>
                 </div>
@@ -31,8 +31,8 @@
                     <div class="card-body card-block">
                     
                         <div class="card-body--">
-                            <button class="btn btn-primary mb-3" (click)="ModalAgregarArea()">
-                                <i class="fa fa-lg fa-fw fa-plus"></i> Agregar Área
+                            <button class="btn btn-primary mb-3" (click)="abrirModalAgregarArea()">
+                                <i class="fa fa-lg fa-fw fa-plus"></i> Agregar Area
                             </button>
                             <div class="table-stats order-table ov-h">
                                 <table class="table ">
@@ -44,14 +44,15 @@
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        <tr *ngFor="let areas of areas; let i = index">
+                                        <tr *ngFor="let area of areas; let i = index">
                                           <td>{{ i + 1 }}</td>
-                                          <td class="text-center">{{ areas.nombre }}</td>
+                                          <td class="text-center">{{ area.areaNombre }}</td>
                                           <td class="text-center">
-                                            <button class="btn btn-sm btn-warning mr-2" (click)="EditarArea(i)">
+                                            <button class="btn btn-sm btn-primary me-2" (click)="abrirModalAgregarArea(area)">
                                               <i class="fa fa-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-danger" (click)="EliminarArea(i)">
+                                            
+                                            <button class="btn btn-sm btn-danger " (click)="eliminarArea(area.idArea)" >
                                               <i class="fa fa-trash"></i>
                                             </button>
                                           </td>

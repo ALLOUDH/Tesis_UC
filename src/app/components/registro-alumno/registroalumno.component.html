@@ -23,18 +23,14 @@
     </div>
 </div>
 
-<div class="content">
-    <div class="animated fadeIn">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body card-block">
-                        <form autocomplete="off" novalidate="novalidate" [formGroup]="alumnoForm">
-                            <strong for="exampleFormControlInput1" class="form-label label fs-5 user-name-txt" >DATOS ALUMNO </strong>
-                            <hr>
-                            
-                                <div class="row">
-                                    <!-- Primera fila: DNI y Nombres -->
+<div class="content">   
+    <form autocomplete="off" novalidate="novalidate" [formGroup]="alumnoForm">
+        <div class="card">
+            <div class="card-body card-block">
+                <strong for="exampleFormControlInput1" class="form-label label fs-5 user-name-txt" >DATOS ALUMNO </strong>
+                    <hr>
+                    <div class="row">
+                        <!-- Primera fila: DNI y Nombres -->
                                     <div class="col-lg-6">
                                         <div class="form-group mb-4">
                                             <strong for="DNI" class="form-label label user-name-txt">DNI:</strong>
@@ -176,9 +172,12 @@
                                         </div>
                                     </div>
                                 </div>
-                            
+                            </div>
+                        </div>
                             
                             <!--CAMPO DE INSERCION DE DATOS DE APODERADO-->
+                        <div class="card">
+                            <div class="card-body card-block">
                             <strong for="exampleFormControlInput1" class="form-label label fs-5 user-name-txt" >DATOS APODERADO </strong>
                             <hr>
                             <div class="row">
@@ -265,10 +264,8 @@
                                 <button type="button" class="btn btn-success" (click)="RegistrarAlumno()"><i class="fa fa-check"></i>&nbsp;
                                     Registrar</button>
                             </div>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
+                
