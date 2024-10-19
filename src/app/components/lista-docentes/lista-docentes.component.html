@@ -1,1 +1,151 @@
-<p>lista-docentes works!</p>
+
+<div class="breadcrumbs" >
+    <div class="breadcrumbs-inner">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title user-name-txt">
+                        <h1>Docentes</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#">Usuarios</a></li>
+                            <li class="active">Docentes</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body card-block">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="mb-3">
+                                <p class="card-description label-custom-short">
+                                    Búsqueda de docentes
+                                </p>
+                            </div>
+                            <button type="button" class="btn btn-success btn-sm button-color-success" (click)="ModalAgregarDocente()">
+                                <i class="fa fa-lg fa-fw fa-user-plus"></i> Nuevo
+                            </button>
+                        </div>
+                        <!-- busquead por nombre y DNI-->
+                        <form>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1"
+                                        class="form-label label-custom-medium">Nombre:</label>
+                                    <dx-autocomplete placeholder="Escriba el nombre del paciente."
+                                       >
+                                    </dx-autocomplete>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label label-custom-medium">DNI:</label>
+                                    <input type="text" class="form-control" id="exampleFormControlInput1"
+                                        placeholder="Ingrese el número de documento."
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="8">
+                                </div>
+                            </div>
+
+                            
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1"
+                                        class="form-label label-custom-medium">Periodo:</label>
+                                    <dx-autocomplete placeholder="Escriba el nombre del paciente."
+                                       >
+                                    </dx-autocomplete>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1"
+                                        class="form-label label-custom-medium">Estado:</label>
+                                    <dx-autocomplete placeholder="Escriba el nombre del paciente."
+                                       >
+                                    </dx-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-10 text-right">
+                                <div class="d-flex justify-content-end" style="margin-right: 15px;"> <!-- Ajusta el margen derecho -->
+                                    <button type="button" class="btn btn-primary btn-sm button-color-primary"
+                                        data-toggle="tooltip" data-placement="top" title="Buscar paciente."
+                                        style="margin-right: 5px;">
+                                        <i class="fa fa-lg fa-fw fa-search"></i> Buscar
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm button-color-danger"
+                                        data-toggle="tooltip" data-placement="top" title="Limpiar campos.">
+                                        <i class="fa fa-lg fa-fw fa-eraser"></i> Limpiar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <br>
+                        
+                    </form>
+                        <div class="card-body--">
+                            
+                            <!-- Docentes Table -->
+            <div class="table-stats order-table ov-h">
+                <table class="table">
+                  <thead class="bg-primary text-white">
+                    <tr>
+                      <th>#</th>
+                      <th class="text-center">DNI</th>
+                      <th class="text-center">Nombre</th>
+                      <th class="text-center">Apellido Paterno</th>
+                      <th class="text-center">Apellido Materno</th>
+                      <th class="text-center">Auxiliar</th>
+                      <th class="text-center">Estado</th>
+                      <th class="text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let docente of docentes; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td class="text-center">{{ docente.usDni }}</td>
+                      <td class="text-center">{{ docente.usNombre }}</td>
+                      <td class="text-center">{{ docente.usApellidoPaterno }}</td>
+                      <td class="text-center">{{ docente.usApellidoMaterno }}</td>
+                      <td class="text-center">{{ docente.doEsAuxiliar ? 'Sí' : 'No' }}</td>
+                      <td class="text-center">{{ docente.usEstado ? 'Activo' : 'Inactivo' }}</td>
+                      <td class="text-center">
+                        <button class="btn btn-sm btn-warning mr-2" (click)="EditarDocente(i)">
+                          <i class="fa fa-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="eliminarDocente(docente.Iddocente)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div><!-- /.table-stats -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

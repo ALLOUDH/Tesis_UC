@@ -28,6 +28,7 @@ import { AgregarCategoriaNotaComponent } from './lista-categoria-notas/agregar-c
 import { AgregarTipoNotaComponent } from './lista-tipos-notas/agregar-tipo-nota/agregar-tipo-nota.component';
 import { RegistroIncidenciasComponent } from './registro-incidencias/registro-incidencias.component';
 import { RegistroComentarioComponent } from './registro-comentario/registro-comentario.component';
+import { EditarDocenteComponent } from './lista-docentes/editar-docente/editar-docente.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { RegistroComentarioComponent } from './registro-comentario/registro-come
     AgregarCategoriaNotaComponent,
     AgregarTipoNotaComponent,
     RegistroIncidenciasComponent,
-    RegistroComentarioComponent
+    RegistroComentarioComponent,
+    EditarDocenteComponent
   ],
   imports: [
     CommonModule,
