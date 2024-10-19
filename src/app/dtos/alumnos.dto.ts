@@ -1,6 +1,6 @@
 export class AlumnosDTO {
     UsDni!: string;
-    UsContrasena!: string;
+    UsContrasena?: string;
     UsRol!: string;
     UsEmail?: string;
     UsNombre!: string;

@@ -17,6 +17,16 @@
     border-color: #D45454;
 }
 
+.btn-orange {
+    background-color: #FB9678;
+    border-color: #FB9678;
+}
+
+.btn-skyblue {
+    background-color: #00C292;
+    border-color: #00C292;
+}
+
 .traffic-chart {
     min-height: 335px;
 }
@@ -95,6 +105,10 @@
     color: #007bff !important;
 }
 
+.custom-color-black {
+    color: #585858 !important;
+}
+
 .user-area {
     display: flex;
     align-items: center;
@@ -111,8 +125,10 @@
 .user-name-txt {
     font-style: bold;
     margin: 0;
+    margin-bottom: 5px;
     line-height: 1;
     font-size: 16px;
+    font-style: bold;
     /* Ajusta el tamaño de texto según sea necesario */
     color: #78909cfd;
 }
