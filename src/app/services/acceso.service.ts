@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ResponseAppDTO } from '../auth/auth-dtos/responseapp.dto';
 import { LoginDTO } from '../auth/auth-dtos/login.dto';
 import { jwtDecode } from 'jwt-decode';
+import { AlumnosDTO } from '../dtos/alumnos.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -73,15 +74,18 @@ export class AccesoService {
   registrarAlumno(objeto: any): Observable<ResponseAppDTO> {
     return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroAlumnos`, objeto);
   }
-
+  
+  actualizarAlumno(id: number, objeto: any): Observable<ResponseAppDTO> {
+    return this.http.put<ResponseAppDTO>(`${this.baseUrl}Acceso/ActualizarAlumno/${id}`, objeto);
+  }
+  
   registrarDocente(objeto: any): Observable<ResponseAppDTO> {
     return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroDocentes`, objeto);
   }
 
-
-  
   obtenerAccesos(): Observable<{ totalAccesos: number; totalAccesosExitosos: number }> {
     return this.http.get<{ totalAccesos: number; totalAccesosExitosos: number }>(`${this.baseUrl}Acceso/ContadorAccesos`);
   }
+
   
 }

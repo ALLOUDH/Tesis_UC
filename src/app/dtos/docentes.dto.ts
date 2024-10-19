@@ -12,4 +12,6 @@ export class DocentesDTO{
     DoEspecialidad!: string;
     DoGradoAcademico!: string;
     DoEsAuxiliar!: boolean;
+    IdAsignatura!: string;
+    IdGrado!: string;
 }
