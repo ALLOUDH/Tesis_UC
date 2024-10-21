@@ -16,8 +16,8 @@ export class RecoverpassComponent {
   verificationCode: string = '';
   token: string = '';
   nuevaContrasena: string = '';
-  isSending: boolean = false; 
- 
+  isSending: boolean = false;
+
 
   constructor(
     private modalService: BsModalService,
@@ -73,7 +73,7 @@ export class RecoverpassComponent {
     );
   }
 
-  
+
 
   /// Autor: Hector Chavez Perez
   /// Fecha: 02/09/2024
@@ -90,19 +90,6 @@ export class RecoverpassComponent {
 
 
   CerrarModal() {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "No podrás deshacer esta acción!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, cancelar',
-      cancelButtonText: 'No, continuar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.bsModalRecoverPass.hide();
-      }
-    });
+    this.bsModalRecoverPass.hide();
   }
 }

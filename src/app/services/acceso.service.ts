@@ -87,5 +87,7 @@ export class AccesoService {
     return this.http.get<{ totalAccesos: number; totalAccesosExitosos: number }>(`${this.baseUrl}Acceso/ContadorAccesos`);
   }
 
-  
+  actualizarDatosPrimerAcceso(objeto: any) {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/ActualizarPrimerAcceso`, objeto);
+  }
 }

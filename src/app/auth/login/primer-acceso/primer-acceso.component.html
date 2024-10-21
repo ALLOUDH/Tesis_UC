@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h4 class="modal-title fw-bold">Introduce tus nuevos datos de acceso</h4>
+</div>
+<div class="modal-body">
+    <section id="seccion-buscador">
+        <form autocomplete="off" novalidate="novalidate" [formGroup]="primeraccesoform">
+            <div class="mb-3">
+                <label for="newEmail" class="form-label fw-semibold">Ingrese su correo electronico</label>
+                <input type="email" class="form-control" id="newEmail" formControlName="inputCorreoElectronico" name="newPassword" placeholder="Correo electronico" required>
+                <div *ngIf="Controls['inputCorreoElectronico'].invalid && (Controls['inputCorreoElectronico'].dirty || Controls['inputCorreoElectronico'].touched)" class="text-error">
+                    <div *ngIf="Controls['inputCorreoElectronico']?.errors?.['required']">Campo obligatorio.</div>
+                    <div *ngIf="Controls['inputCorreoElectronico']?.errors?.['email']">Debe ingresar un email válido.</div>
+                </div>
+              </div>
+            <div class="mb-3">
+              <label for="newPassword" class="form-label fw-semibold">Ingrese su nueva contraseña</label>
+              <input type="password" class="form-control" id="newPassword"  formControlName="inputPassword" name="newPassword" placeholder="Nueva contraseña" required>
+              <div *ngIf="Controls['inputPassword'].invalid && (Controls['inputPassword'].dirty || Controls['inputPassword'].touched)" class="text-error">
+                <div *ngIf="Controls['inputPassword']?.errors?.['required']">Campo obligatorio.</div>
+                <div *ngIf="Controls['inputPassword']?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres.</div>
+                <div *ngIf="Controls['inputPassword']?.errors?.['pattern']">La contraseña debe ser solo números.</div>
+              </div>
+
+              <!-- Mensaje de error si la contraseña no coincide con el DNI -->
+              <div *ngIf="primeraccesoform.errors?.['dniMismatch'] && (Controls['inputPassword'].dirty || Controls['inputPassword'].touched)" class="text-error">La contraseña debe ser igual al DNI.</div>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label fw-semibold">Confirmar su contraseña</label>
+                <input type="password" class="form-control" id="confirmPassword"  formControlName="inputConfirmPassword" name="confirmPassword" placeholder="Confirma nueva contraseña" required>
+                <div *ngIf="Controls['inputConfirmPassword'].invalid && (Controls['inputConfirmPassword'].dirty || Controls['inputConfirmPassword'].touched)" class="text-error">
+                    <div>Campo obligatorio.</div>
+                  </div>
+                  <div *ngIf="primeraccesoform.errors?.['mismatch'] && (Controls['inputConfirmPassword'].dirty || Controls['inputConfirmPassword'].touched)" class="text-error">Las contraseñas no coinciden.</div>
+            </div>
+        </form>
+    </section>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary button-color-primary" (click)="GuardarDatos()">
+        <i class="fa fa-lg fa-fw fa-save"></i> Guardar
+    </button>
+    <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
+        <i class="fa fa-lg fa-fw fa-times"></i> Cancelar
+    </button>
+</div>
