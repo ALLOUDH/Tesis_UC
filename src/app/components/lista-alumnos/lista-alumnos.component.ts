@@ -104,7 +104,7 @@ export class ListaAlumnosComponent {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.vistasService.cambiarEstadoAlumno(alumno.idusuario, nuevoEstado).subscribe(
+        this.vistasService.cambiarEstadoUsuario(alumno.idusuario, nuevoEstado).subscribe(
           () => {
             alumno.usEliminado = nuevoEstado;
             this.obtenerAlumnos();

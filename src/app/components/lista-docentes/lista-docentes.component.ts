@@ -11,13 +11,12 @@ import { ListaDocentesDTO } from '../../dtos/lista-docentes.dto';
 import { OthersIntDTO } from '../../dtos/other.dto';
 import { AuxiliarService } from '../../services/esauxiliar-docente.service';
 
-
 @Component({
   selector: 'app-lista-docentes',
   templateUrl: './lista-docentes.component.html',
-  styleUrl: './lista-docentes.component.css'
+  styleUrl: './lista-docentes.component.css',
 })
-export class ListaDocentesComponent  {
+export class ListaDocentesComponent {
   listadocenteform: FormGroup;
   docentes: ListaDocentesDTO[] = [];
   otherEstadoUsuario: OthersIntDTO[] = [];
@@ -31,8 +30,7 @@ export class ListaDocentesComponent  {
     private vistasService: VistasService,
     private modalService: BsModalService,
     estadoUsuarioService: EstadoUsuarioService,
-    auxiliardocenteService: AuxiliarService,
-
+    auxiliardocenteService: AuxiliarService
   ) {
     this.otherEstadoUsuario = estadoUsuarioService.ObtenerEstadoUsuario();
     this.otherAuxiliarDocente = auxiliardocenteService.ObtenerAuxiliarDocente();
@@ -42,20 +40,19 @@ export class ListaDocentesComponent  {
       selectEstadoUsuario: new FormControl(''),
     });
   }
- 
-  ngOnInit(): void {
-    this.obtenerDocentes(); 
 
+  ngOnInit(): void {
+    this.obtenerDocentes();
   }
 
   AbrirModalEditarDocentes(docentes: ListaDocentesDTO) {
     const initialState = {
-      docentes: docentes
+      docentes: docentes,
     };
-    this.ModalEditarDocente = this.modalService.show(EditarDocenteComponent, { 
-      initialState, 
-      backdrop: 'static', 
-      class: 'modal-xl' 
+    this.ModalEditarDocente = this.modalService.show(EditarDocenteComponent, {
+      initialState,
+      backdrop: 'static',
+      class: 'modal-xl',
     });
     this.ModalEditarDocente.content.docenteActualizado.subscribe(() => {
       this.obtenerDocentes(); // Volver a obtener la lista
@@ -65,51 +62,66 @@ export class ListaDocentesComponent  {
   obtenerDocentes() {
     this.vistasService.obtenerDocentes().subscribe(
       (data: ListaDocentesDTO[]) => {
-        this.docentes = data; // Asigna los datos obtenidos
-        this.listadocentes = data.map(docente =>
-          `${docente.usNombre} ${docente.usApellidoPaterno} ${docente.usApellidoMaterno}`
-        ); // Llena el arreglo de nombres
+        if (data.length === 0) {
+          console.warn('No se encontraron docentes registrados.');
+          this.docentes = []; // Asignar lista vacía para actualizar la tabla
+        } else {
+          this.docentes = data; // Asigna los datos obtenidos
+          this.listadocentes = data.map(
+            (docente) =>
+              `${docente.usNombre} ${docente.usApellidoPaterno} ${docente.usApellidoMaterno}`
+          ); // Llena el arreglo de nombres
+        }
       },
       (error) => {
         console.error('Error al obtener los docentes', error);
       }
     );
   }
+
   RegistrarDocente() {
     this.router.navigate(['/registrodocente']).then(() => {
       window.location.reload();
     });
   }
-  
+
   LimpiarFormulario() {
     this.listadocenteform.reset();
     this.buscardocente = [...this.docentes];
   }
 
-  CambiarEstadoDocente(docente: any) {
-    const nuevoEstado = !docente.usEstado;
+  EliminarDocente(docente: any) {
+    const nuevoEstado = !docente.usEliminado;
     Swal.fire({
       title: '¿Está seguro?',
-      text: "Cambiará el estado del docente seleccionado",
+      text: 'El docente sera eliminado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, actualizar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.vistasService.cambiarEstadoDocente(docente.idusuario, nuevoEstado).subscribe(
-          () => {
-            docente.usEstado = nuevoEstado;
-            this.obtenerDocentes();
-            this.MostrarMensajeExito('Estado del docente actualizado', 'El estado del docente se actualizó correctamente');
-          },
-          (error) => {
-            console.error('Error al eliminar el docente', error);
-            this.MostrarMensajeError('Hubo un error al cambiar el estado del docente', 'Error');
-          }
-        );
+        this.vistasService
+          .cambiarEstadoUsuario(docente.idusuario, nuevoEstado)
+          .subscribe(
+            () => {
+              docente.usEliminado = nuevoEstado;
+              this.obtenerDocentes();
+              this.MostrarMensajeExito(
+                'Docente eliminado',
+                'El docente fue eliminado correctamente'
+              );
+            },
+            (error) => {
+              console.error('Error al eliminar el docente', error);
+              this.MostrarMensajeError(
+                'Hubo un error al cambiar el estado del docente',
+                'Error'
+              );
+            }
+          );
       }
     });
   }
@@ -144,21 +156,32 @@ export class ListaDocentesComponent  {
 
   BuscarDocente() {
     if (!this.validarCamposBusqueda()) {
-      this.MostrarMensajeError('Por favor, rellene al menos un campo de búsqueda.', 'Error');
+      this.MostrarMensajeError(
+        'Por favor, rellene al menos un campo de búsqueda.',
+        'Error'
+      );
       return;
     }
 
     const terminobusqueda = this.listadocenteform.get('inputDocente')?.value;
-    const nroDocumento = this.listadocenteform.get('inputNroDocumento')?.value || '';
-    const estadoUsuario = this.listadocenteform.get('selectEstadoUsuario')?.value;
-  
-    this.buscardocente= this.docentes.filter(docentes => {
-      const nombreCompleto = `${docentes.usNombre} ${docentes.usApellidoPaterno} ${docentes.usApellidoMaterno}`.toLowerCase();
-  
+    const nroDocumento =
+      this.listadocenteform.get('inputNroDocumento')?.value || '';
+    const estadoUsuario = this.listadocenteform.get(
+      'selectEstadoUsuario'
+    )?.value;
+
+    this.buscardocente = this.docentes.filter((docentes) => {
+      const nombreCompleto =
+        `${docentes.usNombre} ${docentes.usApellidoPaterno} ${docentes.usApellidoMaterno}`.toLowerCase();
+
       return (
-        (terminobusqueda ? nombreCompleto.includes(terminobusqueda.toLowerCase()) : true) &&
+        (terminobusqueda
+          ? nombreCompleto.includes(terminobusqueda.toLowerCase())
+          : true) &&
         (nroDocumento ? docentes.usDni.includes(nroDocumento) : true) &&
-        (estadoUsuario !== undefined && estadoUsuario !== '' ? docentes.usEstado === estadoUsuario : true)
+        (estadoUsuario !== undefined && estadoUsuario !== ''
+          ? docentes.usEstado === estadoUsuario
+          : true)
       );
     });
   }
@@ -166,11 +189,13 @@ export class ListaDocentesComponent  {
   validarCamposBusqueda(): boolean {
     const terminobusqueda = this.listadocenteform.get('inputDocente')?.value;
     const nroDocumento = this.listadocenteform.get('inputNroDocumento')?.value;
-    const estadoUsuario = this.listadocenteform.get('selectEstadoUsuario')?.value;
-  
-    return !!(terminobusqueda || nroDocumento  || estadoUsuario);
+    const estadoUsuario = this.listadocenteform.get(
+      'selectEstadoUsuario'
+    )?.value;
+
+    return !!(terminobusqueda || nroDocumento || estadoUsuario);
   }
-  
+
   MostrarMensajeExito(titulo: string, mensaje: string) {
     Swal.fire({
       title: titulo,
@@ -178,7 +203,7 @@ export class ListaDocentesComponent  {
       icon: 'success',
       showConfirmButton: false,
       timer: 2300,
-      timerProgressBar: true
+      timerProgressBar: true,
     });
   }
 
@@ -186,9 +211,7 @@ export class ListaDocentesComponent  {
     Swal.fire({
       title: titulo,
       text: mensaje,
-      icon: "error"
+      icon: 'error',
     });
   }
-
-  
 }

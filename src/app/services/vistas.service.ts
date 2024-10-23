@@ -18,16 +18,12 @@ export class VistasService {
     return this.http.get<ListaAlumnosDTO[]>(`${this.baseUrl}Vistas/ObtenerAlumnos`);
   }
 
-  cambiarEstadoAlumno(id: number, nuevoEstado: boolean): Observable<void> {
+  cambiarEstadoUsuario(id: number, nuevoEstado: boolean): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}Vistas/EliminarUsuario/${id}`, nuevoEstado);
   }
 
   obtenerDocentes(): Observable<any[]> {
     return this.http.get<ListaDocentesDTO[]>(`${this.baseUrl}Vistas/ObtenerDocentes`);
-  }
-
-  cambiarEstadoDocente(id: number, nuevoEstado: boolean): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}Vistas/CambiarEstadoDocente/${id}`, nuevoEstado);
   }
 
   cambiarAuxiliarDocente(id: number, nuevoAuxiliar: boolean): Observable<void> {
