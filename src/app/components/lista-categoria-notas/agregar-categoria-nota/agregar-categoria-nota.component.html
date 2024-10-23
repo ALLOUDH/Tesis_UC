@@ -1,20 +1,24 @@
 <div class="modal-header">
-    <h4 class="modal-title fw-bold text-center text-color-titulos">Agregar Categoría de Notas</h4>
+    <strong class="modal-title fw-bold text-center user-name-txt">{{ isEditMode ? 'EDITAR CATEGORIA DE NOTA' : 'AGREGAR CATEGORIA DE NOTA' }}</strong>
 </div>
 <div class="modal-body">
     <section id="seccion-categoria-notas">
         <form [formGroup]="formGroup">
             <!-- Campo para el nombre la categoria de notas -->
             <div class="mb-3">
-                <label for="nombre" class="form-label fw-semibold text-color-titulos">Nombre</label>
+                <label for="nombre" class="form-label fw-semibold user-name-txt">Nombre</label>
                 <input type="text" class="form-control text-color-placeholder" id="NombreCategoriaNotas" formControlName="NombreCategoriaNotas" placeholder="Nombre de la categoría de notas">
+                <div *ngIf="Controls['NombreCategoriaNotas'].invalid && (Controls['NombreCategoriaNotas'].dirty || Controls['NombreCategoriaNotas'].touched)" class="text-error">
+                    <div *ngIf="Controls['NombreCategoriaNotas']?.errors?.['required']">Campo obligatorio.</div>
+                </div>
             </div>
         </form>
     </section>
 </div>
 <div class="modal-footer">
-    <button type="submit" class="btn btn-primary button-color-primary" (click)="AgregarCategoriaNotas()">
-        <i class="fa fa-lg fa-fw fa-plus"></i> Añadir
+    <button type="submit" class="btn btn-primary button-color-primary" (click)="guardarCategoriaNotas()">
+        <i class="fa" [ngClass]="isEditMode ? 'fa-refresh' : 'fa-plus'"></i> 
+        {{ isEditMode ? 'Actualizar' : 'Añadir' }}
     </button>
     <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
         <i class="fa fa-lg fa-fw fa-times"></i> Cancelar

@@ -31,7 +31,7 @@
                     <div class="card-body card-block">
                     
                         <div class="card-body--">
-                            <button class="btn btn-primary mb-3" (click)="ModalAgregarPeriodo()">
+                            <button class="btn btn-primary mb-3" (click)="abrirModalAgregarPeriodo()">
                                 <i class="fa fa-lg fa-fw fa-plus"></i> Agregar Periodo
                             </button>
                             <div class="table-stats order-table ov-h">
@@ -46,16 +46,16 @@
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        <tr *ngFor="let periodos of periodos; let i = index">
+                                        <tr *ngFor="let periodo of periodos; let i = index">
                                           <td>{{ i + 1 }}</td>
-                                          <td class="text-center">{{ periodos.nombre }}</td>
-                                          <td class="text-center">{{ periodos.fechainicio }}</td>
-                                          <td class="text-center">{{ periodos.fechafin }}</td>
+                                          <td class="text-center">{{ periodo.peNombre }}</td>
+                                          <td class="text-center">{{ periodo.peFechaIni }}</td>
+                                          <td class="text-center">{{ periodo.peFechaFin }}</td>
                                           <td class="text-center">
-                                            <button class="btn btn-sm btn-warning mr-2" (click)="EditarPeriodo(i)">
+                                            <button class="btn btn-sm btn-warning mr-2" (click)="abrirModalAgregarPeriodo(periodo)">
                                               <i class="fa fa-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-danger" (click)="EliminarPeriodo(i)">
+                                            <button class="btn btn-sm btn-danger" (click)="EliminarPeriodo(periodo.idperiodo)">
                                               <i class="fa fa-trash"></i>
                                             </button>
                                           </td>

@@ -1,20 +1,39 @@
 <div class="modal-header">
-    <h4 class="modal-title fw-bold text-center text-color-titulos">Agregar Tipo de Notas</h4>
+    <strong class="modal-title fw-bold text-center user-name-txt">{{ isEditMode ? 'EDITAR TIPO DE NOTA' : 'AGREGAR TIPO DE NOTA' }}</strong>
 </div>
 <div class="modal-body">
     <section id="seccion-tipos-notas">
         <form [formGroup]="formGroup">
             <!-- Campo para el nombre del tipo de notas -->
             <div class="mb-3">
-                <label for="nombre" class="form-label fw-semibold text-color-titulos">Nombre</label>
+                <label for="nombre" class="form-label fw-semibold user-name-txt">Nombre</label>
                 <input type="text" class="form-control text-color-placeholder" id="NombreTipoNotas" formControlName="NombreTipoNotas" placeholder="Nombre del tipo de nota">
+                <div *ngIf="Controls['NombreTipoNotas'].invalid && (Controls['NombreTipoNotas'].dirty || Controls['NombreTipoNotas'].touched)" class="text-error">
+                    <div *ngIf="Controls['NombreTipoNotas']?.errors?.['required']">Campo obligatorio.</div>
+                </div>
+            </div>
+
+             <!-- Campo para seleccionar categoria -->
+             <div class="mb-3">
+                <label for="categoriaId" class="form-label fw-semibold user-name-txt">Categoría</label>
+                <dx-select-box 
+                  [items]="categorias"
+                  displayExpr="catNombre"
+                  valueExpr="idcategoriaNotas"
+                  formControlName="categoriaId"
+                  placeholder="Seleccione una categoría">
+                </dx-select-box>
+                <div *ngIf="Controls['categoriaId'].invalid && (Controls['categoriaId'].dirty || Controls['categoriaId'].touched)" class="text-error">
+                    <div *ngIf="Controls['categoriaId']?.errors?.['required']">Campo obligatorio.</div>
+                </div>
             </div>
         </form>
     </section>
 </div>
 <div class="modal-footer">
     <button type="submit" class="btn btn-primary button-color-primary" (click)="AgregarTipoNotas()">
-        <i class="fa fa-lg fa-fw fa-plus"></i> Añadir
+        <i class="fa" [ngClass]="isEditMode ? 'fa-refresh' : 'fa-plus'"></i> 
+        {{ isEditMode ? 'Actualizar' : 'Añadir' }}
     </button>
     <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
         <i class="fa fa-lg fa-fw fa-times"></i> Cancelar

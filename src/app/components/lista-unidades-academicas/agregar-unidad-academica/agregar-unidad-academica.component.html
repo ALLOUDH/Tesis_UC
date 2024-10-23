@@ -1,20 +1,37 @@
 <div class="modal-header">
-    <h4 class="modal-title fw-bold text-center text-color-titulos">Agregar Unidad Académica</h4>
-</div>
+    <strong class="modal-title fw-bold text-center user-name-txt">{{ isEditMode ? 'EDITAR UNIDAD' : 'AGREGAR UNIDAD' }}</strong>
 <div class="modal-body">
     <section id="seccion-unidad-academico">
         <form [formGroup]="formGroup">
             <!-- Campo para el nombre del unidad académico -->
             <div class="mb-3">
-                <label for="nombre" class="form-label fw-semibold text-color-titulos">Nombre</label>
+                <label for="NombreUnidadAcademico" class="form-label fw-semibold user-name-txt">Nombre</label>
                 <input type="text" class="form-control text-color-placeholder" id="NombreUnidadAcademico" formControlName="NombreUnidadAcademico" placeholder="Nombre de la unidad académica">
+                <div *ngIf="Controls['NombreUnidadAcademico'].invalid && (Controls['NombreUnidadAcademico'].dirty || Controls['NombreUnidadAcademico'].touched)" class="text-error">
+                    <div *ngIf="Controls['NombreUnidadAcademico']?.errors?.['required']">Campo obligatorio.</div>
+                </div>
+            </div>
+            <!-- Campo para seleccionar unidad -->
+            <div class="mb-3">
+                <label for="unidadId" class="form-label fw-semibold user-name-txt">Bimestre</label>
+                <dx-select-box 
+                  [items]="bimestres"
+                  displayExpr="biNombre"
+                  valueExpr="idbimestre"
+                  formControlName="bimestreId"
+                  placeholder="Seleccione una unidad">
+                </dx-select-box>
+                <div *ngIf="Controls['bimestreId'].invalid && (Controls['bimestreId'].dirty || Controls['bimestreId'].touched)" class="text-error">
+                    <div *ngIf="Controls['bimestreId']?.errors?.['required']">Campo obligatorio.</div>
+                </div>
             </div>
         </form>
     </section>
 </div>
 <div class="modal-footer">
     <button type="submit" class="btn btn-primary button-color-primary" (click)="AgregarUnidadAcademico()">
-        <i class="fa fa-lg fa-fw fa-plus"></i> Añadir
+        <i class="fa" [ngClass]="isEditMode ? 'fa-refresh' : 'fa-plus'"></i> 
+        {{ isEditMode ? 'Actualizar' : 'Añadir' }}
     </button>
     <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
         <i class="fa fa-lg fa-fw fa-times"></i> Cancelar
