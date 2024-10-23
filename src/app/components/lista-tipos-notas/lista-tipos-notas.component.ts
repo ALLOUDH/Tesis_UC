@@ -1,43 +1,82 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AgregarTipoNotaComponent } from './agregar-tipo-nota/agregar-tipo-nota.component';
 import Swal from 'sweetalert2';
+import { TipoNotasDTO } from '../../dtos/tiponotas.dto';
+import { CategoriaNotasDTO } from '../../dtos/categorianotas.dto';
+import { TiponotasService } from '../../services/tiponotas.service';
+import { CategorianotasService } from '../../services/categorianotas.service';
 
 @Component({
   selector: 'app-lista-tipos-notas',
   templateUrl: './lista-tipos-notas.component.html',
   styleUrl: './lista-tipos-notas.component.css'
 })
-export class ListaTiposNotasComponent {
+export class ListaTiposNotasComponent implements OnInit {
+  tipos: (TipoNotasDTO & { categoriaNombre: string })[] = [];
+  categorias: CategoriaNotasDTO[] = [];
+  error: string | null = null;
+  modalRef?: BsModalRef;
 
   constructor(
     private router: Router,
     private bsModalAgregarTipoNota: BsModalRef,
     private modalService: BsModalService,
+    private tiponotasService: TiponotasService,
+    private categoriaService: CategorianotasService
 
   ) {
   }
 
-  tipos = [
-    { nombre: 'Tarea 1', categoria:'Registro Auxiliar',},
-    { nombre: 'Tarea 2', categoria:'Registro Auxiliar'},
-    { nombre: 'Fast Test', categoria:'Registro Auxiliar'},
-    { nombre: 'Aptitudinal', categoria:'Conducta'},
-    { nombre: 'Examen Formativo', categoria:'Notas del Padre '},
-  ];
-
-  ModalAgregarTipoNota() {
-    this.bsModalAgregarTipoNota = this.modalService.show(AgregarTipoNotaComponent, { backdrop: 'static', class: 'modal-dialog-centered' });
-    console.log('Agregar nueva tipo de nota');
+  ngOnInit(): void {
+    this.cargarCategorias();
   }
 
-  EditarTipoNota(index: number) {
-    // Aquí puedes abrir un modal para editar el tipo de nota seleccionado
-    console.log('Editar tipo de nota', this.tipos[index]);
+  cargarCategorias(): void {
+    this.categoriaService.getCategorias().subscribe(
+      (data: CategoriaNotasDTO[]) => {
+        this.categorias = data;
+        this.cargarTipoNotas(); // Cargar tipos después de que las categorias estén disponibles
+      },
+      (error) => {
+        this.error = 'Error al cargar las categorías: ' + error.message;
+        console.error('Error al cargar las categorías:', error);
+      }
+    );
   }
 
-  EliminarTipoNota(index: number) {
+  cargarTipoNotas(): void {
+    this.tiponotasService.getTiposNota().subscribe(
+      (data: TipoNotasDTO[]) => {
+        this.tipos = data.map((tipo) => {
+          const categoria = this.categorias.find((categoria) => categoria.idcategoriaNotas === tipo.idcategoriaNotas);
+          return {
+            ...tipo,
+            categoriaNombre: categoria ? categoria.catNombre : 'Sin área', // Asignar el nombre de la categoria
+          };
+        });
+        console.log('Tipos de notas cargadas:', this.tipos);
+      },
+      (error) => {
+        this.error = 'Error al cargar los tipos de notas: ' + error.message;
+        console.error('Error al cargar los tipos de notas:', error);
+      }
+    );
+  }
+  abrirModalAgregarTipoNota(tiponota?: TipoNotasDTO): void {
+    const initialState = {
+      tiponota, // Pasar el tipo al modal si está definida (para edición)
+    };
+
+    const modalRef: BsModalRef = this.modalService.show(AgregarTipoNotaComponent, { initialState, backdrop: 'static', keyboard: false,});
+
+    modalRef.content.tiponotaGuardada.subscribe(() => {
+      this.cargarTipoNotas(); // Recargar la lista de tipos de notas
+    });
+  }
+
+  EliminarTipoNota(id: number): void{
     Swal.fire({
       title: '¿Estás seguro?',
       text: "No podrás revertir esta acción",
@@ -49,13 +88,19 @@ export class ListaTiposNotasComponent {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        //Logica de programación
-        this.tipos.splice(index, 1); //Eliminación a nivel interfaz
-        Swal.fire(
-          '¡Eliminado!',
-          'El tipo de nota ha sido eliminada.',
-          'success'
+        this.tiponotasService.deleteTipoNota(id).subscribe(
+          () => {
+            this.cargarTipoNotas(); // Recargar tipo de notas después de eliminar
+            Swal.fire('Eliminado', 'Tipo de nota eliminada correctamente', 'success');
+          },
+          (error) => {
+            console.error('Error al eliminar el tipo de nota:', error);
+            console.error(id, error);
+            Swal.fire('Error', 'No se pudo eliminar el tipo de nota', 'error');
+          }
         );
+      } else {
+        Swal.fire('Cancelado', 'La eliminación ha sido cancelada', 'info');
       }
     });
 

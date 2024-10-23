@@ -31,7 +31,7 @@
                     <div class="card-body card-block">
                     
                         <div class="card-body--">
-                            <button class="btn btn-primary mb-3" (click)="ModalAgregarUnidad()">
+                            <button class="btn btn-primary mb-3" (click)="abrirModalAgregarUnidad()">
                                 <i class="fa fa-lg fa-fw fa-plus"></i> Agregar Unidad
                             </button>
                             <div class="table-stats order-table ov-h">
@@ -40,18 +40,20 @@
                                         <tr>
                                           <th class="widthtablas">#</th>
                                           <th class="text-center">Nombre</th>
+                                          <th class="text-center">Bimestre</th>
                                           <th class="text-center">Acciones</th>
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        <tr *ngFor="let unidades of unidades; let i = index">
+                                        <tr *ngFor="let unidad of unidades; let i = index">
                                           <td>{{ i + 1 }}</td>
-                                          <td class="text-center">{{ unidades.nombre }}</td>
+                                          <td class="text-center">{{ unidad.uniNombre }}</td>
+                                          <td class="text-center">{{ unidad.bimestreNombre }}</td>
                                           <td class="text-center">
-                                            <button class="btn btn-sm btn-warning mr-2" (click)="EditarUnidad(i)">
+                                            <button class="btn btn-sm btn-warning mr-2" (click)="abrirModalAgregarUnidad(unidad)">
                                               <i class="fa fa-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-danger" (click)="EliminarUnidad(i)">
+                                            <button class="btn btn-sm btn-danger" (click)="EliminarUnidad(unidad.idunidad)">
                                               <i class="fa fa-trash"></i>
                                             </button>
                                           </td>

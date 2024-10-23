@@ -1,32 +1,42 @@
 <div class="modal-header">
-    <h4 class="modal-title fw-bold text-center text-color-titulos">Agregar Periodo Académico</h4>
+    <strong class="modal-title fw-bold text-center user-name-txt">{{ isEditMode ? 'EDITAR PERIODO' : 'AGREGAR PERIODO' }}</strong>
 </div>
 <div class="modal-body">
     <section id="seccion-periodo-academico">
         <form [formGroup]="formGroup">
             <!-- Campo para el nombre del periodo académico -->
             <div class="mb-3">
-                <label for="nombre" class="form-label fw-semibold text-color-titulos">Nombre</label>
+                <label for="nombre" class="form-label fw-semibold user-name-txt">Nombre</label>
                 <input type="text" class="form-control text-color-placeholder" id="NombrePeriodoAcademico" formControlName="NombrePeriodoAcademico" placeholder="Nombre del periodo académico">
+                <div *ngIf="Controls['NombrePeriodoAcademico'].invalid && (Controls['NombrePeriodoAcademico'].dirty || Controls['NombrePeriodoAcademico'].touched)" class="text-error">
+                    <div *ngIf="Controls['NombrePeriodoAcademico']?.errors?.['required']">Campo obligatorio.</div>
+                </div>
             </div>
             <!-- Campo para la fecha de inicio -->
             <div class="mb-3">
-                <label for="fechaInicio" class="form-label fw-semibold text-color-titulos">Fecha de inicio</label>
-                <dx-date-box type="date" formControlName="inputFechaInicioPeriodoAcademico" [displayFormat]="'dd/MM/yyyy'" [placeholder]="'dd/MM/yyyy'">
+                <label for="fechaInicio" class="form-label fw-semibold user-name-txt">Fecha de inicio</label>
+                <dx-date-box type="date" formControlName="inputFechaInicioPeriodoAcademico" [displayFormat]="'yyyy/MM/dd'">
                 </dx-date-box>
+                <div *ngIf="Controls['inputFechaInicioPeriodoAcademico'].invalid && (Controls['inputFechaInicioPeriodoAcademico'].dirty || Controls['inputFechaInicioPeriodoAcademico'].touched)" class="text-error">
+                    <div *ngIf="Controls['inputFechaInicioPeriodoAcademico']?.errors?.['required']">Campo obligatorio.</div>
+                </div>
             </div>
             <!-- Campo para la fecha de fin -->
             <div class="mb-3">
-                <label for="fechaFin" class="form-label fw-semibold text-color-titulos">Fecha de fin</label>
-                <dx-date-box type="date" formControlName="inputFechaFinPeriodoAcademico" [displayFormat]="'dd/MM/yyyy'" [value]="fechaActual">
+                <label for="fechaFin" class="form-label fw-semibold user-name-txt">Fecha de fin</label>
+                <dx-date-box type="date" formControlName="inputFechaFinPeriodoAcademico" [displayFormat]="'yyyy/MM/dd'" >
                 </dx-date-box>
+                <div *ngIf="Controls['inputFechaFinPeriodoAcademico'].invalid && (Controls['inputFechaFinPeriodoAcademico'].dirty || Controls['inputFechaFinPeriodoAcademico'].touched)" class="text-error">
+                    <div *ngIf="Controls['inputFechaFinPeriodoAcademico']?.errors?.['required']">Campo obligatorio.</div>
+                </div>
             </div>
         </form>
     </section>
 </div>
 <div class="modal-footer">
-    <button type="submit" class="btn btn-primary button-color-primary" (click)="AgregarPeriodoAcademico()">
-        <i class="fa fa-lg fa-fw fa-plus"></i> Añadir
+    <button type="submit" class="btn btn-primary button-color-primary" (click)="guardarPeriodoAcademico()">
+        <i class="fa" [ngClass]="isEditMode ? 'fa-refresh' : 'fa-plus'"></i> 
+        {{ isEditMode ? 'Actualizar' : 'Añadir' }}
     </button>
     <button type="button" class="btn btn-danger button-color-danger" (click)="CerrarModal()">
         <i class="fa fa-lg fa-fw fa-times"></i> Cancelar

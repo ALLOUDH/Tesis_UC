@@ -1,41 +1,59 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CategorianotasService } from '../../services/categorianotas.service';
+import { CategoriaNotasDTO } from '../../dtos/categorianotas.dto';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AgregarCategoriaNotaComponent } from './agregar-categoria-nota/agregar-categoria-nota.component';
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-lista-categoria-notas',
   templateUrl: './lista-categoria-notas.component.html',
   styleUrl: './lista-categoria-notas.component.css'
 })
-export class ListaCategoriaNotasComponent {
+export class ListaCategoriaNotasComponent implements OnInit{
+  categorias: CategoriaNotasDTO[] = [];
+  error: string | null = null;
+  modalRef?: BsModalRef
+
 
   constructor(
-    private router: Router,
-    private bsModalAgregarCategoriaNota: BsModalRef,
+    private categoriaService: CategorianotasService,
     private modalService: BsModalService,
 
   ) {
   }
 
-  categorias = [
-    { nombre: 'Registro Auxiliar'},
-    { nombre: 'Conducta'},
-    { nombre: 'Notas del Padre'},
-  ];
-
-  ModalAgregarCategoriaNotas() {
-    this.bsModalAgregarCategoriaNota = this.modalService.show(AgregarCategoriaNotaComponent, { backdrop: 'static', class: 'modal-dialog-centered' });
-    console.log('Agregar nueva categoria de nota');
+  ngOnInit(): void {
+    this.cargarCategorias();
   }
 
-  EditarCategoriaNotas(index: number) {
-    // Aquí puedes abrir un modal para editar el categoria de nota seleccionado
-    console.log('Editar categoria de nota', this.categorias[index]);
+  cargarCategorias(): void {
+    this.categoriaService.getCategorias().subscribe(
+      (data: CategoriaNotasDTO[]) => {
+        this.categorias = data;
+        console.log('Categorias cargadas:', this.categorias);
+      },
+      (error) => {
+        this.error = 'Error al cargar las categorias de notas: ' + error.message;
+        console.error('Error al cargar las categorias de notas:', error);
+      }
+    );
   }
 
-  EliminarCategoriaNotas(index: number) {
+  abrirModalAgregarCategoriaNotas(categoria?: CategoriaNotasDTO): void {
+    const initialState = {
+      categoria // Pasar el área al modal si está definida (para edición)
+    };
+
+    const modalRef: BsModalRef = this.modalService.show(AgregarCategoriaNotaComponent, { initialState, backdrop: 'static', keyboard: false });
+
+    modalRef.content.categoriaGuardada.subscribe(() => {
+      this.cargarCategorias(); // Recargar la lista de áreas
+    });
+  }
+
+  EliminarCategoriaNotas(id: number): void {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "No podrás revertir esta acción",
@@ -47,13 +65,18 @@ export class ListaCategoriaNotasComponent {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        //Logica de programación
-        this.categorias.splice(index, 1); //Eliminación a nivel interfaz
-        Swal.fire(
-          '¡Eliminado!',
-          'La categoria de nota ha sido eliminada.',
-          'success'
+        this.categoriaService.deleteCategoria(id).subscribe(
+          () => {
+            this.cargarCategorias(); // Recargar categorias después de eliminar
+            Swal.fire('Eliminado', 'Categoría eliminada correctamente', 'success'); // Mensaje de éxito
+          },
+          (error) => {
+            console.error('Error al eliminar el área:', error);
+            Swal.fire('Error', 'No se pudo eliminar el área', 'error'); // Mensaje de error
+          }
         );
+      } else {
+        Swal.fire('Cancelado', 'La eliminación ha sido cancelada', 'info'); // Mensaje de cancelación
       }
     });
 

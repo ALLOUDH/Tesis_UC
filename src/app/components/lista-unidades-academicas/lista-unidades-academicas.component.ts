@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import Swal from 'sweetalert2';
 import { AgregarUnidadAcademicaComponent } from './agregar-unidad-academica/agregar-unidad-academica.component';
+import { UnidadAcademicaDTO } from '../../dtos/unidadacademica.dto';
+import { BimestreAcademicoDTO } from '../../dtos/bimestreacademico.dto';
+import { UnidadAcademicoService } from '../../services/unidad-academico.service';
+import { BimestreAcademicoService } from '../../services/bimestre-academico.service';
 
 @Component({
   selector: 'app-lista-unidades-academicas',
@@ -10,37 +14,72 @@ import { AgregarUnidadAcademicaComponent } from './agregar-unidad-academica/agre
   styleUrl: './lista-unidades-academicas.component.css'
 })
 export class ListaUnidadesAcademicasComponent {
+  unidades: (UnidadAcademicaDTO & { bimestreNombre: string })[] = [];
+  bimestres: BimestreAcademicoDTO[] = [];
+  error: string | null = null;
+  modalRef?: BsModalRef;
 
   constructor(
     private router: Router,
-    private bsModalAgregarUnidad: BsModalRef,
     private modalService: BsModalService,
+    private unidadService: UnidadAcademicoService,
+    private bimestreService: BimestreAcademicoService
 
   ) {
   }
-
-  unidades = [
-    { nombre: 'Unidad 1'},
-    { nombre: 'Unidad 2'},
-    { nombre: 'Unidad 3'},
-    { nombre: 'Unidad 4'},
-    { nombre: 'Unidad 5'},
-    { nombre: 'Unidad 6'},
-    { nombre: 'Unidad 7'},
-    { nombre: 'Unidad 8'}
-  ];
-
-  ModalAgregarUnidad() {
-    this.bsModalAgregarUnidad = this.modalService.show(AgregarUnidadAcademicaComponent, { backdrop: 'static', class: 'modal-dialog-centered' });
-    console.log('Agregar nueva unidad');
+  ngOnInit(): void {
+    this.cargarBimestres();
   }
 
-  EditarUnidad(index: number) {
-    // Aquí puedes abrir un modal para editar el unidad seleccionado
-    console.log('Editar unidad', this.unidades[index]);
+  cargarBimestres(): void {
+    this.bimestreService.getBimestre().subscribe(
+      (data: BimestreAcademicoDTO[]) => {
+        this.bimestres = data;
+        this.cargarUnidades(); // Cargar unidades después de que las áreas estén disponibles
+      },
+      (error) => {
+        this.error = 'Error al cargar las unidades: ' + error.message;
+        console.error('Error al cargar las unidades:', error);
+      }
+    );
   }
 
-  EliminarUnidad(index: number) {
+  cargarUnidades(): void {
+    this.unidadService.getUnidad().subscribe(
+      (data: UnidadAcademicaDTO[]) => {
+        this.unidades = data.map((unidad) => {
+          const bimestre = this.bimestres.find((bimestre) => bimestre.idbimestre === unidad.idbimestre);
+          return {
+            ...unidad,
+            bimestreNombre: bimestre ? bimestre.biNombre : 'Sin bimestre', // Asignar el nombre del área
+          };
+        });
+        console.log('Unidades cargadas:', this.unidades);
+      },
+      (error) => {
+        this.error = 'Error al cargar las unidades: ' + error.message;
+        console.error('Error al cargar las unidades:', error);
+      }
+    );
+  }
+
+  abrirModalAgregarUnidad(unidad?: UnidadAcademicaDTO): void {
+    const initialState = {
+      unidad, // Pasar la unidad al modal si está definida (para edición)
+    };
+
+    const modalRef: BsModalRef = this.modalService.show(AgregarUnidadAcademicaComponent, {
+      initialState,
+      backdrop: 'static',
+      keyboard: false,
+    });
+
+    modalRef.content.unidadGuardada.subscribe(() => {
+      this.cargarUnidades(); // Recargar la lista de unidades
+    });
+  }
+
+  EliminarUnidad(id: number): void {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "No podrás revertir esta acción",
@@ -52,13 +91,18 @@ export class ListaUnidadesAcademicasComponent {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        //Logica de programación
-        this.unidades.splice(index, 1); //Eliminación a nivel interfaz
-        Swal.fire(
-          '¡Eliminado!',
-          'La unidad ha sido eliminada.',
-          'success'
+        this.unidadService.deleteUnidad(id).subscribe(
+          () => {
+            this.cargarUnidades(); // Recargar unidades después de eliminar
+            Swal.fire('Eliminado', 'Unidad eliminada correctamente', 'success');
+          },
+          (error) => {
+            console.error('Error al eliminar la unidad:', error);
+            Swal.fire('Error', 'No se pudo eliminar la unidad', 'error');
+          }
         );
+      } else {
+        Swal.fire('Cancelado', 'La eliminación ha sido cancelada', 'info');
       }
     });
 

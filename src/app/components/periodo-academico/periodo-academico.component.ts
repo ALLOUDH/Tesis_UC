@@ -1,29 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import Swal from 'sweetalert2';
 import { AgregarPeriodoAcademicoComponent } from './agregar-periodo-academico/agregar-periodo-academico.component';
+import { PeriodoAcademicoDTO } from '../../dtos/periodoacademico.dto';
+import { PeriodoAcademicoService } from '../../services/periodo-academico.service';
 
 @Component({
   selector: 'app-periodo-academico',
   templateUrl: './periodo-academico.component.html',
   styleUrl: './periodo-academico.component.css'
 })
-export class PeriodoAcademicoComponent {
+export class PeriodoAcademicoComponent implements OnInit {
+  periodos: PeriodoAcademicoDTO[] = [];
+  error: string | null = null;
+  modalRef?: BsModalRef;
 
   constructor(
-    private router: Router,
     private bsModalAgregarPeriodo: BsModalRef,
+    private periodoService: PeriodoAcademicoService,
     private modalService: BsModalService,
 
   ) {
   }
 
-  periodos = [
-    { nombre: '2024', fechainicio: '18/03/2024', fechafin: '18/12/2024' },
-    { nombre: '2025', fechainicio: '17/03/2025', fechafin: '19/12/2025'},
-    { nombre: '2026', fechainicio: '16/03/2026', fechafin: '20/12/2026' }
-  ];
+  ngOnInit(): void {
+    this.cargarPeriodos();
+  }
+
+  cargarPeriodos(): void{
+    this.periodoService.getPeriodo().subscribe(
+      (data: PeriodoAcademicoDTO[]) => {
+        this.periodos = data;
+        console.log('Periodos cargados:', this.periodos);
+      },
+      (error) => {
+        this.error = 'Error al cargar las áreas: ' + error.message;
+        console.error('Error al cargar las áreas:', error);
+      }
+    );
+  }
+
+  abrirModalAgregarPeriodo(periodo?: PeriodoAcademicoDTO): void {
+    const initialState = {
+      periodo // Pasar el área al modal si está definida (para edición)
+    };
+  
+    const modalRef: BsModalRef = this.modalService.show(AgregarPeriodoAcademicoComponent, { initialState,backdrop: 'static',keyboard: false  });
+  
+    // Suscribirse al evento 'periodoGuardada' para recargar la lista de áreas cuando se guarde o actualice
+    modalRef.content.periodoGuardada.subscribe(() => {
+      this.cargarPeriodos(); // Recargar la lista de periodos
+    });
+  }
 
   ModalAgregarPeriodo() {
     this.bsModalAgregarPeriodo = this.modalService.show(AgregarPeriodoAcademicoComponent, { backdrop: 'static', class: 'modal-dialog-centered' });
@@ -35,27 +64,33 @@ export class PeriodoAcademicoComponent {
     console.log('Editar periodo', this.periodos[index]);
   }
 
-  EliminarPeriodo(index: number) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "No podrás revertir esta acción",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        //Logica de programación
-        this.periodos.splice(index, 1); //Eliminación a nivel interfaz
-        Swal.fire(
-          '¡Eliminado!',
-          'El periodo ha sido eliminado.',
-          'success'
-        );
-      }
-    });
-
-  }
+  // Método para eliminar un periodo
+  EliminarPeriodo(id: number): void {
+    // Mostrar alerta de confirmación antes de proceder a eliminar
+   Swal.fire({
+     title: '¿Estás seguro?',
+     text: "No podrás revertir esta acción",
+     icon: 'warning',
+     showCancelButton: true,
+     confirmButtonColor: '#3085d6',
+     cancelButtonColor: '#d33',
+     confirmButtonText: 'Sí, eliminar',
+     cancelButtonText: 'Cancelar'
+   }).then((result) => {
+     if (result.isConfirmed) {
+       this.periodoService.deletePeriodo(id).subscribe(
+         () => {
+           this.cargarPeriodos(); // Recargar periodos después de eliminar
+           Swal.fire('Eliminado', 'Periodo eliminado correctamente', 'success'); // Mensaje de éxito
+         },
+         (error) => {
+           console.error('Error al eliminar el periodo:', error);
+           Swal.fire('Error', 'No se pudo eliminar el periodo', 'error'); // Mensaje de error
+         }
+       );
+     }else {
+       Swal.fire('Cancelado', 'La eliminación ha sido cancelada', 'info'); 
+     }// Mensaje de cancelación
+   });
+ }
 }

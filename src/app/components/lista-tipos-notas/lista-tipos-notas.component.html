@@ -31,7 +31,7 @@
                     <div class="card-body card-block">
                     
                         <div class="card-body--">
-                            <button class="btn btn-primary mb-3" (click)="ModalAgregarTipoNota()">
+                            <button class="btn btn-primary mb-3" (click)="abrirModalAgregarTipoNota()">
                                 <i class="fa fa-lg fa-fw fa-plus"></i> Agregar Tipo de Nota
                             </button>
                             <div class="table-stats order-table ov-h">
@@ -45,15 +45,15 @@
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        <tr *ngFor="let tipos of tipos; let i = index">
+                                        <tr *ngFor="let tiponota of tipos; let i = index">
                                           <td>{{ i + 1 }}</td>
-                                          <td class="text-center">{{ tipos.nombre }}</td>
-                                          <td class="text-center">{{ tipos.categoria }}</td>
+                                          <td class="text-center">{{ tiponota.tipNoNombre }}</td>
+                                          <td class="text-center">{{ tiponota.categoriaNombre }}</td>
                                           <td class="text-center">
-                                            <button class="btn btn-sm btn-warning mr-2" (click)="EditarTipoNota(i)">
+                                            <button class="btn btn-sm btn-warning mr-2" (click)="abrirModalAgregarTipoNota(tiponota)">
                                               <i class="fa fa-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-danger" (click)="EliminarTipoNota(i)">
+                                            <button class="btn btn-sm btn-danger" (click)="EliminarTipoNota(tiponota.idtipoNotas)">
                                               <i class="fa fa-trash"></i>
                                             </button>
                                           </td>
