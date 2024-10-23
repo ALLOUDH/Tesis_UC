@@ -65,7 +65,8 @@ export class ListaAlumnosComponent {
     this.vistasService.obtenerAlumnos().subscribe(
       (data: ListaAlumnosDTO[]) => {
         if (data.length === 0) {
-          console.warn('No se encontraron alumnos registrados.'); // Mensaje en la consola
+          console.warn('No se encontraron alumnos registrados.');
+          this.alumnos = []; // Asignar lista vacía para actualizar la tabla
         } else {
           this.alumnos = data; // Asigna los datos obtenidos
           this.listadoalumnos = data.map(alumno =>
