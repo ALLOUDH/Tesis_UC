@@ -1,0 +1,168 @@
+<div class="breadcrumbs" >
+  <div class="breadcrumbs-inner">
+      <div class="row">
+          <div class="col-sm-4">
+              <div class="page-header float-left">
+                  <div class="page-title user-name-txt">
+                      <h1>Asignar Docentes</h1>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-8">
+              <div class="page-header float-right">
+                  <div class="page-title">
+                      <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
+                          <li><a href="#">Inicio</a></li>
+                          <li><a href="#">Usuarios</a></li>
+                          <li class="active">Asignación</li>
+                      </ol>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<section id="asignar">
+  <div class="asignar-docentes">
+    <form [formGroup]="asignarDocenteForm" >
+      <div class="content">
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body card-block">
+                  <div class="row">
+                    <div class="col-md-6 mb-5">
+                      <div class="mb-3 user-name-txt">
+                        <strong>Seleccione un docente para ver y realizar su asignación respectiva: </strong>
+                      </div>
+                      <!-- Selección de Docente -->
+                      <div class="form-group mb-5">
+                        <label for="SelectDocente" class="form-control-label user-name-txt">Seleccionar Docente</label>
+                        <dx-select-box
+                          formControlName="SelectDocente"
+                          id="SelectDocente"
+                          class="form-control"
+                          placeholder="Seleccione un Docente"
+                          [dataSource]="docente" 
+                          displayExpr="fullName" 
+                          valueExpr="iddocente" 
+                          (valueChange)="cargarAsignaciones()"
+                          [showClearButton]="true"
+                        ></dx-select-box>
+                         <!-- <div *ngIf="asignarDocenteForm.get('SelectDocente')?.invalid && asignarDocenteForm.get('SelectDocente')?.touched" class="text-danger">
+                          Este campo es obligatorio.
+                        </div>-->
+                      </div>
+
+                      <div class="mb-3 user-name-txt" *ngIf="asignarDocenteForm.get('SelectDocente')?.value">
+                        <strong >VER Y REALIZAR ASIGNACIÓN A: </strong>
+                          {{ obtenerNombreCompleto() }}
+                      </div>
+                      <!-- Selección de Grado -->
+                      <div class="form-group mb-5" *ngIf="asignarDocenteForm.get('SelectDocente')?.value">
+                        <label for="SelectGrado" class="form-control-label user-name-txt">Grado</label>
+                        <dx-select-box
+                          formControlName="SelectGrado"
+                          id="SelectGrado"
+                          class="form-control"
+                          placeholder="Seleccione un Grado"
+                          [dataSource]="otherGradoAcademico" 
+                          displayExpr="nombre"
+                          valueExpr="id"
+                          [showClearButton]="true"
+                        ></dx-select-box>
+                        <!-- <div *ngIf="asignarDocenteForm.get('SelectGrado')?.invalid && asignarDocenteForm.get('SelectGrado')?.touched" class="text-danger">
+                          Este campo es obligatorio.
+                        </div>-->
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4" *ngIf="asignarDocenteForm.get('SelectDocente')?.value">
+                      <!-- Selección de Asignaturas -->
+                      <label for="SelectAsignatura" class="form-control-label user-name-txt">Asignaturas</label>
+                      <div class="overflow-auto" style="max-height: 300px; border: 1px solid #dee2e6; padding: 10px;">
+                        <div *ngFor="let asignatura of otherAsignatura">
+                          <input 
+                            type="checkbox" 
+                            [value]="asignatura.idasignatura" 
+                            (change)="onCheckboxChange($event, asignatura.idasignatura)"
+                            [checked]="selectedAsignaturas.includes(asignatura.idasignatura)" 
+                          />
+                          {{ asignatura.asigNombre }}
+                        </div>
+                      </div>
+                      <!--<div *ngIf="asignarDocenteForm.get('SelectAsignatura')?.invalid && asignarDocenteForm.get('SelectAsignatura')?.touched" class="text-danger">
+                        Este campo es obligatorio.
+                      </div>-->
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end mb-4">
+                    <button type="submit" class="btn btn-success me-2" (click)="agregarAsignacion()"><i 
+                      class="fa fa-plus"></i>&nbsp;Asignar</button>
+                    <button type="submit" class="btn btn-primary" (click)="LimpiarFormulario()"><i
+                      class="fa fa-eraser"></i>&nbsp;Limpiar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    
+  </div>
+</section>
+
+
+<section id="lista-asignaciones">
+  <div class="content">
+      <div class="animated fadeIn">
+          <div class="row">
+              <div class="col-lg-12">
+                  <div class="card">
+                      <div class="card-body card-block">
+                          <div class="card-body--">
+                              <div class="table-stats order-table ov-h">
+                                <table class="table">
+                                  <thead class="bg-primary ">
+                                    <tr>
+                                      <th class="widthtablas">#</th>
+                                      <th class="text-center">Grado</th>
+                                      <th class="text-center">Asignaturas</th>
+                                      <th class="text-center">Acciones</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngIf="!asignarDocenteForm.get('SelectDocente')?.value">
+                                      <td colspan="4" class="text-center">Seleccione un docente para ver sus asignaciones</td>
+                                    </tr>
+                                    <tr *ngFor="let asignacion of asignarDocentes; let i = index" >
+                                      <td class="widthtablas">{{ i + 1 }}</td>
+                                      <td class="text-center">{{ asignacion.graNombre }}</td>
+                                      <td class="text-center">
+                                        <div *ngFor="let asignatura of asignacion.asigNombre">{{ asignatura }}</div>
+                                      </td>
+                                      <td class="text-center">
+                                        <button class="btn btn-sm btn-danger mx-2" (click)="eliminarAsignacion(i)">
+                                          <i class="fa fa-trash"></i>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                    <tr *ngIf="asignarDocenteForm.get('SelectDocente')?.value && asignarDocentes.length === 0">
+                                      <td colspan="4" class="text-center">No hay asignaciones disponibles para el docente .</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+</section>
+
+                      

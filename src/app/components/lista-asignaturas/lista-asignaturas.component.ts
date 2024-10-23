@@ -64,7 +64,7 @@ export class ListaAsignaturasComponent implements OnInit {
 
   abrirModalAgregarAsignatura(asignatura?: AsignaturaDTO): void {
     const initialState = {
-      asignatura, // Pasar la asignatura al modal si está definida (para edición)
+      asignatura, 
     };
 
     const modalRef: BsModalRef = this.modalService.show(AgregarAsignaturaComponent, {

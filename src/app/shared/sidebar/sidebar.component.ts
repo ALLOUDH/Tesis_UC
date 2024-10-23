@@ -45,6 +45,12 @@ export class SidebarComponent {
     });
   }
 
+  AsignarDocente() {
+    this.router.navigate(['/asignardocentes']).then(() => {
+      window.location.reload();
+    });
+  }
+
   RegistrarPadre() {
     this.router.navigate(['/registropadre']).then(() => {
       window.location.reload();

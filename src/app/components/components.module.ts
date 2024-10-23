@@ -29,6 +29,8 @@ import { AgregarTipoNotaComponent } from './lista-tipos-notas/agregar-tipo-nota/
 import { RegistroIncidenciasComponent } from './registro-incidencias/registro-incidencias.component';
 import { RegistroComentarioComponent } from './registro-comentario/registro-comentario.component';
 import { ActualizarAlumnosComponent } from './lista-alumnos/actualizar-alumnos/actualizar-alumnos.component';
+import { AsignardocentesComponent } from './asignardocentes/asignardocentes.component';
+import { EditarDocenteComponent } from './lista-docentes/editar-docente/editar-docente.component';
 
 
 @NgModule({
@@ -58,7 +60,9 @@ import { ActualizarAlumnosComponent } from './lista-alumnos/actualizar-alumnos/a
     AgregarTipoNotaComponent,
     RegistroIncidenciasComponent,
     RegistroComentarioComponent,
-    ActualizarAlumnosComponent
+    ActualizarAlumnosComponent,
+    AsignardocentesComponent,
+    EditarDocenteComponent,
   ],
   imports: [
     CommonModule,

@@ -162,7 +162,11 @@ export class RegistroAlumnoComponent {
             },
             (error) => {
                 console.error('Error en el servidor:', error);
-                this.MostrarMensajeError('Error', 'Ocurrió un error en el servidor');
+                if (error.error && error.error.message) {
+                  this.MostrarMensajeError('Error', error.error.message); 
+              } else {
+                  this.MostrarMensajeError('Error', 'Ocurrió un error en el servidor');
+              }
             }
         );
     } else {

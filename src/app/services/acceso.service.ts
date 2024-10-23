@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ResponseAppDTO } from '../auth/auth-dtos/responseapp.dto';
 import { LoginDTO } from '../auth/auth-dtos/login.dto';
 import { jwtDecode } from 'jwt-decode';
+import { AlumnosDTO } from '../dtos/alumnos.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -77,13 +78,34 @@ export class AccesoService {
   actualizarAlumno(id: number, objeto: any): Observable<ResponseAppDTO> {
     return this.http.put<ResponseAppDTO>(`${this.baseUrl}Acceso/ActualizarAlumno/${id}`, objeto);
   }
+  actualizarDocente(id: number, objeto: any): Observable<ResponseAppDTO> {
+    return this.http.put<ResponseAppDTO>(`${this.baseUrl}Acceso/ActualizarDocente/${id}`, objeto);
+  }
   
-  registrarDocente(objeto: DocentesDTO): Observable<ResponseAppDTO> {
+  registrarDocente(objeto: any): Observable<ResponseAppDTO> {
     return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/RegistroDocentes`, objeto);
   }
 
   obtenerAccesos(): Observable<{ totalAccesos: number; totalAccesosExitosos: number }> {
     return this.http.get<{ totalAccesos: number; totalAccesosExitosos: number }>(`${this.baseUrl}Acceso/ContadorAccesos`);
+  }
+
+  // asignacion a grado y cursos
+
+  asignarDocente(objeto: any): Observable<ResponseAppDTO> {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/AsignarDocente`, objeto);
+  }
+
+  listarAsignaciones(idDocente: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}Acceso/ListarAsignaciones/${idDocente}`);
+  }
+
+  editarAsignacionPorGrado(idDocente: number, idGrado: number, objeto: any): Observable<ResponseAppDTO> {
+    return this.http.put<ResponseAppDTO>(`${this.baseUrl}EditarAsignacionPorGrado/${idDocente}/${idGrado}`, objeto);
+  }
+
+  eliminarAsignacion(idDocente: number, idGrado: number): Observable<ResponseAppDTO> {
+    return this.http.delete<ResponseAppDTO>(`${this.baseUrl}Acceso/EliminarAsignacion/${idDocente}/${idGrado}`);
   }
 
   

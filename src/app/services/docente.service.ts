@@ -12,9 +12,7 @@ export class DocenteService {
   constructor(private http: HttpClient) {}
 
   // Obtener todos los docentes
-  obtenerDocentes(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/ObtenerDocentes`);
-  }
+  
 
   // Editar un docente
   editarDocente(idDocente: number, docente: any): Observable<any> {

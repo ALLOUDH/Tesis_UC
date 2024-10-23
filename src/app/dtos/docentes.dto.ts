@@ -1,4 +1,3 @@
-import { AsignarDocenteDTO } from "./asignardocente.dto";
 
 export class DocentesDTO {
     UsDni!: string;
@@ -9,15 +8,15 @@ export class DocentesDTO {
     UsApellidoPaterno!: string;
     UsApellidoMaterno!: string;
     UsSexo!: boolean;
-    UsFechaRegistro!: Date;
     UsCelular?: string;
     UsEstado!: boolean;
     DoEspecialidad!: string;
     DoGradoAcademico!: string;
     DoEsAuxiliar!: boolean;
     Idusuario?: number; 
-    Iddocente?: number; 
+    IdDocente?: number; 
+    IdGradoAcademico?: number;
+    IdAsignaturas?: number;
 
-    // Lista de asignaciones
-    Asignaciones: AsignarDocenteDTO[] = []; // Inicializado como una lista vacía
+   
 }

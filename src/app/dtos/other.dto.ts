@@ -3,6 +3,6 @@ export class OthersDTO{
     nombre!:string;
 }
 export class OthersIntDTO{
-    id!: boolean | number;
+    id!: number | boolean;
     nombre!:string;
 }
