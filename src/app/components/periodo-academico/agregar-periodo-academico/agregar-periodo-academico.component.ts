@@ -36,55 +36,71 @@ export class AgregarPeriodoAcademicoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Si la categoria ya existe (edición), rellenar el formulario
+    // Inicializa el formulario
+    this.formGroup = this.fb.group({
+      NombrePeriodoAcademico: ['', Validators.required],
+      inputFechaInicioPeriodoAcademico: [null, Validators.required], // Inicializa como null
+      inputFechaFinPeriodoAcademico: [null, Validators.required] // Inicializa como null
+    });
+
+    // Si el periodo ya existe (edición), rellenar el formulario
     if (this.periodo) {
-      this.formGroup.patchValue({ NombrePeriodoAcademico: this.periodo.peNombre });
-      this.formGroup.patchValue({ inputFechaInicioPeriodoAcademico: this.periodo.peFechaIni });
-      this.formGroup.patchValue({ inputFechaFinPeriodoAcademico: this.periodo.peFechaFin });
+      this.formGroup.patchValue({
+        NombrePeriodoAcademico: this.periodo.peNombre,
+        inputFechaInicioPeriodoAcademico: this.periodo.peFechaIni, // Asegúrate de que este valor sea el tipo correcto (string o Date)
+        inputFechaFinPeriodoAcademico: this.periodo.peFechaFin, // Asegúrate de que este valor sea el tipo correcto (string o Date)
+      });
       this.isEditMode = true;
     }
   }
 
-  // Método para agregar o actualizar el periodo
+  // Función para formatear la fecha en yyyy-MM-dd
+  formatearFecha(fecha: Date): string {
+    // Convertir la fecha a UTC para evitar problemas de zona horaria
+    const utcDate = new Date(fecha.getUTCFullYear(), fecha.getUTCMonth(), fecha.getUTCDate());
+
+    const year = utcDate.getFullYear();
+    const month = ('0' + (utcDate.getMonth() + 1)).slice(-2); // Mes de 2 dígitos
+    const day = ('0' + utcDate.getDate()).slice(-2); // Día de 2 dígitos
+    return `${year}-${month}-${day}`; // Cambiar a '-' para el formato esperado
+  }
+
   guardarPeriodoAcademico(): void {
     if (this.formGroup.valid) {
+      // Las fechas se mantienen como string en el formato esperado
       const nuevaPeriodo: PeriodoAcademicoDTO = {
-        idperiodo: this.periodo ? this.periodo.idperiodo : 0, // Usar el ID si es una edición, 0 si es nuevo
+        idperiodo: this.periodo ? this.periodo.idperiodo : 0,
         peNombre: this.formGroup.value.NombrePeriodoAcademico,
-        peFechaIni: this.formGroup.value.inputFechaInicioPeriodoAcademico,
-        peFechaFin: this.formGroup.value.inputFechaFinPeriodoAcademico,
+        peFechaIni: this.formatearFecha(new Date(this.formGroup.value.inputFechaInicioPeriodoAcademico)), // Usar la función de formateo
+        peFechaFin: this.formatearFecha(new Date(this.formGroup.value.inputFechaFinPeriodoAcademico)), // Usar la función de formateo
       };
 
-      // Si estamos editando un periodo existente
+      // Resto del código se mantiene igual
       if (this.periodo) {
         this.periodoService.updatePeriodo(nuevaPeriodo).subscribe(
           () => {
-            this.periodoGuardada.emit(nuevaPeriodo); // Emitir el periodo actualizado
+            this.periodoGuardada.emit(nuevaPeriodo);
             Swal.fire('Éxito', 'Periodo actualizado correctamente', 'success');
-            this.bsModalRef.hide(); // Cerrar el modal
-            console.log(nuevaPeriodo);
+            this.bsModalRef.hide();
           },
           (error) => {
             console.error('Error al actualizar el periodo:', error);
           }
         );
       } else {
-        // Si estamos creando un nuevo periodo
         this.periodoService.createPeriodo(nuevaPeriodo).subscribe(
           (periodoCreada: PeriodoAcademicoDTO) => {
-            this.periodoGuardada.emit(periodoCreada); // Emitir el periodo creada
+            this.periodoGuardada.emit(periodoCreada);
             Swal.fire('Éxito', 'Periodo guardada correctamente', 'success');
-            this.bsModalRef.hide(); // Cerrar el modal
-
+            this.bsModalRef.hide();
           },
           (error) => {
             console.error('Error al crear el periodo:', error);
             console.log('Validation Errors:', error.error.errors);
-            console.log(nuevaPeriodo);
           }
         );
       }
-    }else {
+    } else {
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -93,7 +109,6 @@ export class AgregarPeriodoAcademicoComponent implements OnInit {
       });
     }
   }
-
 
   CerrarModal() {
     this.bsModalRef.hide();

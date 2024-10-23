@@ -15,7 +15,7 @@
             <!-- Campo para la fecha de inicio -->
             <div class="mb-3">
                 <label for="fechaInicio" class="form-label fw-semibold user-name-txt">Fecha de inicio</label>
-                <dx-date-box type="date" formControlName="inputFechaInicioPeriodoAcademico" [displayFormat]="'yyyy/MM/dd'">
+                <dx-date-box type="date" formControlName="inputFechaInicioPeriodoAcademico" [displayFormat]="'yyyy/MM/dd'" placeholder="0000/00/00">
                 </dx-date-box>
                 <div *ngIf="Controls['inputFechaInicioPeriodoAcademico'].invalid && (Controls['inputFechaInicioPeriodoAcademico'].dirty || Controls['inputFechaInicioPeriodoAcademico'].touched)" class="text-error">
                     <div *ngIf="Controls['inputFechaInicioPeriodoAcademico']?.errors?.['required']">Campo obligatorio.</div>
@@ -24,7 +24,7 @@
             <!-- Campo para la fecha de fin -->
             <div class="mb-3">
                 <label for="fechaFin" class="form-label fw-semibold user-name-txt">Fecha de fin</label>
-                <dx-date-box type="date" formControlName="inputFechaFinPeriodoAcademico" [displayFormat]="'yyyy/MM/dd'" >
+                <dx-date-box type="date" formControlName="inputFechaFinPeriodoAcademico" [displayFormat]="'yyyy/MM/dd'" placeholder="0000/00/00">
                 </dx-date-box>
                 <div *ngIf="Controls['inputFechaFinPeriodoAcademico'].invalid && (Controls['inputFechaFinPeriodoAcademico'].dirty || Controls['inputFechaFinPeriodoAcademico'].touched)" class="text-error">
                     <div *ngIf="Controls['inputFechaFinPeriodoAcademico']?.errors?.['required']">Campo obligatorio.</div>

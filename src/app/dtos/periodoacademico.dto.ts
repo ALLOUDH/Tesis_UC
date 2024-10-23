@@ -1,6 +1,6 @@
 export class PeriodoAcademicoDTO {
     idperiodo!:number; 
     peNombre!: string;
-    peFechaIni!: Date;
-    peFechaFin!: Date;
+    peFechaIni!: string;
+    peFechaFin!: string;
   }

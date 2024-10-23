@@ -52,13 +52,23 @@
                                           <td class="text-center">{{ periodo.peFechaIni }}</td>
                                           <td class="text-center">{{ periodo.peFechaFin }}</td>
                                           <td class="text-center">
-                                            <button class="btn btn-sm btn-warning mr-2" (click)="abrirModalAgregarPeriodo(periodo)">
-                                              <i class="fa fa-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger" (click)="EliminarPeriodo(periodo.idperiodo)">
-                                              <i class="fa fa-trash"></i>
-                                            </button>
-                                          </td>
+                                                    <div class="text-center">
+                                                        <button type="button"
+                                                            class="btn btn-primary btn-sm button-color-primary"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Editar alumno." style="margin-right: 5px;"
+                                                            (click)="abrirModalAgregarPeriodo(periodo)">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-sm button-color-danger"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Eliminar elemento." style="margin-right: 5px;"
+                                                            (click)="EliminarPeriodo(periodo.idperiodo)">
+                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                         </tr>
                                       </tbody>
                                 </table>
