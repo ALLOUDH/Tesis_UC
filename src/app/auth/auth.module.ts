@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OptionselectComponent } from './recoverpass/optionselect/optionselect.component';
 import { ValidatesecuritycodeComponent } from './recoverpass/validatesecuritycode/validatesecuritycode.component';
 import { ChangepassComponent } from './recoverpass/changepass/changepass.component';
+import { PrimerAccesoComponent } from './login/primer-acceso/primer-acceso.component';
 
 
 
@@ -15,7 +16,8 @@ import { ChangepassComponent } from './recoverpass/changepass/changepass.compone
     RecoverpassComponent,
     OptionselectComponent,
     ValidatesecuritycodeComponent,
-    ChangepassComponent
+    ChangepassComponent,
+    PrimerAccesoComponent
   ],
   imports: [
     CommonModule,

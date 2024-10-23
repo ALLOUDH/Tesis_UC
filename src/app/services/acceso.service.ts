@@ -108,5 +108,7 @@ export class AccesoService {
     return this.http.delete<ResponseAppDTO>(`${this.baseUrl}Acceso/EliminarAsignacion/${idDocente}/${idGrado}`);
   }
 
-  
+  actualizarDatosPrimerAcceso(objeto: any) {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Acceso/ActualizarPrimerAcceso`, objeto);
+  }
 }

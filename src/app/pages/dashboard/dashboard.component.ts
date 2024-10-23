@@ -27,6 +27,8 @@ export class DashboardComponent {
   totalIncidenciasPendientes: number = 0;
   totalComentarios: number = 0;
 
+  private myChart: any;
+
   constructor(
     private auditoriaService: AuditoriaService,
     private accesoService: AccesoService
@@ -36,7 +38,25 @@ export class DashboardComponent {
     this.obtenerDatosAuditoria();
     this.obtenerDatosAcceso();
     this.iniciarGrafica();
+
+    // Escuchar cambios de tamaño de ventana
+    window.addEventListener('resize', this.onResize.bind(this));
   }
+
+  ngOnDestroy(): void {
+    // Limpiar el evento al destruir el componente
+    window.removeEventListener('resize', this.onResize.bind(this));
+    if (this.myChart) {
+      this.myChart.dispose(); // Limpiar el gráfico
+    }
+  }
+
+  onResize() {
+    if (this.myChart) {
+      this.myChart.resize(); // Ajustar el gráfico al tamaño de la ventana
+    }
+  }
+
 
   obtenerDatosAcceso() {
     this.accesoService.obtenerAccesos().subscribe({
@@ -114,14 +134,13 @@ export class DashboardComponent {
         feature: {
           mark: { show: true },
           dataView: { show: true, readOnly: false },
-          // restore: { show: true },
           saveAsImage: { show: true }
         }
       },
-      tooltip: { // Configuración del tooltip
-        trigger: 'item', // Muestra el tooltip al pasar sobre los elementos
-        formatter: '{b}: {c} ({d}%)', // Formato del tooltip
-        extraCssText: 'box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);' // Estilo adicional
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b}: {c} ({d}%)',
+        extraCssText: 'box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);'
       },
       series: [
         {
@@ -138,7 +157,6 @@ export class DashboardComponent {
             { value: this.totalAccesosExitosos, name: 'Total Accesos Exitosos', itemStyle: { color: '#AB8CE4' } },
             { value: this.totalComentarios, name: 'Total Comentarios', itemStyle: { color: '#03A9F3' } },
             { value: this.totalIncidencias, name: 'Total Incidencias', itemStyle: { color: '#FB9678' } },
-            // Aquí puedes agregar más datos según sea necesario
           ]
         }
       ]

@@ -19,7 +19,7 @@ export class VistasService {
   }
 
   cambiarEstadoAlumno(id: number, nuevoEstado: boolean): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}Vistas/${id}`, nuevoEstado);
+    return this.http.put<void>(`${this.baseUrl}Vistas/EliminarUsuario/${id}`, nuevoEstado);
   }
 
   obtenerDocentes(): Observable<any[]> {

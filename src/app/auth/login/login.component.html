@@ -17,24 +17,14 @@
                   </div>
                   <div data-mdb-input-init class="form-outline mb-4">
                     <label class="form-label" for="form2Example11">Usuario</label>
-                    <input type="text" class="form-control text-input-opacity" id="exampleFormControlInput1"
+                    <input type="text" class="form-control text-input-opacity" id="exampleFormControlInput"
                       formControlName="inputUsuario" placeholder="Ingrese su usuario.">
-                    <div
-                      *ngIf="Controls['inputUsuario'].invalid && (Controls['inputUsuario'].dirty || Controls['inputUsuario'].touched) "
-                      class="text-error">
-                      <div>Campo obligatorio.</div>
-                    </div>
                   </div>
 
                   <div data-mdb-input-init class="form-outline mb-4">
                     <label class="form-label" for="form2Example22">Contraseña</label>
                     <input type="password" class="form-control text-input-opacity" id="exampleFormControlInput1"
                       formControlName="inputPassword" placeholder="Ingrese su contraseña.">
-                    <div
-                      *ngIf="Controls['inputPassword'].invalid && (Controls['inputPassword'].dirty || Controls['inputPassword'].touched) "
-                      class="text-error">
-                      <div>Campo obligatorio.</div>
-                    </div>
                   </div>
 
                   <div class="text-center pt-1 mb-5 pb-1">

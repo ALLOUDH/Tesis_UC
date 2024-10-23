@@ -7,6 +7,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { LoginDTO } from '../auth-dtos/login.dto';
 import Swal from 'sweetalert2';
 import { jwtDecode } from 'jwt-decode';
+import { PrimerAccesoComponent } from './primer-acceso/primer-acceso.component';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private bsModalRecoverPass: BsModalRef,
+    private bsModal: BsModalRef,
     private modalService: BsModalService,
     private AccesoService: AccesoService,
 
@@ -68,9 +69,16 @@ export class LoginComponent {
                 localStorage.removeItem('usertoken');
                 this.MensajeError('Error', 'El usuario esta inactivo, contacte al administrador');
               }
-              this.router.navigate(['/dashboard']).then(() => {
-                window.location.reload();
-              });
+              if (response.primerAcceso) {
+                if (decodedToken && decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/expired'] === 'False'){
+                } else {
+                  this.bsModal = this.modalService.show(PrimerAccesoComponent, { backdrop: 'static', class: 'modal-dialog-centered' });
+                }
+              } else {
+                this.router.navigate(['/dashboard']).then(() => {
+                  window.location.reload();
+                });
+              }
             } else {
               this.MensajeError('Error', 'No se recibió un token válido.');
             }
@@ -83,6 +91,8 @@ export class LoginComponent {
           this.MensajeError('Error', 'Ocurrió un error en el servidor');
         }
       );
+    } else {
+      this.MensajeError('Error', 'Por favor, complete los campos correctamente');
     }
     console.log(localStorage.getItem('usertoken'));
   }
@@ -99,6 +109,6 @@ export class LoginComponent {
   }
 
   AbrirModalRecoverPass() {
-    this.bsModalRecoverPass = this.modalService.show(RecoverpassComponent, { backdrop: 'static', class: 'modal-dialog-centered' });
+    this.bsModal = this.modalService.show(RecoverpassComponent, { backdrop: 'static', class: 'modal-dialog-centered' });
   }
 }

@@ -22,7 +22,7 @@
     </div>
 </div>
 <section id="section-buscar-alumno">
-    <form novalidate="novalidate" [formGroup]="listaalumnoform">
+    <form novalidate="novalidate" [formGroup]="listaalumnoform" (ngSubmit)="BuscarAlumno()">
         <div class="content">
             <div class="animated fadeIn">
                 <div class="row">
@@ -173,11 +173,11 @@
                                                             <i class="fa fa-pencil"></i>
                                                         </button>
                                                         <button type="button"
-                                                            [ngClass]="alumno.usEstado ? 'btn btn-orange btn-sm button-color-danger' : 'btn btn-skyblue btn-sm button-color-success'"
+                                                            class="btn btn-danger btn-sm button-color-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Eliminar elemento." style="margin-right: 5px;"
-                                                            (click)="CambiarEstadoAlumno(alumno)">
-                                                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                                                            (click)="EliminarAlumno(alumno)">
+                                                            <i class="fa fa-trash" aria-hidden="true"></i>
                                                         </button>
                                                     </div>
                                                 </td>

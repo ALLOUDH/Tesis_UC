@@ -51,10 +51,10 @@ export class ListaAlumnosComponent {
     const initialState = {
       alumno: alumno // Pasa los datos del alumno seleccionado
     };
-    this.modalEditarAlumno = this.modalService.show(ActualizarAlumnosComponent, { 
-      initialState, 
-      backdrop: 'static', 
-      class: 'modal-xl' 
+    this.modalEditarAlumno = this.modalService.show(ActualizarAlumnosComponent, {
+      initialState,
+      backdrop: 'static',
+      class: 'modal-xl'
     });
     this.modalEditarAlumno.content.alumnoActualizado.subscribe(() => {
       this.obtenerAlumnos(); // Volver a obtener la lista de alumnos
@@ -86,16 +86,16 @@ export class ListaAlumnosComponent {
     this.buscarAlumno = [...this.alumnos];
   }
 
-  CambiarEstadoAlumno(alumno: any) {
-    const nuevoEstado = !alumno.usEstado;
+  EliminarAlumno(alumno: any) {
+    const nuevoEstado = !alumno.usEliminado;
     Swal.fire({
       title: '¿Está seguro?',
-      text: "Cambiará el estado del alumno seleccionado",
+      text: "El alumno será eliminado.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, actualizar',
+      confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -103,11 +103,11 @@ export class ListaAlumnosComponent {
           () => {
             alumno.usEstado = nuevoEstado;
             this.obtenerAlumnos();
-            this.MostrarMensajeExito('Estado del alumno actualizado', 'El estado del alumno se actualizó correctamente');
+            this.MostrarMensajeExito('Alumno eliminado', 'El estado del alumno se actualizó correctamente');
           },
           (error) => {
             console.error('Error al eliminar el alumno', error);
-            this.MostrarMensajeError('Hubo un error al cambiar el estado del alumno', 'Error');
+            this.MostrarMensajeError('Hubo un error al eliminar el alumno', 'Error');
           }
         );
       }
@@ -124,44 +124,46 @@ export class ListaAlumnosComponent {
     const nroDocumento = this.listaalumnoform.get('inputNroDocumento')?.value || '';
     const gradoAcademico = this.listaalumnoform.get('selectGradoAcademico')?.value;
     const estadoUsuario = this.listaalumnoform.get('selectEstadoUsuario')?.value;
-  
+
     this.buscarAlumno = this.alumnos.filter(alumno => {
       const nombreCompleto = `${alumno.usNombre} ${alumno.usApellidoPaterno} ${alumno.usApellidoMaterno}`.toLowerCase();
-  
+
       return (
         (terminobusqueda ? nombreCompleto.includes(terminobusqueda.toLowerCase()) : true) &&
         (nroDocumento ? alumno.usDni.includes(nroDocumento) : true) &&
         (gradoAcademico ? alumno.idgrado === gradoAcademico : true) &&
-        (estadoUsuario !== undefined && estadoUsuario !== '' ? alumno.usEstado === estadoUsuario : true)
+        (estadoUsuario === true || estadoUsuario === false ? alumno.usEstado === estadoUsuario : true)
       );
-    });
-  }
+  });
 
-  validarCamposBusqueda(): boolean {
-    const terminobusqueda = this.listaalumnoform.get('inputEstudiante')?.value;
-    const nroDocumento = this.listaalumnoform.get('inputNroDocumento')?.value;
-    const gradoAcademico = this.listaalumnoform.get('selectGradoAcademico')?.value;
-    const estadoUsuario = this.listaalumnoform.get('selectEstadoUsuario')?.value;
-  
-    return !!(terminobusqueda || nroDocumento || gradoAcademico || estadoUsuario);
-  }
+    console.log(this.buscarAlumno);
+}
 
-  MostrarMensajeExito(titulo: string, mensaje: string) {
-    Swal.fire({
-      title: titulo,
-      html: mensaje,
-      icon: 'success',
-      showConfirmButton: false,
-      timer: 2300,
-      timerProgressBar: true
-    });
-  }
+validarCamposBusqueda(): boolean {
+  const terminobusqueda = this.listaalumnoform.get('inputEstudiante')?.value;
+  const nroDocumento = this.listaalumnoform.get('inputNroDocumento')?.value;
+  const gradoAcademico = this.listaalumnoform.get('selectGradoAcademico')?.value;
+  const estadoUsuario = this.listaalumnoform.get('selectEstadoUsuario')?.value;
 
-  MostrarMensajeError(mensaje: string, titulo: string) {
-    Swal.fire({
-      title: titulo,
-      text: mensaje,
-      icon: "error"
-    });
-  }
+  return !!(terminobusqueda || nroDocumento || gradoAcademico || estadoUsuario === true || estadoUsuario === false);
+}
+
+MostrarMensajeExito(titulo: string, mensaje: string) {
+  Swal.fire({
+    title: titulo,
+    html: mensaje,
+    icon: 'success',
+    showConfirmButton: false,
+    timer: 2300,
+    timerProgressBar: true
+  });
+}
+
+MostrarMensajeError(mensaje: string, titulo: string) {
+  Swal.fire({
+    title: titulo,
+    text: mensaje,
+    icon: "error"
+  });
+}
 }
