@@ -179,9 +179,7 @@ export class ListaDocentesComponent {
           ? nombreCompleto.includes(terminobusqueda.toLowerCase())
           : true) &&
         (nroDocumento ? docentes.usDni.includes(nroDocumento) : true) &&
-        (estadoUsuario !== undefined && estadoUsuario !== ''
-          ? docentes.usEstado === estadoUsuario
-          : true)
+        (estadoUsuario === true || estadoUsuario === false ? docentes.usEstado === estadoUsuario : true)
       );
     });
   }
@@ -193,7 +191,7 @@ export class ListaDocentesComponent {
       'selectEstadoUsuario'
     )?.value;
 
-    return !!(terminobusqueda || nroDocumento || estadoUsuario);
+    return !!(terminobusqueda || nroDocumento || estadoUsuario === true || estadoUsuario === false);
   }
 
   MostrarMensajeExito(titulo: string, mensaje: string) {

@@ -161,7 +161,7 @@ AsignarValoresAControles(docente: DocentesDTO) {
             },
             (error) => {
                 console.error('Error en el servidor:', error);
-                this.MostrarMensajeError('Error', 'Ocurrió un error en el servidor');
+                this.MostrarMensajeError('El Docente ingresado ya existe', 'Error');
             }
         );
     } else {
