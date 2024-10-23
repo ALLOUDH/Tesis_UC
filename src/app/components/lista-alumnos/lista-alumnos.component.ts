@@ -64,10 +64,14 @@ export class ListaAlumnosComponent {
   obtenerAlumnos() {
     this.vistasService.obtenerAlumnos().subscribe(
       (data: ListaAlumnosDTO[]) => {
-        this.alumnos = data; // Asigna los datos obtenidos
-        this.listadoalumnos = data.map(alumno =>
-          `${alumno.usNombre} ${alumno.usApellidoPaterno} ${alumno.usApellidoMaterno}`
-        ); // Llena el arreglo de nombres
+        if (data.length === 0) {
+          console.warn('No se encontraron alumnos registrados.'); // Mensaje en la consola
+        } else {
+          this.alumnos = data; // Asigna los datos obtenidos
+          this.listadoalumnos = data.map(alumno =>
+            `${alumno.usNombre} ${alumno.usApellidoPaterno} ${alumno.usApellidoMaterno}`
+          ); // Llena el arreglo de nombres
+        }
       },
       (error) => {
         console.error('Error al obtener los alumnos', error);
@@ -101,9 +105,9 @@ export class ListaAlumnosComponent {
       if (result.isConfirmed) {
         this.vistasService.cambiarEstadoAlumno(alumno.idusuario, nuevoEstado).subscribe(
           () => {
-            alumno.usEstado = nuevoEstado;
+            alumno.usEliminado = nuevoEstado;
             this.obtenerAlumnos();
-            this.MostrarMensajeExito('Alumno eliminado', 'El estado del alumno se actualizó correctamente');
+            this.MostrarMensajeExito('Alumno eliminado', 'El alumno fue eliminado correctamente');
           },
           (error) => {
             console.error('Error al eliminar el alumno', error);
@@ -134,36 +138,36 @@ export class ListaAlumnosComponent {
         (gradoAcademico ? alumno.idgrado === gradoAcademico : true) &&
         (estadoUsuario === true || estadoUsuario === false ? alumno.usEstado === estadoUsuario : true)
       );
-  });
+    });
 
     console.log(this.buscarAlumno);
-}
+  }
 
-validarCamposBusqueda(): boolean {
-  const terminobusqueda = this.listaalumnoform.get('inputEstudiante')?.value;
-  const nroDocumento = this.listaalumnoform.get('inputNroDocumento')?.value;
-  const gradoAcademico = this.listaalumnoform.get('selectGradoAcademico')?.value;
-  const estadoUsuario = this.listaalumnoform.get('selectEstadoUsuario')?.value;
+  validarCamposBusqueda(): boolean {
+    const terminobusqueda = this.listaalumnoform.get('inputEstudiante')?.value;
+    const nroDocumento = this.listaalumnoform.get('inputNroDocumento')?.value;
+    const gradoAcademico = this.listaalumnoform.get('selectGradoAcademico')?.value;
+    const estadoUsuario = this.listaalumnoform.get('selectEstadoUsuario')?.value;
 
-  return !!(terminobusqueda || nroDocumento || gradoAcademico || estadoUsuario === true || estadoUsuario === false);
-}
+    return !!(terminobusqueda || nroDocumento || gradoAcademico || estadoUsuario === true || estadoUsuario === false);
+  }
 
-MostrarMensajeExito(titulo: string, mensaje: string) {
-  Swal.fire({
-    title: titulo,
-    html: mensaje,
-    icon: 'success',
-    showConfirmButton: false,
-    timer: 2300,
-    timerProgressBar: true
-  });
-}
+  MostrarMensajeExito(titulo: string, mensaje: string) {
+    Swal.fire({
+      title: titulo,
+      html: mensaje,
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2300,
+      timerProgressBar: true
+    });
+  }
 
-MostrarMensajeError(mensaje: string, titulo: string) {
-  Swal.fire({
-    title: titulo,
-    text: mensaje,
-    icon: "error"
-  });
-}
+  MostrarMensajeError(mensaje: string, titulo: string) {
+    Swal.fire({
+      title: titulo,
+      text: mensaje,
+      icon: "error"
+    });
+  }
 }
