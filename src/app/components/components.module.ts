@@ -31,6 +31,7 @@ import { RegistroComentarioComponent } from './registro-comentario/registro-come
 import { ActualizarAlumnosComponent } from './lista-alumnos/actualizar-alumnos/actualizar-alumnos.component';
 import { AsignardocentesComponent } from './asignardocentes/asignardocentes.component';
 import { EditarDocenteComponent } from './lista-docentes/editar-docente/editar-docente.component';
+import { PruebaDesignsComponent } from './prueba-designs/prueba-designs.component';
 
 
 @NgModule({
@@ -63,6 +64,7 @@ import { EditarDocenteComponent } from './lista-docentes/editar-docente/editar-d
     ActualizarAlumnosComponent,
     AsignardocentesComponent,
     EditarDocenteComponent,
+    PruebaDesignsComponent,
   ],
   imports: [
     CommonModule,

@@ -1,7 +1,7 @@
 export class BimestreAcademicoDTO {
     idbimestre!:number; 
     biNombre!: string;
-    biFechaIni!: Date;
-    biFechaFin!: Date;
+    biFechaIni!: string;
+    biFechaFin!: string;
     idperiodo!: number; 
   }

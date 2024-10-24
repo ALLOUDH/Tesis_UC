@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { BimestreAcademicoDTO } from '../../../dtos/bimestreacademico.dto';
 import { BimestreAcademicoService } from '../../../services/bimestre-academico.service';
@@ -21,9 +21,11 @@ export class AgregarBimestreAcademicoComponent implements OnInit{
   periodos: PeriodoAcademicoDTO[] = [];
 
   constructor(
+    private bsModalRef: BsModalRef,
     private bsAgregarBimestreAcademico: BsModalRef,
     private bimestreService: BimestreAcademicoService,
-    private periodoService: PeriodoAcademicoService
+    private periodoService: PeriodoAcademicoService,
+    private fb: FormBuilder
 
 
   ) { this.formGroup = new FormGroup({
@@ -37,18 +39,53 @@ export class AgregarBimestreAcademicoComponent implements OnInit{
   get Controls() {
     return this.formGroup.controls;
   }
-
+/*
   ngOnInit(): void {
     this.cargarPeriodos();
     if (this.bimestre) {
       this.formGroup.patchValue({
         NombreBimestreAcademico: this.bimestre.biNombre,
-        inputFechaInicioBimestreAcademico: this.bimestre.biFechaIni,
-        inputFechaFinBimestreAcademico: this.bimestre.biFechaFin,
+        inputFechaInicioBimestreAcademico: this.bimestre.biFechaIni, // Asegúrate de que este valor sea el tipo correcto (string o Date)
+        inputFechaFinBimestreAcademico: this.bimestre.biFechaFin, // Asegúrate de que este valor sea el tipo correcto (string o Date)
         periodoId: this.bimestre.idperiodo,
       });
       this.isEditMode = true;
     }
+  }
+*/
+
+  ngOnInit(): void {
+    this.cargarPeriodos();
+    // Inicializa el formulario
+    this.formGroup = this.fb.group({
+      NombreBimestreAcademico: ['', Validators.required],
+      inputFechaInicioBimestreAcademico: [null, Validators.required], // Inicializa como null
+      inputFechaFinBimestreAcademico: [null, Validators.required], // Inicializa como null
+      periodoId: [null, Validators.required]
+    });
+
+    // Si el periodo ya existe (edición), rellenar el formulario
+    if (this.bimestre) {
+      this.formGroup.patchValue({
+        NombreBimestreAcademico: this.bimestre.biNombre,
+        inputFechaInicioBimestreAcademico: this.bimestre.biFechaIni, // Asegúrate de que este valor sea el tipo correcto (string o Date)
+        inputFechaFinBimestreAcademico: this.bimestre.biFechaFin, // Asegúrate de que este valor sea el tipo correcto (string o Date)
+        periodoId: this.bimestre.idperiodo
+      });
+      this.isEditMode = true;
+    }
+  }
+
+
+  // Función para formatear la fecha en yyyy-MM-dd
+  formatearFecha(fecha: Date): string {
+    // Convertir la fecha a UTC para evitar problemas de zona horaria
+    const utcDate = new Date(fecha.getUTCFullYear(), fecha.getUTCMonth(), fecha.getUTCDate());
+
+    const year = utcDate.getFullYear();
+    const month = ('0' + (utcDate.getMonth() + 1)).slice(-2); // Mes de 2 dígitos
+    const day = ('0' + utcDate.getDate()).slice(-2); // Día de 2 dígitos
+    return `${year}-${month}-${day}`; // Cambiar a '-' para el formato esperado
   }
 
   cargarPeriodos() {
@@ -68,6 +105,7 @@ export class AgregarBimestreAcademicoComponent implements OnInit{
     );
   }
 
+/*
   AgregarBimestreAcademico() {
     if (this.formGroup.invalid) {
       Swal.fire({
@@ -79,25 +117,11 @@ export class AgregarBimestreAcademicoComponent implements OnInit{
       return;
     }
   
-    // Validación de las fechas (opcional)
-    const fechaInicio = this.formGroup.value.inputFechaInicioBimestreAcademico;
-    const fechaFin = this.formGroup.value.inputFechaFinBimestreAcademico;
-  
-    if (new Date(fechaInicio) > new Date(fechaFin)) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'La fecha de inicio no puede ser mayor que la fecha de fin.',
-        showConfirmButton: true,
-      });
-      return;
-    }
-  
     const nuevoBimestre: BimestreAcademicoDTO = {
       idbimestre: this.isEditMode && this.bimestre ? this.bimestre.idbimestre : 0,
       biNombre: this.formGroup.value.NombreBimestreAcademico,
-      biFechaIni: fechaInicio,
-      biFechaFin: fechaFin,
+      biFechaIni: this.formatearFecha(new Date(this.formGroup.value.inputFechaInicioBimestreAcademico)), // Usar la función de formateo
+      biFechaFin: this.formatearFecha(new Date(this.formGroup.value.inputFechaFinBimestreAcademico)), // Usar la función de formateo
       idperiodo: this.formGroup.value.periodoId,
     };
   
@@ -123,6 +147,7 @@ export class AgregarBimestreAcademicoComponent implements OnInit{
         let errorMessage = 'Hubo un problema al guardar el bimestre.';
         if (error.status === 400) {
           errorMessage = 'Error en los datos proporcionados.';
+          console.log(nuevoBimestre)
         } else if (error.status === 500) {
           errorMessage = 'Error en el servidor. Por favor, intenta más tarde.';
         }
@@ -136,6 +161,54 @@ export class AgregarBimestreAcademicoComponent implements OnInit{
         console.error('Error al guardar bimestre:', error);
       }
     );
+  }
+*/
+
+  AgregarBimestreAcademico(): void {
+    if (this.formGroup.valid) {
+      // Las fechas se mantienen como string en el formato esperado
+      const nuevoBimestre: BimestreAcademicoDTO = {
+      idbimestre: this.isEditMode && this.bimestre ? this.bimestre.idbimestre : 0,
+      biNombre: this.formGroup.value.NombreBimestreAcademico,
+      biFechaIni: this.formatearFecha(new Date(this.formGroup.value.inputFechaInicioBimestreAcademico)), // Usar la función de formateo
+      biFechaFin: this.formatearFecha(new Date(this.formGroup.value.inputFechaFinBimestreAcademico)), // Usar la función de formateo
+      idperiodo: this.formGroup.value.periodoId,
+      };
+
+      // Resto del código se mantiene igual
+      if (this.bimestre) {
+        this.bimestreService.updateBimestre(nuevoBimestre).subscribe(
+          () => {
+            this.bimestreGuardada.emit(nuevoBimestre);
+            Swal.fire('Éxito', 'Bimestre actualizado correctamente', 'success');
+            this.bsModalRef.hide();
+          },
+          (error) => {
+            console.error('Error al actualizar el bimestre:', error);
+            console.log(nuevoBimestre)
+          }
+        );
+      } else {
+        this.bimestreService.createBimestre(nuevoBimestre).subscribe(
+          (bimestreCreada: BimestreAcademicoDTO) => {
+            this.bimestreGuardada.emit(bimestreCreada);
+            Swal.fire('Éxito', 'Bimestre guardada correctamente', 'success');
+            this.bsModalRef.hide();
+          },
+          (error) => {
+            console.error('Error al crear el bimestre:', error);
+            console.log('Validation Errors:', error.error.errors);
+          }
+        );
+      }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Campos vacíos. Por favor, complete todos los campos.',
+        showConfirmButton: true,
+      });
+    }
   }
   
   CerrarModal() {
