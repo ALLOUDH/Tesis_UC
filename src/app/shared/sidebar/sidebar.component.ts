@@ -110,4 +110,8 @@ export class SidebarComponent {
   ListaTiposNotas() {
     this.router.navigate(['/tiposnotas']);
     };
+
+  RegistrarAsistencia() {
+    this.router.navigate(['/registrarasistencia']);
+    };
 }
