@@ -34,80 +34,80 @@ export class SidebarComponent {
   }
 
   RegistrarAlumno() {
-    this.router.navigate(['/registroalumno']).then(() => {
+    this.router.navigate(['/registro-alumno']).then(() => {
       window.location.reload();
     });
   }
 
   RegistrarDocente() {
-    this.router.navigate(['/registrodocente']).then(() => {
+    this.router.navigate(['/registro-docente']).then(() => {
       window.location.reload();
     });
   }
 
   AsignarDocente() {
-    this.router.navigate(['/asignardocentes']).then(() => {
+    this.router.navigate(['/asignar-docentes']).then(() => {
       window.location.reload();
     });
   }
 
   RegistrarPadre() {
-    this.router.navigate(['/registropadre']).then(() => {
+    this.router.navigate(['/registro-padre']).then(() => {
       window.location.reload();
     });
   }
 
   EnviarComentarios() {
-    this.router.navigate(['/registrocomentario']).then(() => {
+    this.router.navigate(['/registro-comentario']).then(() => {
       window.location.reload();
     });
   }
 
   EnviarReportes() {
-    this.router.navigate(['/registroincidencia']).then(() => {
+    this.router.navigate(['/registro-incidencia']).then(() => {
       window.location.reload();
     });
   }
   ListaAlumnos() {
-    this.router.navigate(['/listaalumnos']);
+    this.router.navigate(['/lista-alumnos']);
     };
   ListaDocentes() {
-    this.router.navigate(['/listadocentes']);
+    this.router.navigate(['/lista-docentes']);
     };
   AdministrarNotasRegistroAuxiliar() {
-    this.router.navigate(['/administracionnotasregistroauxiliar']);
+    this.router.navigate(['/administracion-notas-registro-auxiliar']);
     };
   AdministrarNotasConducta() {
-    this.router.navigate(['/administracionnotasconducta']);
+    this.router.navigate(['/administracion-notas-conducta']);
     };
   AdministrarNotasPadre() {
-    this.router.navigate(['/administracionnotaspadre']);
+    this.router.navigate(['/administracion-notas-padre']);
     };
   EditarAsistencia() {
-    this.router.navigate(['/editarasistencia']);
+    this.router.navigate(['/editar-asistencia']);
     };
   VerFaltasTardanzas() {
-    this.router.navigate(['/verfaltastardanzas']);
+    this.router.navigate(['/ver-faltas-tardanzas']);
     };
   ListaPeriodoAcademico() {
-    this.router.navigate(['/periodoacademico']);
+    this.router.navigate(['/periodo-academico']);
     };
   ListaUnidadesAcademicas() {
-    this.router.navigate(['/unidadesacademicas']);
+    this.router.navigate(['/unidades-academicas']);
     }
   ListaBimestresAcademicos() {
-    this.router.navigate(['/bimestresacademicos']);
+    this.router.navigate(['/bimestres-academicos']);
     };
   ListaAreaAsignaturas() {
-    this.router.navigate(['/areaasignaturas']);
+    this.router.navigate(['/area-asignaturas']);
     };
   ListaAsignaturas() {
     this.router.navigate(['/asignaturas']);
     };
   ListaCategoriaNotas() {
-    this.router.navigate(['/categorianotas']);
+    this.router.navigate(['/categoria-notas']);
     };
   ListaTiposNotas() {
-    this.router.navigate(['/tiposnotas']);
+    this.router.navigate(['/tipos-notas']);
     };
 }
