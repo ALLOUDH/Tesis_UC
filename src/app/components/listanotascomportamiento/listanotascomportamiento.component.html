@@ -133,7 +133,7 @@
                           <td>{{ i + 1 }}</td>
                           <td>{{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</td>
                           <td *ngFor="let tipoNota of otherTipoNota">
-                            {{ alumno.notas[tipoNota.idtipoNotas] || 'Sin nota' }}
+                            {{ alumno.notas[tipoNota.idtipoNotas] || '00' }}
                           </td>
                           <td>{{ alumno.promedio | number:'1.2-2' }}</td> 
                           <td>

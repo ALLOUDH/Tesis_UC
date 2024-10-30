@@ -14,7 +14,8 @@ export class AsistenciaService {
   // Crear una nueva asistencia
   createAsistencia(asistencias: AsistenciaDTO[]): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/RegistrarAsistencia`, asistencias);
-  }
+}
+
   
   // Obtener todas las asistencias
   getAsistencia(): Observable<AsistenciaDTO[]> {
@@ -22,9 +23,9 @@ export class AsistenciaService {
   }
 
   // Actualizar una aistencia existente
-  updateAsistencia(asistencia: AsistenciaDTO): Observable<AsistenciaDTO> {
-    return this.http.put<AsistenciaDTO>(`${this.baseUrl}/${asistencia.idasistencia}`, asistencia);
-  }
+  //updateAsistencia(asistencia: AsistenciaDTO): Observable<AsistenciaDTO> {
+    //return this.http.put<AsistenciaDTO>(`${this.baseUrl}/${asistencia.idasistencia}`, asistencia);
+  //}
 
   // Eliminar una asistencia
   deleteAsistencia(id: number): Observable<void> {

@@ -32,6 +32,9 @@ import { ActualizarAlumnosComponent } from './lista-alumnos/actualizar-alumnos/a
 import { AsignardocentesComponent } from './asignardocentes/asignardocentes.component';
 import { EditarDocenteComponent } from './lista-docentes/editar-docente/editar-docente.component';
 import { PruebaDesignsComponent } from './prueba-designs/prueba-designs.component';
+import { ListanotascomportamientoComponent } from './listanotascomportamiento/listanotascomportamiento.component';
+import { EditarNotasComportamientoComponent } from './listanotascomportamiento/editar-notas-comportamiento/editar-notas-comportamiento.component';
+import { RegistrarAsistenciaComponent } from './registrar-asistencia/registrar-asistencia.component';
 
 
 @NgModule({
@@ -65,6 +68,9 @@ import { PruebaDesignsComponent } from './prueba-designs/prueba-designs.componen
     AsignardocentesComponent,
     EditarDocenteComponent,
     PruebaDesignsComponent,
+    ListanotascomportamientoComponent,
+    EditarNotasComportamientoComponent,
+    RegistrarAsistenciaComponent,
   ],
   imports: [
     CommonModule,

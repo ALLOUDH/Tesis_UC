@@ -24,6 +24,8 @@ import { AdministracionNotasPadreComponent } from "../components/administracion-
 import { EditarAsistenciaComponent } from "../components/editar-asistencia/editar-asistencia.component";
 import { VerFaltasTardanzasComponent } from "../components/ver-faltas-tardanzas/ver-faltas-tardanzas.component";
 import { AsignardocentesComponent } from "../components/asignardocentes/asignardocentes.component";
+import { ListanotascomportamientoComponent } from "../components/listanotascomportamiento/listanotascomportamiento.component";
+import { RegistrarAsistenciaComponent } from "../components/registrar-asistencia/registrar-asistencia.component";
 
 const routes: Routes = [
     {
