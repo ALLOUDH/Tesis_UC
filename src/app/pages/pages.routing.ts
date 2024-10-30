@@ -24,6 +24,7 @@ import { AdministracionNotasPadreComponent } from "../components/administracion-
 import { EditarAsistenciaComponent } from "../components/editar-asistencia/editar-asistencia.component";
 import { VerFaltasTardanzasComponent } from "../components/ver-faltas-tardanzas/ver-faltas-tardanzas.component";
 import { AsignardocentesComponent } from "../components/asignardocentes/asignardocentes.component";
+import { ListanotascomportamientoComponent } from "../components/listanotascomportamiento/listanotascomportamiento.component";
 
 const routes: Routes = [
     {
@@ -43,6 +44,7 @@ const routes: Routes = [
             { path: 'listadocentes', component: ListaDocentesComponent },
             { path: 'administracionnotasregistroauxiliar', component: AdministracionNotasRegistroAuxiliarComponent },
             { path: 'administracionnotasconducta', component: AdministracionNotasConductaComponent },
+            { path: 'vernotasconducta', component: ListanotascomportamientoComponent },
             { path: 'administracionnotaspadre', component: AdministracionNotasPadreComponent },
             { path: 'editarasistencia', component: EditarAsistenciaComponent },
             { path: 'verfaltastardanzas', component: VerFaltasTardanzasComponent },

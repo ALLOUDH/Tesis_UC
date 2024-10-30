@@ -80,6 +80,9 @@ export class SidebarComponent {
   AdministrarNotasConducta() {
     this.router.navigate(['/administracionnotasconducta']);
     };
+    VerNotasConducta() {
+      this.router.navigate(['/vernotasconducta']);
+      };
   AdministrarNotasPadre() {
     this.router.navigate(['/administracionnotaspadre']);
     };

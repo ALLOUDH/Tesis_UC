@@ -1,0 +1,164 @@
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title user-name-txt">
+                        <h1>Visualizar notas de comportamiento</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#">Notas</a></li>
+                            <li class="active">Notas de conducta</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="section-buscar-alumnos">
+    <form novalidate="novalidate" [formGroup]="notascomporform">
+        <div class="content">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body card-block">
+                                <div class="col-lg-12 text-right col-sm-9">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="mb-3">
+                                                <label for="inputEstudiante" class="form-label label-custom-medium">Alumno:</label>
+                                                <dx-autocomplete placeholder="Escriba el nombre del alumno"
+                                                    formControlName="inputEstudiante" [dataSource]="listadoalumnos">
+                                                </dx-autocomplete>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-3">
+                                                <label for="selectGradoAcademico" class="form-label label-custom-medium">Grado:</label>
+                                                <dx-select-box placeholder="Seleccione una opción"
+                                                    class="text-color-placeholder" displayExpr="nombre" valueExpr="id"
+                                                    [dataSource]="otherGradoAcademico"
+                                                    [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+                                                    [showClearButton]="true"
+                                                    formControlName="selectGradoAcademico">
+                                                </dx-select-box>
+                                                <div *ngIf="notascomporform.get('selectGradoAcademico')?.invalid && (notascomporform.get('selectGradoAcademico')?.dirty || notascomporform.get('selectGradoAcademico')?.touched)" class="text-error">
+                                                    <div>Campo obligatorio.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="mb-3">
+                                                <label for="selectUnidadAcademica" class="form-label label-custom-medium">Unidad:</label>
+                                                <dx-select-box placeholder="Seleccione una opción"
+                                                    class="text-color-placeholder" displayExpr="uniNombre" valueExpr="idunidad"
+                                                    [dataSource]="otherUnidad"
+                                                    [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+                                                    [showClearButton]="true"
+                                                    formControlName="selectUnidadAcademica">
+                                                </dx-select-box>
+                                                <div *ngIf="notascomporform.get('selectUnidadAcademica')?.invalid && (notascomporform.get('selectUnidadAcademica')?.dirty || notascomporform.get('selectUnidadAcademica')?.touched)" class="text-error">
+                                                    <div>Campo obligatorio.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-12 text-right">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-primary btn-sm button-color-primary"
+                                                    data-toggle="tooltip" data-placement="top" title="Obtener notas"
+                                                    style="margin-right: 5px;" (click)="obtenerNotas()">
+                                                    <i class="fa fa-lg fa-fw fa-search"></i> Buscar 
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-sm button-color-danger"
+                                                    data-toggle="tooltip" data-placement="top" title="Limpiar campos"
+                                                    (click)="LimpiarFormulario()">
+                                                    <i class="fa fa-lg fa-fw fa-eraser"></i> Limpiar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+
+
+<section id="lista-alumnos">
+    <div class="content">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body card-block">
+                <div class="card-body--">
+                  <div class="table-stats order-table ov-h">
+                    <div class="content text-center " *ngIf="notascomporform.get('selectGradoAcademico')?.value && notascomporform.get('selectUnidadAcademica')?.value" && >
+                    <strong class="user-name-txt">Notas de comportamiento del {{ obtenerGradoNombre() }} en la {{ obtenerUnidadNombre() }}</strong>
+                    </div>
+                    <!-- Tabla para mostrar los alumnos y sus notas -->
+                    <table class="table" *ngIf="!mostrarDatos || notasPorAlumno.length > 0 || !notascomporform.get('selectGradoAcademico')?.value">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Nombre Completo</th>
+                          <th *ngFor="let tipoNota of otherTipoNota">{{ tipoNota.tipNoNombre }}</th>
+                          <th>Promedio</th> 
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let alumno of notasPorAlumno; let i = index">
+                          <td>{{ i + 1 }}</td>
+                          <td>{{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</td>
+                          <td *ngFor="let tipoNota of otherTipoNota">
+                            {{ alumno.notas[tipoNota.idtipoNotas] || 'Sin nota' }}
+                          </td>
+                          <td>{{ alumno.promedio | number:'1.2-2' }}</td> 
+                          <td>
+                            <button type="button"
+                            class="btn btn-primary btn-sm button-color-primary"
+                            data-toggle="tooltip" data-placement="top"
+                            title="Editar alumno." style="margin-right: 5px;"
+                            (click)="abrirModalEdicion(alumno)">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="content text-center" *ngIf="!mostrarDatos">
+                        <p class="text-muted user-name-txt">Seleccione un grado y una unidad para visualizar las notas.</p>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+  
