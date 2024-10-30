@@ -24,7 +24,6 @@ import { AdministracionNotasPadreComponent } from "../components/administracion-
 import { EditarAsistenciaComponent } from "../components/editar-asistencia/editar-asistencia.component";
 import { VerFaltasTardanzasComponent } from "../components/ver-faltas-tardanzas/ver-faltas-tardanzas.component";
 import { AsignardocentesComponent } from "../components/asignardocentes/asignardocentes.component";
-import { ListanotascomportamientoComponent } from "../components/listanotascomportamiento/listanotascomportamiento.component";
 
 const routes: Routes = [
     {
@@ -58,6 +57,7 @@ const routes: Routes = [
             { path: 'registroincidencia', component: RegistroIncidenciasComponent},
             { path: 'registrocomentario', component: RegistroComentarioComponent},
             { path: 'asignardocentes', component: AsignardocentesComponent},
+            { path: 'registrarasistencia', component: RegistrarAsistenciaComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },

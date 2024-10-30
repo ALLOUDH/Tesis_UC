@@ -50,10 +50,12 @@
                                           <td class="text-center">{{ tiponota.tipNoNombre }}</td>
                                           <td class="text-center">{{ tiponota.categoriaNombre }}</td>
                                           <td class="text-center">
-                                            <button class="btn btn-sm btn-warning mr-2" (click)="abrirModalAgregarTipoNota(tiponota)">
+                                            <button class="btn btn-primary btn-sm button-color-primary" data-toggle="tooltip" 
+                                            data-placement="top" style="margin-right: 5px;" (click)="abrirModalAgregarTipoNota(tiponota)">
                                               <i class="fa fa-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-danger" (click)="EliminarTipoNota(tiponota.idtipoNotas)">
+                                            <button class="btn btn-danger btn-sm button-color-danger"
+                                            data-toggle="tooltip" data-placement="top" style="margin-right: 5px;" (click)="EliminarTipoNota(tiponota.idtipoNotas)">
                                               <i class="fa fa-trash"></i>
                                             </button>
                                           </td>
