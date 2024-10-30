@@ -35,13 +35,16 @@ export class RegistrarAsistenciaComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerAlumnos();
+
+    // Establece la fecha actual en el campo de fecha del formulario
+    const fechaActual = new Date();
+    this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.setValue(fechaActual);
   }
 
   // Obtener alumnos por grado seleccionado
   obtenerAlumnos() {
     const gradoAcademico = this.listaasistenciaform.get('selectGradoAcademico')?.value;
     if (!gradoAcademico) {
-      Swal.fire('Error', 'Seleccione un grado para mostrar los alumnos.', 'warning');
       return;
     }
 
@@ -68,8 +71,16 @@ export class RegistrarAsistenciaComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
   
+  
   // Guardar la asistencia de los alumnos
   GuardarAsistencia() {
+    // Cambiar de numero a texto
+  const tipoAsistenciaMap: { [key: number]: string } = {
+    1: 'Asistio',
+    2: 'Tarde',
+    3: 'Falto'
+  };
+  
     const fechaRegistro = this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.value;
     if (!fechaRegistro) {
       Swal.fire('Error', 'Por favor, selecciona una fecha de registro', 'error');
@@ -78,8 +89,8 @@ export class RegistrarAsistenciaComponent implements OnInit {
   
     const asistencias: AsistenciaDTO[] = this.alumnos.map(alumno => {
       const asisTipo = this.asistenciaSeleccionada[alumno.idalumno] !== undefined
-        ? this.asistenciaSeleccionada[alumno.idalumno].toString()
-        : '0'; 
+      ? tipoAsistenciaMap[this.asistenciaSeleccionada[alumno.idalumno]] || 'No definido'
+      : 'No definido'; 
   
       return {
         asisFecha: this.formatearFecha(new Date(fechaRegistro)),
