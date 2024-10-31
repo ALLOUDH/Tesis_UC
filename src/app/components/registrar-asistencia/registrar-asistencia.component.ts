@@ -85,6 +85,9 @@ autoRellenarAsistencia() {
       // Llamada al servicio para obtener asistencia por fecha
       this.asistenciaService.obtenerAsistenciaPorFecha(fechaFormateada).subscribe(
           (asistencias: AsistenciaDTO[]) => {
+              // Limpiar valores previos
+                this.asistenciaSeleccionada = {};
+                this.descripcionAsistencia = {};
               // Rellenar radio buttons y descripciones según los datos obtenidos
               asistencias.forEach(asistencia => {
                   this.asistenciaSeleccionada[asistencia.idalumno] = asistencia.asisTipo === 'Asistio' ? 1 :
@@ -121,53 +124,66 @@ autoRellenarAsistencia() {
       return;
     }
 
-    const asistenciasAActualizar: AsistenciaDTO[] = [];
-    const nuevasAsistencias: AsistenciaDTO[] = [];
-  
-    this.alumnos.forEach(alumno => {
-      const asisTipo = tipoAsistenciaMap[this.asistenciaSeleccionada[alumno.idalumno]] || 'No definido';
-      const asistenciaExistente = this.alumnos.some(a => a.idalumno === alumno.idalumno);
-  
-      const asistencia: AsistenciaDTO = {
-        asisFecha: this.formatearFecha(new Date(fechaRegistro)),
-        asisTipo: asisTipo,
-        asisDescripcion: this.descripcionAsistencia[alumno.idalumno] || '',
-        idalumno: alumno.idalumno
-      };
-  
-      if (asistenciaExistente) {
-        asistenciasAActualizar.push(asistencia);
-      } else {
-        nuevasAsistencias.push(asistencia);
-      }
-    });
-  
-    // Guardar las nuevas asistencias
-  if (nuevasAsistencias.length > 0) {
-    this.asistenciaService.createAsistencia(nuevasAsistencias).subscribe(
-      response => {
-        Swal.fire('Éxito', 'Asistencia registrada exitosamente', 'success');
-      },
-      error => {
-        console.error('Error al registrar asistencia', error);
-        Swal.fire('Error', 'Ocurrió un error al registrar la asistencia', 'error');
-      }
-    );
-  }
+    const fechaFormateada = this.formatearFecha(new Date(fechaRegistro));
 
-  // Actualizar asistencias existentes
-  if (asistenciasAActualizar.length > 0) {
-    this.asistenciaService.updateAsistencia(asistenciasAActualizar).subscribe(
-      response => {
-        Swal.fire('Éxito', 'Asistencia actualizada exitosamente', 'success');
+    // Obtener asistencias existentes para la fecha seleccionada
+    this.asistenciaService.obtenerAsistenciaPorFecha(fechaFormateada).subscribe(
+      (asistenciasExistentes: AsistenciaDTO[]) => {
+        const asistenciasAActualizar: AsistenciaDTO[] = [];
+        const nuevasAsistencias: AsistenciaDTO[] = [];
+
+        this.alumnos.forEach(alumno => {
+          const asisTipo = tipoAsistenciaMap[this.asistenciaSeleccionada[alumno.idalumno]] || 'No definido';
+
+          const asistencia: AsistenciaDTO = {
+            asisFecha: fechaFormateada,
+            asisTipo: asisTipo,
+            asisDescripcion: this.descripcionAsistencia[alumno.idalumno] || '',
+            idalumno: alumno.idalumno
+          };
+
+          // Verificar si ya existe un registro para este alumno y fecha
+          const registroExistente = asistenciasExistentes.find(a => a.idalumno === alumno.idalumno);
+
+          if (registroExistente) {
+            asistenciasAActualizar.push(asistencia);
+          } else {
+            nuevasAsistencias.push(asistencia);
+          }
+        });
+
+        // Guardar las nuevas asistencias
+        if (nuevasAsistencias.length > 0) {
+          this.asistenciaService.createAsistencia(nuevasAsistencias).subscribe(
+            response => {
+              Swal.fire('Éxito', 'Asistencia registrada exitosamente', 'success');
+            },
+            error => {
+              console.error('Error al registrar asistencia', error);
+              Swal.fire('Error', 'Ocurrió un error al registrar la asistencia', 'error');
+            }
+          );
+        }
+
+        // Actualizar asistencias existentes
+        if (asistenciasAActualizar.length > 0) {
+          this.asistenciaService.updateAsistencia(asistenciasAActualizar).subscribe(
+            response => {
+              Swal.fire('Éxito', 'Asistencia actualizada exitosamente', 'success');
+            },
+            error => {
+              console.error('Error al actualizar asistencia', error);
+              Swal.fire('Error', 'Ocurrió un error al actualizar la asistencia', 'error');
+            }
+          );
+        }
       },
       error => {
-        console.error('Error al actualizar asistencia', error);
-        Swal.fire('Error', 'Ocurrió un error al actualizar la asistencia', 'error');
+        console.error('Error al obtener asistencias para la fecha seleccionada', error);
+        Swal.fire('Error', 'No se pudo verificar las asistencias previas.', 'error');
       }
     );
   }
-}
   
   LimpiarFormulario() {
     this.listaasistenciaform.reset();
