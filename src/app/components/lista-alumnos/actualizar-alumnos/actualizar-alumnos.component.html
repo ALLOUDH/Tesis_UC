@@ -127,12 +127,22 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-3">
                     <div class="form-group mb-4">
                         <strong for="grado" class="form-control-label user-name-txt">Grado:</strong>
                         <dx-select-box placeholder="Seleccione una opción." class="text-color-placeholder" displayExpr="nombre" valueExpr="id" [dataSource]="otherGradoAcademico"
                             [inputAttr]="{ 'aria-strong': 'Product With Placeholder' }" [showClearButton]="true" formControlName="selectGradoAcademico"></dx-select-box>
                         <div *ngIf="Controls['selectGradoAcademico'].invalid && (Controls['selectGradoAcademico'].dirty || Controls['selectGradoAcademico'].touched)" class="text-error">
+                            <div>Campo obligatorio.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group mb-4">
+                        <strong for="grado" class="form-control-label user-name-txt">Periodo:</strong>
+                        <dx-select-box placeholder="Seleccione una opción." class="text-color-placeholder" displayExpr="peNombre" valueExpr="idperiodo" [dataSource]="periodoAcademico"
+                            [inputAttr]="{ 'aria-strong': 'Product With Placeholder' }" [showClearButton]="true" formControlName="selectPeriodoAcademico"></dx-select-box>
+                        <div *ngIf="Controls['selectPeriodoAcademico'].invalid && (Controls['selectPeriodoAcademico'].dirty || Controls['selectPeriodoAcademico'].touched)" class="text-error">
                             <div>Campo obligatorio.</div>
                         </div>
                     </div>

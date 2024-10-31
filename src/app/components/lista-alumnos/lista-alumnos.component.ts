@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ActualizarAlumnosComponent } from './actualizar-alumnos/actualizar-alumnos.component';
 import { AlumnosDTO } from '../../dtos/alumnos.dto';
+import { PeriodoAcademicoService } from '../../services/periodo-academico.service';
+import { PeriodoAcademicoDTO } from '../../dtos/periodoacademico.dto';
 
 @Component({
   selector: 'app-lista-alumnos',
@@ -23,12 +25,14 @@ export class ListaAlumnosComponent {
   otherEstadoUsuario: OthersIntDTO[] = [];
   listadoalumnos: string[] = [];
   buscarAlumno: ListaAlumnosDTO[] = [];
+  periodoAcademico: PeriodoAcademicoDTO[] = [];
 
   constructor(
     private router: Router,
     private vistasService: VistasService,
     private modalEditarAlumno: BsModalRef,
     private modalService: BsModalService,
+    private periodoaAcademicoService: PeriodoAcademicoService,
     estadoUsuarioService: EstadoUsuarioService,
     gradoAcademicoService: GradoAcademicoService,
   ) {
@@ -45,6 +49,14 @@ export class ListaAlumnosComponent {
 
   ngOnInit(): void {
     this.obtenerAlumnos();
+    this.periodoaAcademicoService.getPeriodo().subscribe(
+      (data: PeriodoAcademicoDTO[]) => {
+        this.periodoAcademico = data;
+      },
+      (error) => {
+        console.error("Error al obtener los bimestres:", error);
+      }
+    );
   }
 
   AbrirModalEditarAlumno(alumno: ListaAlumnosDTO) {
@@ -80,8 +92,13 @@ export class ListaAlumnosComponent {
     );
   }
 
+  obtenerNombrePeriodo(idperiodo: number): string {
+    const periodo = this.periodoAcademico.find(p => p.idperiodo === idperiodo);
+    return periodo ? periodo.peNombre : 'Período no encontrado';
+  }
+
   RegistrarAlumno() {
-    this.router.navigate(['/registroalumno']).then(() => {
+    this.router.navigate(['/registro-alumno']).then(() => {
       window.location.reload();
     });
   }
@@ -129,6 +146,7 @@ export class ListaAlumnosComponent {
     const nroDocumento = this.listaalumnoform.get('inputNroDocumento')?.value || '';
     const gradoAcademico = this.listaalumnoform.get('selectGradoAcademico')?.value;
     const estadoUsuario = this.listaalumnoform.get('selectEstadoUsuario')?.value;
+    const periodoAcademico = this.listaalumnoform.get('selectPeriodoAcademico')?.value;
 
     this.buscarAlumno = this.alumnos.filter(alumno => {
       const nombreCompleto = `${alumno.usNombre} ${alumno.usApellidoPaterno} ${alumno.usApellidoMaterno}`.toLowerCase();
@@ -137,6 +155,7 @@ export class ListaAlumnosComponent {
         (terminobusqueda ? nombreCompleto.includes(terminobusqueda.toLowerCase()) : true) &&
         (nroDocumento ? alumno.usDni.includes(nroDocumento) : true) &&
         (gradoAcademico ? alumno.idgrado === gradoAcademico : true) &&
+        (periodoAcademico ? alumno.idperiodo === periodoAcademico : true) &&
         (estadoUsuario === true || estadoUsuario === false ? alumno.usEstado === estadoUsuario : true)
       );
     });

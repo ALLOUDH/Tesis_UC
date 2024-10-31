@@ -10,6 +10,8 @@ import { AlumnosDTO } from '../../dtos/alumnos.dto';
 import { UserRoleService } from '../../services/user-role.service';
 import Swal from 'sweetalert2';
 import { AccesoService } from '../../services/acceso.service';
+import { PeriodoAcademicoService } from '../../services/periodo-academico.service';
+import { PeriodoAcademicoDTO } from '../../dtos/periodoacademico.dto';
 
 
 
@@ -24,10 +26,12 @@ export class RegistroAlumnoComponent {
   otherGradoAcademico: OthersIntDTO[] = [];
   otherEstadoUsuario: OthersIntDTO[] = [];
   otherUserRole: OthersDTO[] = [];
+  periodoAcademico: PeriodoAcademicoDTO[] = [];
   UserRole: any;
 
   constructor(
     private AccesoService: AccesoService,
+    private periodoaAcademicoService: PeriodoAcademicoService,
     sexoUsuarioService: SexoService,
     estadoUsuarioService: EstadoUsuarioService,
     gradoAcademicoService: GradoAcademicoService,
@@ -45,6 +49,7 @@ export class RegistroAlumnoComponent {
       selectSexo: new FormControl('', Validators.required),
       selectEstadoUsuario: new FormControl('', Validators.required),
       selectGradoAcademico: new FormControl('', Validators.required),
+      selectPeriodoAcademico: new FormControl('', Validators.required),
       inputInstitucionProcedencia: new FormControl('', Validators.required),
       inputNombreAlumno: new FormControl('', Validators.required),
       inputApellidoMaterno: new FormControl('', Validators.required),
@@ -62,7 +67,31 @@ export class RegistroAlumnoComponent {
     }, { validators: [this.passwordMatchValidator, this.passwordMatchesDNI] });
   }
 
+  ngOnInit(): void {
+    this.periodoaAcademicoService.getPeriodo().subscribe(
+      (data: PeriodoAcademicoDTO[]) => {
+        this.periodoAcademico = data;
+        this.setDefaultPeriodo();
+      },
+      (error) => {
+        console.error("Error al obtener los bimestres:", error);
+      }
+    );
+  }
 
+  private setDefaultPeriodo(): void {
+    const añoActual = new Date().getFullYear().toString(); // Obtener el año actual como string
+
+    // Buscar el periodo que coincide con el año actual
+    const periodoEncontrado = this.periodoAcademico.find(periodo => periodo.peNombre.includes(añoActual));
+
+    // Si se encuentra un periodo que coincide, establecerlo en el formulario
+    if (periodoEncontrado) {
+      this.alumnoForm.patchValue({
+        selectPeriodoAcademico: periodoEncontrado.idperiodo, // O puedes usar periodoEncontrado.peNombre según lo que necesites
+      });
+    }
+  }
 
   // Método para validar que la contraseña ingresada es igual a la de confirmar contraseña
   passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -107,6 +136,7 @@ export class RegistroAlumnoComponent {
     this.alumnoForm.get('selectSexo')?.setValue(alumno.UsSexo);
     this.alumnoForm.get('selectEstadoUsuario')?.setValue(alumno.UsEstado);
     this.alumnoForm.get('selectGradoAcademico')?.setValue(alumno.Idgrado);
+    this.alumnoForm.get('selectPeriodoAcademico')?.setValue(alumno.Idperiodo);
     this.alumnoForm.get('inputCelular')?.setValue(alumno.UsCelular);
     this.alumnoForm.get('inputInstitucionProcedencia')?.setValue(alumno.AlInstitucion);
     this.alumnoForm.get('inputNombreAlumno')?.setValue(alumno.UsNombre);
@@ -149,6 +179,7 @@ export class RegistroAlumnoComponent {
         alumno.AlNombreApoderado = this.alumnoForm.controls['inputNombreApoderado'].value;
         alumno.AlOcupacionApoderado = this.alumnoForm.controls['inputOcupacionApoderado'].value;
         alumno.AlPensionApoderado = this.alumnoForm.controls['inputPensionApoderado'].value;
+        alumno.Idperiodo = this.alumnoForm.controls['selectPeriodoAcademico'].value;
         console.log(alumno);
 
         this.AccesoService.registrarAlumno(alumno).subscribe(

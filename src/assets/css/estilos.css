@@ -215,3 +215,19 @@
 .eviar-comentarios-reportes:hover {
     color: #99afbdaf !important;
 }
+
+.input-nota {
+    width: 40%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.readonly-input {
+    background-color: #f0f0f0;
+    color: #6c757d;
+}
+
+.center-content {
+    margin-right: auto;
+    margin-left: auto;
+}

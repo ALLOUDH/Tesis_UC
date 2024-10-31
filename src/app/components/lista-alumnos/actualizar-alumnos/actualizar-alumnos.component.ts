@@ -9,6 +9,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ListaAlumnosDTO } from '../../../dtos/lista-alumnos.dto';
 import { AlumnosDTO } from '../../../dtos/alumnos.dto';
 import Swal from 'sweetalert2';
+import { PeriodoAcademicoService } from '../../../services/periodo-academico.service';
+import { PeriodoAcademicoDTO } from '../../../dtos/periodoacademico.dto';
 
 @Component({
   selector: 'app-actualizar-alumnos',
@@ -22,10 +24,12 @@ export class ActualizarAlumnosComponent {
   otherSexo: OthersIntDTO[] = [];
   otherGradoAcademico: OthersIntDTO[] = [];
   otherEstadoUsuario: OthersIntDTO[] = [];
+  periodoAcademico: PeriodoAcademicoDTO[] = [];
 
   constructor(
     private ModalActualizarAlumno: BsModalRef,
     private accesoService: AccesoService,
+    private periodoaAcademicoService: PeriodoAcademicoService,
     sexoUsuarioService: SexoService,
     estadoUsuarioService: EstadoUsuarioService,
     gradoAcademicoService: GradoAcademicoService,
@@ -41,6 +45,7 @@ export class ActualizarAlumnosComponent {
       selectSexo: new FormControl('', Validators.required),
       selectEstadoUsuario: new FormControl('', Validators.required),
       selectGradoAcademico: new FormControl('', Validators.required),
+      selectPeriodoAcademico: new FormControl('', Validators.required),
       inputInstitucionProcedencia: new FormControl('', Validators.required),
       inputNombreAlumno: new FormControl('', Validators.required),
       inputApellidoMaterno: new FormControl('', Validators.required),
@@ -63,6 +68,14 @@ export class ActualizarAlumnosComponent {
       this.CargarDatosAlumno();
       console.log('Datos del alumno:', this.alumno);
     }
+    this.periodoaAcademicoService.getPeriodo().subscribe(
+      (data: PeriodoAcademicoDTO[]) => {
+        this.periodoAcademico = data;
+      },
+      (error) => {
+        console.error("Error al obtener los bimestres:", error);
+      }
+    );
   }
 
   CargarDatosAlumno() {
@@ -72,6 +85,7 @@ export class ActualizarAlumnosComponent {
       selectSexo: this.alumno.usSexo,
       selectEstadoUsuario: this.alumno.usEstado,
       selectGradoAcademico: this.alumno.idgrado,
+      selectPeriodoAcademico: this.alumno.idperiodo,
       inputInstitucionProcedencia: this.alumno.alInstitucion,
       inputNombreAlumno: this.alumno.usNombre,
       inputApellidoMaterno: this.alumno.usApellidoMaterno,
@@ -108,6 +122,7 @@ export class ActualizarAlumnosComponent {
       AlOcupacionApoderado: this.actualizaralumnoform.get('inputOcupacionApoderado')?.value,
       AlPensionApoderado: this.actualizaralumnoform.get('inputPensionApoderado')?.value,
       Idgrado: this.actualizaralumnoform.get('selectGradoAcademico')?.value,
+      Idperiodo: this.actualizaralumnoform.get('selectPeriodoAcademico')?.value
   };
 
   console.log('Objeto a enviar:', alumnoActualizado); // Imprimir objeto para depuración

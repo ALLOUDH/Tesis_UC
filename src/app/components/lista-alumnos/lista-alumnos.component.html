@@ -80,8 +80,8 @@
                                                 <label for="exampleFormControlInput1"
                                                     class="form-label label-custom-medium">Periodo:</label>
                                                 <dx-select-box placeholder="Seleccione una opción."
-                                                    class="text-color-placeholder" displayExpr="nombre" valueExpr="id"
-                                                    [dataSource]="otherGradoAcademico"
+                                                    class="text-color-placeholder" displayExpr="peNombre" valueExpr="idperiodo"
+                                                    [dataSource]="periodoAcademico"
                                                     [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
                                                     [showClearButton]="true"
                                                     formControlName="selectPeriodoAcademico"></dx-select-box>
@@ -155,7 +155,7 @@
                                                 <td class="text-center">{{ alumno.usApellidoPaterno }}</td>
                                                 <td class="text-center">{{ alumno.usApellidoMaterno }}</td>
                                                 <td class="text-center">{{ alumno.idgrado }}</td>
-                                                <td class="text-center">{{ alumno.usFechaRegistro | date: 'yyyy-MM-dd'}}
+                                                <td class="text-center">{{ obtenerNombrePeriodo(alumno.idperiodo) }}
                                                 </td>
                                                 <td class="text-center">
                                                     <span *ngIf="alumno.usEstado; else pendingBadge" class="badge badge-complete">Activo</span>

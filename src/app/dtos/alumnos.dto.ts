@@ -18,4 +18,5 @@ export class AlumnosDTO {
     AlOcupacionApoderado!: string;
     AlPensionApoderado!: number;
     Idgrado!: number;
+    Idperiodo!: number;
 }

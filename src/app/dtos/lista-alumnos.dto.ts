@@ -19,4 +19,6 @@ export class ListaAlumnosDTO {
     alPensionApoderado!: number;
     idgrado!: number;
     idusuario!: number;
+    idalumno!: number;
+    idperiodo!: number;
 }
