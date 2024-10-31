@@ -39,18 +39,34 @@ export class RegistrarAsistenciaComponent implements OnInit {
     // Establece la fecha actual en el campo de fecha del formulario
     const fechaActual = new Date();
     this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.setValue(fechaActual);
+
+    // Escuchar cambios en el campo de fecha
+    this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.valueChanges.subscribe(() => {
+      this.autoRellenarAsistencia(); // Llama a la función al cambiar la fecha
+  });
   }
+  
+  // Formatear la fecha para enviarla al backend
+  formatearFecha(fecha: Date): string {
+    const year = fecha.getUTCFullYear();
+    const month = ('0' + (fecha.getUTCMonth() + 1)).slice(-2);
+    const day = ('0' + fecha.getUTCDate()).slice(-2);
+  
+    return `${year}-${month}-${day}`;
+}
+  
 
   // Obtener alumnos por grado seleccionado
   obtenerAlumnos() {
     const gradoAcademico = this.listaasistenciaform.get('selectGradoAcademico')?.value;
     if (!gradoAcademico) {
-      return;
+        return;
     }
 
     this.vistasService.obtenerAlumnos().subscribe(
       (data: ListaAlumnosDTO[]) => {
         this.alumnos = data.filter(alumno => alumno.idgrado === gradoAcademico);
+        this.autoRellenarAsistencia();  // Auto rellenar después de obtener alumnos
       },
       (error) => {
         console.error('Error al obtener los alumnos', error);
@@ -59,50 +75,76 @@ export class RegistrarAsistenciaComponent implements OnInit {
     );
   }
 
-  // Formatear la fecha para enviarla al backend
-  formatearFecha(fecha: Date): string {
-    const utcOffset = -5; 
-    fecha.setHours(fecha.getHours() + utcOffset);
-  
-    const year = fecha.getFullYear();
-    const month = ('0' + (fecha.getMonth() + 1)).slice(-2);
-    const day = ('0' + fecha.getDate()).slice(-2);
-  
-    return `${year}-${month}-${day}`;
+  // Autollenado de asistencia
+autoRellenarAsistencia() {
+  const fechaRegistro = this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.value;
+
+  if (fechaRegistro) {
+      const fechaFormateada = this.formatearFecha(new Date(fechaRegistro));
+
+      // Llamada al servicio para obtener asistencia por fecha
+      this.asistenciaService.obtenerAsistenciaPorFecha(fechaFormateada).subscribe(
+          (asistencias: AsistenciaDTO[]) => {
+              // Rellenar radio buttons y descripciones según los datos obtenidos
+              asistencias.forEach(asistencia => {
+                  this.asistenciaSeleccionada[asistencia.idalumno] = asistencia.asisTipo === 'Asistio' ? 1 :
+                                                                    asistencia.asisTipo === 'Tarde' ? 2 : 3;
+                  this.descripcionAsistencia[asistencia.idalumno] = asistencia.asisDescripcion;
+              });
+          },
+          (error) => {
+              console.error('Error al obtener asistencia por fecha', error);
+              Swal.fire('Error', 'No se pudo cargar la asistencia previa.', 'error');
+          }
+      );
   }
-  
-  
+}
+    
   // Guardar la asistencia de los alumnos
   GuardarAsistencia() {
-    // Cambiar de numero a texto
-  const tipoAsistenciaMap: { [key: number]: string } = {
-    1: 'Asistio',
-    2: 'Tarde',
-    3: 'Falto'
-  };
+    const tipoAsistenciaMap: { [key: number]: string } = {
+      1: 'Asistio',
+      2: 'Tarde',
+      3: 'Falto'
+    };
   
-    const fechaRegistro = this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.value;
+    const fechaRegistro = (this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.value);
     if (!fechaRegistro) {
       Swal.fire('Error', 'Por favor, selecciona una fecha de registro', 'error');
       return;
     }
   
-    const asistencias: AsistenciaDTO[] = this.alumnos.map(alumno => {
-      const asisTipo = this.asistenciaSeleccionada[alumno.idalumno] !== undefined
-      ? tipoAsistenciaMap[this.asistenciaSeleccionada[alumno.idalumno]] || 'No definido'
-      : 'No definido'; 
+    // Verificar si todos los alumnos tienen una asistencia seleccionada
+    const incompletos = this.alumnos.some(alumno => !this.asistenciaSeleccionada[alumno.idalumno]);
+    if (incompletos) {
+      Swal.fire('Error', 'Debe completar la asistencia de todos los alumnos', 'error');
+      return;
+    }
+
+    const asistenciasAActualizar: AsistenciaDTO[] = [];
+    const nuevasAsistencias: AsistenciaDTO[] = [];
   
-      return {
+    this.alumnos.forEach(alumno => {
+      const asisTipo = tipoAsistenciaMap[this.asistenciaSeleccionada[alumno.idalumno]] || 'No definido';
+      const asistenciaExistente = this.alumnos.some(a => a.idalumno === alumno.idalumno);
+  
+      const asistencia: AsistenciaDTO = {
         asisFecha: this.formatearFecha(new Date(fechaRegistro)),
         asisTipo: asisTipo,
         asisDescripcion: this.descripcionAsistencia[alumno.idalumno] || '',
         idalumno: alumno.idalumno
       };
+  
+      if (asistenciaExistente) {
+        asistenciasAActualizar.push(asistencia);
+      } else {
+        nuevasAsistencias.push(asistencia);
+      }
     });
   
-    console.log("Datos enviados al backend:", asistencias);
-  
-    this.asistenciaService.createAsistencia(asistencias).subscribe(
+    // Guardar las nuevas asistencias
+  if (nuevasAsistencias.length > 0) {
+    this.asistenciaService.createAsistencia(nuevasAsistencias).subscribe(
       response => {
         Swal.fire('Éxito', 'Asistencia registrada exitosamente', 'success');
       },
@@ -112,9 +154,20 @@ export class RegistrarAsistenciaComponent implements OnInit {
       }
     );
   }
-  
-  
- 
+
+  // Actualizar asistencias existentes
+  if (asistenciasAActualizar.length > 0) {
+    this.asistenciaService.updateAsistencia(asistenciasAActualizar).subscribe(
+      response => {
+        Swal.fire('Éxito', 'Asistencia actualizada exitosamente', 'success');
+      },
+      error => {
+        console.error('Error al actualizar asistencia', error);
+        Swal.fire('Error', 'Ocurrió un error al actualizar la asistencia', 'error');
+      }
+    );
+  }
+}
   
   LimpiarFormulario() {
     this.listaasistenciaform.reset();
