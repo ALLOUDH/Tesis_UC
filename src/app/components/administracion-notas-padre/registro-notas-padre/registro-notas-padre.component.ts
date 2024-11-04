@@ -92,7 +92,7 @@ export class RegistroNotasPadreComponent implements OnInit {
             // Asigna los datos recibidos y calcula el promedio de cada alumno
             this.alumnos = data.map(alumno => {
               const notas = Object.values(alumno.notas).filter(nota => nota !== null) as number[];
-              const promedio = notas.length > 0 
+              const promedio = notas.length > 0
                 ? Number((notas.reduce((a, b) => a + b, 0) / notas.length).toFixed(2)) // Calcula el promedio con 2 decimales
                 : 0; // Asegúrate de que sea un número
 
@@ -191,9 +191,6 @@ export class RegistroNotasPadreComponent implements OnInit {
   RegistrarNotasPadre(): void {
     const alumnos = this.buscarAlumno.length > 0 ? this.buscarAlumno : this.alumnos;
     const notasPorTipo = [];
-
-    console.log('Alumnos a procesar:', alumnos); // Log para verificar alumnos
-
     const idbimestre = this.bimestrerecibido;
     const idgrado = this.gradorecibido;
 
@@ -202,13 +199,17 @@ export class RegistroNotasPadreComponent implements OnInit {
       const alumnosFormArray = this.notaspadreform.get('alumnosFormArray') as FormArray;
       const alumnoFormGroup = alumnosFormArray.at(index) as FormGroup;
 
+      let tieneNotas = false; // Flag para verificar si el alumno tiene al menos una nota válida
+
       for (let tipoNota = 1; tipoNota <= 3; tipoNota++) {
         const notaControlName = `inputNotaPadre${tipoNota}`;
         const nota = alumnoFormGroup.get(notaControlName)?.value;
 
-        console.log(`Nota para ${tipoNota} de alumno ${idalumno}:`, nota); // Log para verificar el valor
+        console.log(`Nota para tipo ${tipoNota} del alumno ${idalumno}:`, nota); // Log para verificar el valor
 
-        if (nota !== null && nota !== '') { // Solo procesa si hay una nota válida
+        if (nota !== null && nota !== '') {
+          tieneNotas = true; // Marcamos que tiene al menos una nota
+
           const indexExistente = notasPorTipo.findIndex(notaTipo =>
             notaTipo.idbimestre === idbimestre &&
             notaTipo.idgrado === idgrado &&
@@ -216,67 +217,48 @@ export class RegistroNotasPadreComponent implements OnInit {
           );
 
           if (indexExistente !== -1) {
-            // Si ya existe, agrega la nota
             notasPorTipo[indexExistente].notas.push({
               idalumno: idalumno,
               notNotaNumerica: Number(nota),
             });
           } else {
-            // Si no existe, crea una nueva entrada
             notasPorTipo.push({
               idbimestre: idbimestre,
               idgrado: idgrado,
               idtipoNotas: tipoNota,
-              notas: [{
-                idalumno: idalumno,
-                notNotaNumerica: Number(nota),
-              }]
+              notas: [{ idalumno: idalumno, notNotaNumerica: Number(nota) }]
             });
           }
         } else {
           console.warn(`Nota no válida para el alumno ${idalumno} en el tipo ${tipoNota}.`);
         }
       }
+
+      if (!tieneNotas) {
+        console.warn(`El alumno ${idalumno} no tiene ninguna nota registrada.`);
+      }
     }
 
     console.log('Notas agrupadas:', notasPorTipo);
 
     if (notasPorTipo.length > 0) {
-      const tieneNotasNulas = notasPorTipo.some(notaTipo =>
-        notaTipo.notas.some(nota => nota.notNotaNumerica === null)
+      // Llamar a POST para registrar nuevas notas
+      this.notasPadreService.registrarNotasPadre(notasPorTipo).subscribe(
+        (response) => {
+          console.log('Notas registradas con éxito:', response);
+          this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
+        },
+        (error) => {
+          console.error('Error al registrar notas:', error);
+          this.MostrarMensajeError('No se pudieron registrar las notas.', 'Error');
+        }
       );
-
-      if (tieneNotasNulas) {
-        // Ejecutar POST
-        this.notasPadreService.registrarNotasPadre(notasPorTipo).subscribe(
-          (response) => {
-            console.log('Notas registradas con éxito:', response);
-            this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
-          },
-          (error) => {
-            console.error('Error al registrar notas:', error);
-            this.MostrarMensajeError('No se pudieron registrar las notas.', 'Error');
-          }
-        );
-      } else {
-        // Ejecutar PUT
-        this.notasPadreService.actualizarNotasPadre(notasPorTipo).subscribe(
-          (response) => {
-            console.log('Notas actualizadas con éxito:', response);
-            this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
-          },
-          (error) => {
-            console.error('Error al actualizar notas:', error);
-            this.MostrarMensajeError('No se pudieron actualizar las notas.', 'Error');
-          }
-        );
-      }
     } else {
-      console.warn('No hay alumnos y/o notas registradas'); // Mensaje si no hay notas
-      this.MostrarMensajeError('No hay alumnos y/o notas registradas.', 'Error');
+      console.warn('No hay alumnos y/o notas para actualizar'); // Si notasPorTipo está vacío, significa que no hay notas para actualizar
+      this.MostrarMensajeError('No hay alumnos y/o notas para actualizar.', 'Error');
     }
   }
-
+  
   LimpiarFormulario() {
     this.notaspadreform.reset();
   }
