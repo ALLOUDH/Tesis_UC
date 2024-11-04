@@ -69,52 +69,84 @@ export class SidebarComponent {
     });
   }
   ListaAlumnos() {
-    this.router.navigate(['/lista-alumnos']);
-    };
+    this.router.navigate(['/lista-alumnos']).then(() => {
+      window.location.reload();
+    });;
+  };
   ListaDocentes() {
-    this.router.navigate(['/lista-docentes']);
-    };
+    this.router.navigate(['/lista-docentes']).then(() => {
+      window.location.reload();
+    });;
+  };
   AdministrarNotasRegistroAuxiliar() {
-    this.router.navigate(['/administracion-notas-registro-auxiliar']);
-    };
+    this.router.navigate(['/administracion-notas-registro-auxiliar']).then(() => {
+      window.location.reload();
+    });;
+  };
   AdministrarNotasConducta() {
-    this.router.navigate(['/administracion-notas-conducta']);
-    };
-    VerNotasConducta() {
-      this.router.navigate(['/vernotasconducta']);
-      };
+    this.router.navigate(['/administracion-notas-conducta']).then(() => {
+      window.location.reload();
+    });;
+  };
+  VerNotasConducta() {
+    this.router.navigate(['/lista-notas-conportamiento']).then(() => {
+      window.location.reload();
+    });;
+  };
   AdministrarNotasPadre() {
-    this.router.navigate(['/administracion-notas-padre']);
-    };
+    this.router.navigate(['/administracion-notas-padre']).then(() => {
+      window.location.reload();
+    });;
+  };
   EditarAsistencia() {
-    this.router.navigate(['/editar-asistencia']);
-    };
+    this.router.navigate(['/editar-asistencia']).then(() => {
+      window.location.reload();
+    });;
+  };
   VerFaltasTardanzas() {
-    this.router.navigate(['/ver-faltas-tardanzas']);
-    };
+    this.router.navigate(['/ver-faltas-tardanzas']).then(() => {
+      window.location.reload();
+    });;
+  };
   ListaPeriodoAcademico() {
-    this.router.navigate(['/periodo-academico']);
-    };
+    this.router.navigate(['/periodo-academico']).then(() => {
+      window.location.reload();
+    });;
+  };
   ListaUnidadesAcademicas() {
-    this.router.navigate(['/unidades-academicas']);
-    }
+    this.router.navigate(['/unidades-academicas']).then(() => {
+      window.location.reload();
+    });;
+  }
   ListaBimestresAcademicos() {
-    this.router.navigate(['/bimestres-academicos']);
-    };
+    this.router.navigate(['/bimestres-academicos']).then(() => {
+      window.location.reload();
+    });;
+  };
   ListaAreaAsignaturas() {
-    this.router.navigate(['/area-asignaturas']);
-    };
+    this.router.navigate(['/area-asignaturas']).then(() => {
+      window.location.reload();
+    });;
+  };
   ListaAsignaturas() {
-    this.router.navigate(['/asignaturas']);
-    };
+    this.router.navigate(['/asignaturas']).then(() => {
+      window.location.reload();
+    });;
+  };
   ListaCategoriaNotas() {
-    this.router.navigate(['/categoria-notas']);
-    };
+    this.router.navigate(['/categoria-notas']).then(() => {
+      window.location.reload();
+    });;
+  };
   ListaTiposNotas() {
-    this.router.navigate(['/tipos-notas']);
-    };
+    this.router.navigate(['/tipos-notas']).then(() => {
+      window.location.reload();
+    });;
+  };
 
   RegistrarAsistencia() {
-    this.router.navigate(['/registrarasistencia']);
-    };
+    this.router.navigate(['/registrar-asistencia']).then(() => {
+      window.location.reload();
+    });;
+  };
 }

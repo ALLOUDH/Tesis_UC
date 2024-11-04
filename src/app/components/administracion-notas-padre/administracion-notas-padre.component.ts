@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { OthersIntDTO } from '../../dtos/other.dto';
 import { BimestreAcademicoService } from '../../services/bimestre-academico.service';
 import { EstadoUsuarioService } from '../../services/estado-usuario.service';
@@ -8,6 +8,7 @@ import { PeriodoAcademicoService } from '../../services/periodo-academico.servic
 import { BimestreAcademicoDTO } from '../../dtos/bimestreacademico.dto';
 import { PeriodoAcademicoDTO } from '../../dtos/periodoacademico.dto';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-administracion-notas-padre',
@@ -32,7 +33,7 @@ export class AdministracionNotasPadreComponent {
     this.otherGradoAcademico = gradoAcademicoService.ObtenerGradoAcademico();
     this.adminnotaspadre = new FormGroup({
       selectPeriodo: new FormControl(''),
-      selectBimestre: new FormControl(''),
+      selectBimestre: new FormControl('', Validators.required),
     });
 
     for (let i = 0; i < this.otherGradoAcademico.length; i++) {
@@ -75,6 +76,7 @@ export class AdministracionNotasPadreComponent {
   }
 
   EnviarDatos(grado: number) {
+
     // Obtener datos del formulario
     const selectedPeriodo = this.adminnotaspadre.get('selectPeriodo')?.value;
     const selectedBimestre = this.adminnotaspadre.get('selectBimestre')?.value;
@@ -84,6 +86,9 @@ export class AdministracionNotasPadreComponent {
     const selectedGrado = this.otherGradoAcademico[grado - 1]; // Accediendo al DTO
     const gradoId = selectedGrado ? selectedGrado.id : null; // Obtener el ID del grado
 
+    if (selectedBimestre.length === 0) {
+      this.MostrarMensajeError('Seleccione un bimestre', 'Error');
+    } else {
     const formData = {
       selectPeriodo: selectedPeriodo,
       selectBimestre: selectedBimestre,
@@ -94,5 +99,25 @@ export class AdministracionNotasPadreComponent {
     // Navegar a la ruta y enviar los datos
     this.route.navigate(['/registro-notas-padre'], { state: { data: formData } });
     console.log(formData); // Para verificar en la consola
+    }
+  }
+
+  MostrarMensajeExito(titulo: string, mensaje: string) {
+    Swal.fire({
+      title: titulo,
+      html: mensaje,
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2300,
+      timerProgressBar: true
+    });
+  }
+
+  MostrarMensajeError(mensaje: string, titulo: string) {
+    Swal.fire({
+      title: titulo,
+      text: mensaje,
+      icon: "error"
+    });
   }
 }

@@ -251,9 +251,11 @@ export class RegistroNotasPadreComponent implements OnInit {
         this.notasPadreService.registrarNotasPadre(notasPorTipo).subscribe(
           (response) => {
             console.log('Notas registradas con éxito:', response);
+            this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
           },
           (error) => {
             console.error('Error al registrar notas:', error);
+            this.MostrarMensajeError('No se pudieron registrar las notas.', 'Error');
           }
         );
       } else {
@@ -261,14 +263,17 @@ export class RegistroNotasPadreComponent implements OnInit {
         this.notasPadreService.actualizarNotasPadre(notasPorTipo).subscribe(
           (response) => {
             console.log('Notas actualizadas con éxito:', response);
+            this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
           },
           (error) => {
             console.error('Error al actualizar notas:', error);
+            this.MostrarMensajeError('No se pudieron actualizar las notas.', 'Error');
           }
         );
       }
     } else {
-      console.warn('No hay notas para registrar.'); // Mensaje si no hay notas
+      console.warn('No hay alumnos y/o notas registradas'); // Mensaje si no hay notas
+      this.MostrarMensajeError('No hay alumnos y/o notas registradas.', 'Error');
     }
   }
 
