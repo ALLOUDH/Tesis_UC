@@ -11,6 +11,10 @@ import { BimestreAcademicoService } from '../../../services/bimestre-academico.s
 import { BimestreAcademicoDTO } from '../../../dtos/bimestreacademico.dto';
 import { NotasPadreService } from '../../../services/notas-padre.service';
 import { NotasPorPadreDTO } from '../../../dtos/notas-padres.dto';
+import { TipoNotasDTO } from '../../../dtos/tiponotas.dto';
+import { TiponotasService } from '../../../services/tiponotas.service';
+import { CategoriaNotasDTO } from '../../../dtos/categorianotas.dto';
+import { CategorianotasService } from '../../../services/categorianotas.service';
 
 @Component({
   selector: 'app-registro-notas-padre',
@@ -30,6 +34,8 @@ export class RegistroNotasPadreComponent implements OnInit {
   periodorecibido: any;
   bimestrerecibido: any;
   notas: any;
+  tiponota: TipoNotasDTO[]=[];
+  nombrecat: CategoriaNotasDTO[]=[];
 
   constructor(
     private router: Router,
@@ -39,6 +45,8 @@ export class RegistroNotasPadreComponent implements OnInit {
     private bimestreAcademicoService: BimestreAcademicoService,
     estadoUsuarioService: EstadoUsuarioService,
     gradoAcademicoService: GradoAcademicoService,
+    private tipoNotaService: TiponotasService,
+    private categorianotaservice: CategorianotasService,
   ) {
     this.otherEstadoUsuario = estadoUsuarioService.ObtenerEstadoUsuario();
     this.otherGradoAcademico = gradoAcademicoService.ObtenerGradoAcademico();
@@ -78,11 +86,31 @@ export class RegistroNotasPadreComponent implements OnInit {
         console.error("Error al obtener los bimestres:", error);
       }
     );
+
+    this.tipoNotaService.getTiposNota().subscribe(
+      (data: TipoNotasDTO[]) => {
+        this.tiponota = data.filter(tipo => {
+          const categoria = this.nombrecat.find(cat => cat.idcategoriaNotas === tipo.idcategoriaNotas);
+          return categoria?.catNombre === 'Notas de padres';
+        });
+      },
+      (error) => {
+        console.error("Error al obtener las notas:", error);
+      }
+    );
+    this.categorianotaservice.getCategorias().subscribe(
+      (data: CategoriaNotasDTO[]) => {
+        this.nombrecat = data;
+      },
+      (error) => {
+        console.error("Error al obtener la categoria:", error);
+      }
+    );
   }
 
   obtenerNotasPadre(): void {
     if (this.gradorecibido && this.bimestrerecibido && this.periodorecibido) {
-      this.notasPadreService.obtenerNotasPadre(this.gradorecibido, this.bimestrerecibido, this.periodorecibido).subscribe(
+      this.notasPadreService.obtenerNotasPadre(this.gradorecibido, this.bimestrerecibido, this.periodorecibido, 2).subscribe(
         (data: NotasPorPadreDTO[]) => {
           if (data.length === 0) {
             console.warn('No se encontraron notas para los alumnos.');
@@ -196,17 +224,21 @@ export class RegistroNotasPadreComponent implements OnInit {
 
     const idbimestre = this.bimestrerecibido;
     const idgrado = this.gradorecibido;
+    const tiposDeNotaIds = this.tiponota.map(tipo => tipo.idtipoNotas);
+
 
     for (let index = 0; index < alumnos.length; index++) {
       const idalumno = alumnos[index].idalumno;
       const alumnosFormArray = this.notaspadreform.get('alumnosFormArray') as FormArray;
       const alumnoFormGroup = alumnosFormArray.at(index) as FormGroup;
 
-      for (let tipoNota = 1; tipoNota <= 3; tipoNota++) {
-        const notaControlName = `inputNotaPadre${tipoNota}`;
+      // Itera solo sobre los tipos de nota válidos
+      // Itera sobre el arreglo de tiposDeNotaIds para acceder a cada tipo de nota correcto
+      for (let tipoNotaIndex = 0; tipoNotaIndex < tiposDeNotaIds.length; tipoNotaIndex++) {
+        const tipoNota = tiposDeNotaIds[tipoNotaIndex];  // Obtiene el ID de tipo de nota correcto (10, 11, 12, etc.)
+        const notaControlName = `inputNotaPadre${tipoNotaIndex + 1}`; // Correspondencia con el nombre del input (1, 2, 3)
         const nota = alumnoFormGroup.get(notaControlName)?.value;
-
-        console.log(`Nota para ${tipoNota} de alumno ${idalumno}:`, nota); // Log para verificar el valor
+console.log(`Nota para tipoNota ID ${tipoNota} de alumno ${idalumno}:`, nota);
 
         if (nota !== null && nota !== '') { // Solo procesa si hay una nota válida
           const indexExistente = notasPorTipo.findIndex(notaTipo =>
