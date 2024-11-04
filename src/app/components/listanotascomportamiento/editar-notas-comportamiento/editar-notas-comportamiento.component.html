@@ -1,0 +1,33 @@
+<div class="modal-header d-flex justify-content-between align-items-center">
+    <p class="fs-4 fw-bold user-name-txt">Actualizar Notas de Comportamiento</p>
+    <button type="button" class="btn-close close" aria-label="Close" (click)="cerrarModal()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <section class="actualizar-notas-comportamiento">
+        <form [formGroup]="notasForm" autocomplete="off" novalidate>
+            <div class="row">
+                <div *ngFor="let tipo of tiposDeNota" class="col-lg-6">
+                    <div class="form-group mb-3">
+                        <strong class="form-label user-name-txt">{{ tipo.tipNoNombre }}:</strong>
+                        <input type="number" class="form-control" [formControlName]="tipo.idtipoNotas.toString()" min="0" max="20" placeholder="Ingrese nota" />
+                        <div *ngIf="notasForm.controls[tipo.idtipoNotas]?.invalid && notasForm.controls[tipo.idtipoNotas]?.touched" class="text-error">
+                            La nota debe estar entre 0 y 20.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger button-color-danger" (click)="cerrarModal()">
+        <i class="fa fa-lg fa-fw fa-times"></i> Cancelar
+    </button>
+    <button type="button" class="btn btn-primary button-color-primary" (click)="guardarCambios()" [disabled]="notasForm.invalid">
+        <i class="fa fa-lg fa-fw fa-save"></i> Guardar
+    </button>
+</div>

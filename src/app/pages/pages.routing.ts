@@ -24,6 +24,8 @@ import { AdministracionNotasPadreComponent } from "../components/administracion-
 import { EditarAsistenciaComponent } from "../components/editar-asistencia/editar-asistencia.component";
 import { VerFaltasTardanzasComponent } from "../components/ver-faltas-tardanzas/ver-faltas-tardanzas.component";
 import { AsignardocentesComponent } from "../components/asignardocentes/asignardocentes.component";
+import { ListanotascomportamientoComponent } from "../components/listanotascomportamiento/listanotascomportamiento.component";
+import { RegistrarAsistenciaComponent } from "../components/registrar-asistencia/registrar-asistencia.component";
 import { RegistroNotasPadreComponent } from "../components/administracion-notas-padre/registro-notas-padre/registro-notas-padre.component";
 
 const routes: Routes = [
@@ -38,26 +40,25 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             {path:'dashboard', component:DashboardComponent},
-            { path: 'registro-alumno', component: RegistroAlumnoComponent },
-            { path: 'registro-docente', component: RegistrodocenteComponent },
-            { path: 'lista-alumnos', component: ListaAlumnosComponent },
-            { path: 'lista-docentes', component: ListaDocentesComponent },
-            { path: 'administracion-notas-registro-auxiliar', component: AdministracionNotasRegistroAuxiliarComponent },
-            { path: 'administracion-notas-conducta', component: AdministracionNotasConductaComponent },
-            { path: 'administracion-notas-padre', component: AdministracionNotasPadreComponent },
-            { path: 'editar-asistencia', component: EditarAsistenciaComponent },
-            { path: 'ver-faltas-tardanzas', component: VerFaltasTardanzasComponent },
-            { path: 'periodo-academico', component: PeriodoAcademicoComponent},
-            { path: 'unidades-academicas', component: ListaUnidadesAcademicasComponent},
-            { path: 'bimestres-academicos', component: ListaBimestresAcademicosComponent},
-            { path: 'area-asignaturas', component: ListaAreaCursosComponent},
+            { path: 'registroalumno', component: RegistroAlumnoComponent },
+            { path: 'registrodocente', component: RegistrodocenteComponent },
+            { path: 'listaalumnos', component: ListaAlumnosComponent },
+            { path: 'listadocentes', component: ListaDocentesComponent },
+            { path: 'administracionnotasregistroauxiliar', component: AdministracionNotasRegistroAuxiliarComponent },
+            { path: 'administracionnotasconducta', component: AdministracionNotasConductaComponent },
+            { path: 'administracionnotaspadre', component: AdministracionNotasPadreComponent },
+            { path: 'editarasistencia', component: EditarAsistenciaComponent },
+            { path: 'verfaltastardanzas', component: VerFaltasTardanzasComponent },
+            { path: 'periodoacademico', component: PeriodoAcademicoComponent},
+            { path: 'unidadesacademicas', component: ListaUnidadesAcademicasComponent},
+            { path: 'bimestresacademicos', component: ListaBimestresAcademicosComponent},
+            { path: 'areaasignaturas', component: ListaAreaCursosComponent},
             { path: 'asignaturas', component: ListaAsignaturasComponent},
-            { path: 'categoria-notas', component: ListaCategoriaNotasComponent},
-            { path: 'tipos-notas', component: ListaTiposNotasComponent},
-            { path: 'registro-incidencia', component: RegistroIncidenciasComponent},
-            { path: 'registro-comentario', component: RegistroComentarioComponent},
-            { path: 'asignar-docentes', component: AsignardocentesComponent},
-            { path: 'registro-notas-padre', component: RegistroNotasPadreComponent},
+            { path: 'categorianotas', component: ListaCategoriaNotasComponent},
+            { path: 'tiposnotas', component: ListaTiposNotasComponent},
+            { path: 'registroincidencia', component: RegistroIncidenciasComponent},
+            { path: 'registrocomentario', component: RegistroComentarioComponent},
+            { path: 'asignardocentes', component: AsignardocentesComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },

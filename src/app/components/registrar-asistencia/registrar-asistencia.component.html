@@ -1,0 +1,118 @@
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="page-header float-left">
+            <div class="page-title">
+              <h1>Registrar Asistencia</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div class="page-header float-right">
+            <div class="page-title">
+              <ol class="breadcrumb d-flex justify-content-end">
+                <li><a href="#">Inicio</a></li>
+                <li class="active">Registrar Asistencia</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <section id="section-buscar-alumno">
+    <form [formGroup]="listaasistenciaform">
+      <div class="content">
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body card-block">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label for="selectGradoAcademico" class="form-label">Grado:</label>
+                        <dx-select-box 
+                          placeholder="Seleccione una opción"
+                          displayExpr="nombre" 
+                          valueExpr="id"
+                          [dataSource]="otherGradoAcademico"
+                          formControlName="selectGradoAcademico"
+                          (onValueChanged)="obtenerAlumnos()">
+                        </dx-select-box>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label for="inputFechaRegistroAsistencia" class="form-label">Fecha:</label>
+                        <input 
+                          type="date" 
+                          formControlName="inputFechaRegistroAsistencia" 
+                          class="form-control" />
+                      </div>
+                    </div>
+                    <div class="col-lg-4 d-flex align-items-end justify-content-end">
+                      <button type="button" class="btn btn-primary mx-2" (click)="obtenerAlumnos()">Buscar</button>
+                      <button type="button" class="btn btn-danger" (click)="LimpiarFormulario()">Limpiar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+  
+  <section id="lista-alumnos" *ngIf="alumnos.length > 0">
+    <div class="content">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body card-block">
+                <div class="table-stats order-table ov-h">
+          <table class="table">
+            <thead class="bg-primary text-white">
+              <tr>
+                <th>#</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Nombre</th>
+                <th>Asistencia</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let alumno of alumnos; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ alumno.usApellidoPaterno }}</td>
+                <td>{{ alumno.usApellidoMaterno }}</td>
+                <td>{{ alumno.usNombre }}</td>
+                <td>
+                  <label><input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="1" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Asistió</label>
+                  <label><input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="2" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Tarde</label>
+                  <label><input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="3" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Faltó</label>
+                </td>
+                <td>
+                  <input type="text" [(ngModel)]="descripcionAsistencia[alumno.idalumno]" class="form-control" placeholder="Opcional" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-right mt-3">
+          <button type="button" class="btn btn-primary" (click)="GuardarAsistencia()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</section>
+  

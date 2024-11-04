@@ -80,6 +80,9 @@ export class SidebarComponent {
   AdministrarNotasConducta() {
     this.router.navigate(['/administracion-notas-conducta']);
     };
+    VerNotasConducta() {
+      this.router.navigate(['/vernotasconducta']);
+      };
   AdministrarNotasPadre() {
     this.router.navigate(['/administracion-notas-padre']);
     };
@@ -109,5 +112,9 @@ export class SidebarComponent {
     };
   ListaTiposNotas() {
     this.router.navigate(['/tipos-notas']);
+    };
+
+  RegistrarAsistencia() {
+    this.router.navigate(['/registrarasistencia']);
     };
 }

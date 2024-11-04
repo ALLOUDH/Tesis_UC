@@ -54,10 +54,12 @@
                                           <td class="text-center">{{ bimestre.biFechaFin }}</td>
                                           <td class="text-center">{{ bimestre.peNombre }}</td>
                                           <td class="text-center">
-                                            <button class="btn btn-sm btn-warning mr-2" (click)="abrirModalAgregarBimestre(bimestre)">
+                                            <button class="btn btn-primary btn-sm button-color-primary" data-toggle="tooltip" 
+                                            data-placement="top" style="margin-right: 5px;" (click)="abrirModalAgregarBimestre(bimestre)">
                                               <i class="fa fa-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-danger" (click)="EliminarBimestre(bimestre.idbimestre)">
+                                            <button class="btn btn-danger btn-sm button-color-danger"
+                                            data-toggle="tooltip" data-placement="top" style="margin-right: 5px;" (click)="EliminarBimestre(bimestre.idbimestre)">
                                               <i class="fa fa-trash"></i>
                                             </button>
                                           </td>
