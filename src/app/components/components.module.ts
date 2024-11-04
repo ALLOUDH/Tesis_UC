@@ -32,6 +32,9 @@ import { ActualizarAlumnosComponent } from './lista-alumnos/actualizar-alumnos/a
 import { AsignardocentesComponent } from './asignardocentes/asignardocentes.component';
 import { EditarDocenteComponent } from './lista-docentes/editar-docente/editar-docente.component';
 import { RegistroNotasPadreComponent } from './administracion-notas-padre/registro-notas-padre/registro-notas-padre.component';
+import { EditarNotasComportamientoComponent } from './listanotascomportamiento/editar-notas-comportamiento/editar-notas-comportamiento.component';
+import { RegistrarAsistenciaComponent } from './registrar-asistencia/registrar-asistencia.component';
+import { ListanotascomportamientoComponent } from './listanotascomportamiento/listanotascomportamiento.component';
 
 
 @NgModule({
@@ -65,6 +68,10 @@ import { RegistroNotasPadreComponent } from './administracion-notas-padre/regist
     AsignardocentesComponent,
     EditarDocenteComponent,
     RegistroNotasPadreComponent,
+    EditarAsistenciaComponent,
+    EditarNotasComportamientoComponent,
+    RegistrarAsistenciaComponent,
+    ListanotascomportamientoComponent
   ],
   imports: [
     CommonModule,
