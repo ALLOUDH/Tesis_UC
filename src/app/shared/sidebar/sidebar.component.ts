@@ -87,7 +87,7 @@ export class SidebarComponent {
     this.router.navigate(['/administracionnotaspadre']);
     };
   EditarAsistencia() {
-    this.router.navigate(['/editarasistencia']);
+    this.router.navigate(['/registrarasistencia']);
     };
   VerFaltasTardanzas() {
     this.router.navigate(['/verfaltastardanzas']);

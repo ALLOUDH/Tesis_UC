@@ -1,7 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AsistenciaDTO } from '../dtos/asistencia.dto';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { ResumenAsistenciaDTO } from '../dtos/resumenasistencia.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,24 @@ export class AsistenciaService {
 
   updateAsistencia(asistencias: AsistenciaDTO[]): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/ActualizarAsistencia`, asistencias);
+  }
+
+  // Obtener el resumen de asistencia 
+  obtenerResumenAsistencia(año: string, idAlumno: number): Observable<ResumenAsistenciaDTO[]> {
+    const params = new HttpParams()
+      .set('año', año)
+      .set('idAlumno', idAlumno.toString());
+    return this.http.get<ResumenAsistenciaDTO[]>(`${this.baseUrl}/ObtenerResumenAsistenciaPorAnoYAlumno`, { params });
+  }
+
+  // Obtener los años con registros de asistencia
+  obtenerAnosConRegistros(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.baseUrl}/ObtenerAnosConRegistros`)
+      .pipe(
+        map((response: string[]) => {
+          return response;
+        })
+      );
   }
 
 }

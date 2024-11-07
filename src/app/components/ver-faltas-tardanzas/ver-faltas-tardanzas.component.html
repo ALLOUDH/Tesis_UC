@@ -1,1 +1,144 @@
-<p>ver-faltas-tardanzas works!</p>
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="page-header float-left">
+            <div class="page-title">
+              <h1>Registrar Asistencia</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div class="page-header float-right">
+            <div class="page-title">
+              <ol class="breadcrumb d-flex justify-content-end">
+                <li><a href="#">Inicio</a></li>
+                <li class="active">Registrar Asistencia</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <section id="section-buscar-alumno">
+    <form [formGroup]="listaasistenciaform">
+      <div class="content">
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body card-block">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label for="selectGradoAcademico" class="form-label">Grado:</label>
+                        <dx-select-box 
+                          placeholder="Seleccione una opción"
+                          displayExpr="nombre" 
+                          valueExpr="id"
+                          [dataSource]="otherGradoAcademico"
+                          formControlName="selectGradoAcademico"
+                          (onValueChanged)="obtenerAlumnos()">
+                        </dx-select-box>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="mb-3">
+                          <label for="periodo" class="form-label">Periodo</label>
+                          <dx-select-box 
+                            placeholder="Seleccione un año"
+                            [dataSource]="anos"
+                            displayExpr="this" 
+                            valueExpr="this"
+                            formControlName="PeriodoInformacionAsistencia">
+                          </dx-select-box>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 d-flex align-items-end justify-content-end">
+                      <button type="button" class="btn btn-danger" >Limpiar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+  
+  <section id="lista-alumnos" *ngIf="alumnos.length > 0">
+    <div class="content">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body card-block">
+                            <div class="table-stats order-table ov-h">
+                                <table class="table">
+                                    <thead class="bg-primary text-white">
+                                        <tr>
+                                            <th class="widthtablas">#</th>
+                                            <th>Nombre Completo</th>
+                                            <th colspan="11" class="text-center">TARDANZAS</th>
+                                            <th colspan="11" class="text-center">FALTAS</th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th class="text-center">Mar</th>
+                                            <th class="text-center">Abr</th>
+                                            <th class="text-center">May</th>
+                                            <th class="text-center">Jun</th>
+                                            <th class="text-center">Jul</th>
+                                            <th class="text-center">Ago</th>
+                                            <th class="text-center">Set</th>
+                                            <th class="text-center">Oct</th>
+                                            <th class="text-center">Nov</th>
+                                            <th class="text-center">Dic</th>
+                                            <th class="text-center">Total</th>
+                                            <th class="text-center">Mar</th>
+                                            <th class="text-center">Abr</th>
+                                            <th class="text-center">May</th>
+                                            <th class="text-center">Jun</th>
+                                            <th class="text-center">Jul</th>
+                                            <th class="text-center">Ago</th>
+                                            <th class="text-center">Set</th>
+                                            <th class="text-center">Oct</th>
+                                            <th class="text-center">Nov</th>
+                                            <th class="text-center">Dic</th>
+                                            <th class="text-center">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let alumno of alumnos; let i = index">
+                                            <td class="widthtablas">{{ i + 1 }}</td>
+                                            <td>{{ alumno.usApellidoPaterno }} {{ alumno.usApellidoMaterno }} {{ alumno.usNombre }}</td>
+                                            
+                                            <!-- Tardanzas -->
+                                            <ng-container *ngFor="let mes of meses">
+                                              <td class="text-center">{{ getTardanzasMes(alumno.idalumno, mes) }}</td>
+                                            </ng-container>
+                                            <td class="text-center text-primary">{{ getTotalTardanzas(alumno.idalumno) }}</td>
+                                          
+                                            <!-- Faltas -->
+                                            <ng-container *ngFor="let mes of meses">
+                                              <td class="text-center">{{ getFaltasMes(alumno.idalumno, mes) }}</td>
+                                            </ng-container>
+                                            <td class="text-center text-primary">{{ getTotalFaltas(alumno.idalumno) }}</td>
+                                          </tr>
+                                    </tbody>
+                                </table>
+                            </div> <!-- /.table-stats -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+  
