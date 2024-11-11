@@ -21,9 +21,10 @@ export class VerFaltasTardanzasComponent implements OnInit{
   buscarAlumno: ListaAlumnosDTO[] = []; 
   anos: string[] = [];  // Para almacenar los años únicos
   resumenAsistencia: ResumenAsistenciaDTO[] = [];
-  meses = ['03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];  // Array de meses en formato numérico
+  meses = ['marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];  // Array de meses en formato numérico
 
-
+  // Estructura para mapear las tardanzas y faltas por alumno y mes
+  asistenciaMap: { [idalumno: number]: { [mes: string]: { tardanzas: number, faltas: number } } } = {};
 
   constructor(
     private vistasService: VistasService,
@@ -61,7 +62,6 @@ export class VerFaltasTardanzasComponent implements OnInit{
     this.vistasService.obtenerAlumnos().subscribe(
       (data: ListaAlumnosDTO[]) => {
         this.alumnos = data.filter(alumno => alumno.idgrado === gradoAcademico);
-        this.obtenerResumenAsistencia();
       },
       (error) => {
         console.error('Error al obtener los alumnos', error);
@@ -70,6 +70,75 @@ export class VerFaltasTardanzasComponent implements OnInit{
     );
   }
 
+  // Método que se llama cuando se selecciona un periodo (año)
+  onPeriodoChanged(event: any) {
+    const periodo = event.value;
+    console.log('Año seleccionado:', periodo);
+    this.obtenerResumenAsistencia(periodo);
+  }
+
+  // Obtener el resumen de asistencia por año
+  obtenerResumenAsistencia(periodo: string) {
+    const gradoAcademico = this.listaasistenciaform.get('selectGradoAcademico')?.value;
+    if (periodo && gradoAcademico) {
+      this.asistenciaService.obtenerResumenAsistencia(periodo, gradoAcademico).subscribe(
+        (data: ResumenAsistenciaDTO[]) => {
+          this.resumenAsistencia = data;
+          this.organizarAsistenciaPorAlumnoYMes();
+        },
+        error => {
+          console.error('Error al obtener el resumen de asistencia:', error);
+          Swal.fire('Error', 'Hubo un problema al obtener el resumen de asistencia.', 'error');
+        }
+      );
+    }
+  }
+
+  organizarAsistenciaPorAlumnoYMes() {
+    this.asistenciaMap = {};
+    console.log("Resumen de asistencia antes de organizar:", this.resumenAsistencia); // Log inicial para ver los datos de entrada
+  
+    this.resumenAsistencia.forEach(registro => {
+      const { idalumno, resmasisMes, totalTardanzas, totalFaltas } = registro;
+  
+      console.log(`Procesando registro: idalumno=${idalumno}, mes=${resmasisMes}, tardanzas=${totalTardanzas}, faltas=${totalFaltas}`);
+  
+      // Inicializar el objeto para el alumno si no existe
+      if (!this.asistenciaMap[idalumno]) {
+        this.asistenciaMap[idalumno] = {};
+      }
+  
+      // Guardar los datos de tardanzas y faltas para el mes correspondiente
+      this.asistenciaMap[idalumno][resmasisMes] = {
+        tardanzas: totalTardanzas,
+        faltas: totalFaltas
+      };
+  
+      console.log(`Estado actual de asistenciaMap para idalumno ${idalumno}:`, this.asistenciaMap[idalumno]);
+    });
+  
+    console.log("Mapa final de asistencia después de organizar:", this.asistenciaMap); // Log final para ver la estructura completa
+  }
+
+  getTardanzasMes(idalumno: number, mes: string): number {
+    return this.asistenciaMap[idalumno]?.[mes]?.tardanzas || 0;
+  }
+
+  getFaltasMes(idalumno: number, mes: string): number {
+    return this.asistenciaMap[idalumno]?.[mes]?.faltas || 0;
+  }
+
+  getTotalTardanzas(idalumno: number): number {
+    return Object.values(this.asistenciaMap[idalumno] || {}).reduce((total, mesData) => total + (mesData.tardanzas || 0), 0);
+  }
+
+  getTotalFaltas(idalumno: number): number {
+    return Object.values(this.asistenciaMap[idalumno] || {}).reduce((total, mesData) => total + (mesData.faltas || 0), 0);
+  }
+
+
+
+/*
   obtenerResumenAsistencia() {
     const periodo = this.listaasistenciaform.get('PeriodoInformacionAsistencia')?.value;
     const gradoAcademico = this.listaasistenciaform.get('selectGradoAcademico')?.value;
@@ -87,7 +156,8 @@ export class VerFaltasTardanzasComponent implements OnInit{
       );
     }
   }
-
+*/
+/*
   // Métodos para obtener las tardanzas y faltas por mes
   getTardanzasMes(idAlumno: number, mes: string): number {
     const resumen = this.resumenAsistencia.find(
@@ -119,5 +189,6 @@ export class VerFaltasTardanzasComponent implements OnInit{
     this.listaasistenciaform.reset();
     this.alumnos = [];
   }
+*/
 
 }

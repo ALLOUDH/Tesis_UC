@@ -28,11 +28,11 @@ export class AsistenciaService {
   }
 
   // Obtener el resumen de asistencia 
-  obtenerResumenAsistencia(año: string, idAlumno: number): Observable<ResumenAsistenciaDTO[]> {
+  obtenerResumenAsistencia(ano: string, idAlumno: number): Observable<ResumenAsistenciaDTO[]> {
     const params = new HttpParams()
-      .set('año', año)
+      .set('ano', ano)
       .set('idAlumno', idAlumno.toString());
-    return this.http.get<ResumenAsistenciaDTO[]>(`${this.baseUrl}/ObtenerResumenAsistenciaPorAnoYAlumno`, { params });
+    return this.http.get<ResumenAsistenciaDTO[]>(`${this.baseUrl}/obtenerResumenAsistencia`, { params });
   }
 
   // Obtener los años con registros de asistencia
