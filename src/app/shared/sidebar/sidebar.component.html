@@ -161,7 +161,8 @@
                             class="menu-icon fa fa-bar-chart"></i>Registrar Asistencia</a>
                 </li>
                 <li>
-                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Ver Faltas y Tardanzas</a>
+                    <a (click)="VerFaltasTardanzas()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Ver Faltas y Tardanzas</a>
                 </li>
                 <div class="footer-comment">
                     <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarComentarios()">Enviar Comentarios
@@ -193,8 +194,10 @@
 
                 <li class="menu-title">Asistencia</li><!-- /.menu-title -->
                 <li>
-                    <a href="#"> <i class="menu-icon fa fa-tasks"></i>Ver asistencia</a>
+                    <a (click)="VerAsistenciaPrueba()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Asistencia</a>
                 </li>
+                
                 <div class="footer-comment">
                     <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarComentarios()">Enviar Comentarios
                     </p>

@@ -21,7 +21,7 @@ export class VerFaltasTardanzasComponent implements OnInit{
   buscarAlumno: ListaAlumnosDTO[] = []; 
   anos: string[] = [];  // Para almacenar los años únicos
   resumenAsistencia: ResumenAsistenciaDTO[] = [];
-  meses = ['marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];  // Array de meses en formato numérico
+  meses = ['marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];  
 
   // Estructura para mapear las tardanzas y faltas por alumno y mes
   asistenciaMap: { [idalumno: number]: { [mes: string]: { tardanzas: number, faltas: number } } } = {};

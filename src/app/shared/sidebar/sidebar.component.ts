@@ -117,4 +117,9 @@ export class SidebarComponent {
   RegistrarAsistencia() {
     this.router.navigate(['/registrarasistencia']);
     };
+  
+  VerAsistenciaPrueba() {
+    this.router.navigate(['/editarasistencia']);
+    };
+  
 }
