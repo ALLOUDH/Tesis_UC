@@ -56,21 +56,37 @@ export class RegistroNotasComportamientoComponent implements OnInit {
       this.gradorecibido = datos.gradoId;
       this.unidadrecibida = datos.selectUnidad;
     }
-    forkJoin([
-      this.unidadAcademicaService.getUnidad(),
-      this.tipoNotaService.getTiposNota()
-    ]).subscribe(
-      ([unidadData, tipoNotaData]) => {
-        this.unidadAcademica = unidadData;
-        this.tiponota = tipoNotaData.filter(tipo => tipo.idcategoriaNotas === 4); // Solo notas de comportamiento
-        // Encuentra el nombre de la unidad seleccionada
-        const unidadSeleccionada = this.unidadAcademica.find(unidad => unidad.idunidad === this.unidadrecibida);
-        this.unidadNombre = unidadSeleccionada ? unidadSeleccionada.uniNombre : 'Sin nombre';
-        
-        this.obtenerNotasComportamiento();
-      },
-      (error) => console.error("Error al cargar datos iniciales:", error)
-    );
+    
+
+// Método modificado para cargar los datos y filtrar por nombre de categoría
+forkJoin([
+    this.unidadAcademicaService.getUnidad(),
+    this.categorianotaservice.getCategorias(), // Primero obtenemos las categorías para encontrar el ID correspondiente
+    this.tipoNotaService.getTiposNota()
+]).subscribe(
+  ([unidadData, categoriasData, tipoNotaData]) => {
+    this.unidadAcademica = unidadData;
+
+    // Encuentra la categoría "Comportamiento" y su idcategoriaNotas
+    const categoriaComportamiento = categoriasData.find(categoria => categoria.catNombre === 'Comportamiento');
+    if (categoriaComportamiento) {
+      const idCategoriaComportamiento = categoriaComportamiento.idcategoriaNotas;
+
+      // Filtra los tipos de notas que pertenecen a la categoría "Comportamiento" usando el ID encontrado
+      this.tiponota = tipoNotaData.filter(tipo => tipo.idcategoriaNotas === idCategoriaComportamiento);
+
+      // Encuentra el nombre de la unidad seleccionada
+      const unidadSeleccionada = this.unidadAcademica.find(unidad => unidad.idunidad === this.unidadrecibida);
+      this.unidadNombre = unidadSeleccionada ? unidadSeleccionada.uniNombre : 'Sin nombre';
+      
+      this.obtenerNotasComportamiento();
+    } else {
+      console.error("La categoría 'Comportamiento' no fue encontrada.");
+    }
+  },
+  (error) => console.error("Error al cargar datos iniciales:", error)
+);
+
   }
 
   obtenerNotasComportamiento(): void {
