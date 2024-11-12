@@ -9,6 +9,7 @@ import { AlumnoNotaComportamientoDTO, NotasPorUnidadDTO } from '../../dtos/ver-n
 import { PeriodoAcademicoDTO } from '../../dtos/periodoacademico.dto';
 import { FormControl, FormGroup } from '@angular/forms';
 import { PeriodoAcademicoService } from '../../services/periodo-academico.service';
+import { CategorianotasService } from '../../services/categorianotas.service';
 
 @Component({
   selector: 'app-ver-nota-comportamiento-alumno',
@@ -29,7 +30,8 @@ export class VerNotaComportamientoAlumnoComponent implements OnInit {
     private accesoService: AccesoService,
     private unidadAcademicoService: UnidadAcademicoService,
     private tipoNotaService: TiponotasService,
-    private periodoAcademicoService: PeriodoAcademicoService
+    private periodoAcademicoService: PeriodoAcademicoService,
+    private CategorianotasService: CategorianotasService
   ) {
     this.notasForm = new FormGroup({
       selectPeriodo: new FormControl(''),
@@ -76,13 +78,30 @@ export class VerNotaComportamientoAlumnoComponent implements OnInit {
   
 
   cargarTiposNotas(): void {
-    this.tipoNotaService.getTiposNota().subscribe(
-      (tipoNotaData: TipoNotasDTO[]) => {
-        this.tiponota = tipoNotaData.filter(tipo => tipo.idcategoriaNotas === 4);
+    const nombreCategoria = 'Comportamiento'; // El nombre de la categoría que deseas buscar
+
+    // Primero, obtén el ID de la categoría con el nombre especificado
+    this.CategorianotasService.getCategorias().subscribe(
+      (categorias) => {
+        const categoriaComportamiento = categorias.find(categoria => categoria.catNombre === nombreCategoria);
+        if (categoriaComportamiento) {
+          const idCategoriaComportamiento = categoriaComportamiento.idcategoriaNotas;
+
+          // Ahora, carga los tipos de notas y filtra por el ID de la categoría encontrada
+          this.tipoNotaService.getTiposNota().subscribe(
+            (tipoNotaData: TipoNotasDTO[]) => {
+              this.tiponota = tipoNotaData.filter(tipo => tipo.idcategoriaNotas === idCategoriaComportamiento);
+            },
+            (error) => console.error("Error al obtener los tipos de notas:", error)
+          );
+        } else {
+          console.error(`No se encontró la categoría con el nombre: ${nombreCategoria}`);
+        }
       },
-      (error) => console.error("Error al obtener los tipos de notas:", error)
+      (error) => console.error("Error al obtener las categorías de notas:", error)
     );
-  }
+}
+
 
   obtenerIdAlumno(): void {
     const idUsuario = this.accesoService.getUserID();
