@@ -27,6 +27,8 @@ import { AsignardocentesComponent } from "../components/asignardocentes/asignard
 import { RegistroNotasPadreComponent } from "../components/administracion-notas-padre/registro-notas-padre/registro-notas-padre.component";
 import { ListanotascomportamientoComponent } from "../components/listanotascomportamiento/listanotascomportamiento.component";
 import { RegistrarAsistenciaComponent } from "../components/registrar-asistencia/registrar-asistencia.component";
+import { RegistroNotasComportamientoComponent } from "../components/administracion-notas-conducta/registro-notas-conducta/registro-notas-conducta.component";
+import { VerNotaComportamientoAlumnoComponent } from "../components/ver-nota-comportamiento-alumno/ver-nota-comportamiento-alumno.component";
 
 const routes: Routes = [
     {
@@ -60,8 +62,10 @@ const routes: Routes = [
             { path: 'registro-comentario', component: RegistroComentarioComponent},
             { path: 'asignar-docentes', component: AsignardocentesComponent},
             { path: 'registro-notas-padre', component: RegistroNotasPadreComponent},
+            { path: 'registro-notas-conducta', component: RegistroNotasComportamientoComponent},
             { path: 'lista-notas-conportamiento', component: ListanotascomportamientoComponent},
             { path: 'registrar-asistencia', component: RegistrarAsistenciaComponent},
+            { path: 'ver-notas-conducta', component: VerNotaComportamientoAlumnoComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },

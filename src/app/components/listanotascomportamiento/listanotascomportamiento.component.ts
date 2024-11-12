@@ -102,7 +102,7 @@ export class ListanotascomportamientoComponent {
   obtenerTiposDeNota() {
     this.tipoNotasService.getTiposNota().subscribe(
       (data: TipoNotasDTO[]) => {
-        this.otherTipoNota = data;
+        this.otherTipoNota = data.filter(tipo => tipo.idcategoriaNotas === 4);
       },
       (error) => {
         console.error('Error al obtener los tipos de nota', error);
@@ -110,6 +110,7 @@ export class ListanotascomportamientoComponent {
       }
     );
   }
+  
 
   BuscarAlumno() {
     if (!this.validarCamposBusqueda()) {
@@ -150,10 +151,15 @@ export class ListanotascomportamientoComponent {
       this.mostrarDatos = true; 
       this.notaService.obtenerNotas(idGrado, idUnidad).subscribe(
         (data) => {
-          // Asigna los datos recibidos y calcula el promedio de cada alumno
           this.notasPorAlumno = data.map(alumno => {
-            const notas = Object.values(alumno.notas).filter(nota => nota !== null) as number[];
-            const promedio = notas.length > 0 ? notas.reduce((a, b) => a + b, 0) / notas.length : 0;
+            const notasComportamiento = this.otherTipoNota
+              .map(tipoNota => alumno.notas[tipoNota.idtipoNotas])
+              .filter(nota => nota !== null) as number[];
+  
+            const promedio = notasComportamiento.length > 0
+              ? Number((notasComportamiento.reduce((a, b) => a + b, 0) / notasComportamiento.length).toFixed(2))
+              : '00.00';  
+  
             return { ...alumno, promedio };
           });
         },
@@ -163,6 +169,10 @@ export class ListanotascomportamientoComponent {
       Swal.fire('Error', 'Seleccione un grado y una unidad.', 'warning');
     }
   }
+  
+  
+
+  
   obtenerGradoNombre(): string {
     const idGrado = this.notascomporform.get('selectGradoAcademico')?.value;
     const grado = this.otherGradoAcademico.find(g => g.id === idGrado);
@@ -227,7 +237,6 @@ export class ListanotascomportamientoComponent {
         Notas: [
           {
             idalumno: alumno.idalumno,
-            NotFechaRegistro: new Date().toISOString().split('T')[0],
             NotNotaNumerica: notasActualizadas[parseInt(idTipoNota)]
           }
         ]

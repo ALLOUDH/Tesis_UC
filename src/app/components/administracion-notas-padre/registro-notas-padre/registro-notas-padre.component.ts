@@ -89,10 +89,7 @@ export class RegistroNotasPadreComponent implements OnInit {
 
     this.tipoNotaService.getTiposNota().subscribe(
       (data: TipoNotasDTO[]) => {
-        this.tiponota = data.filter(tipo => {
-          const categoria = this.nombrecat.find(cat => cat.idcategoriaNotas === tipo.idcategoriaNotas);
-          return categoria?.catNombre === 'Notas de padres';
-        });
+        this.tiponota= data;
       },
       (error) => {
         console.error("Error al obtener las notas:", error);
@@ -100,17 +97,17 @@ export class RegistroNotasPadreComponent implements OnInit {
     );
     this.categorianotaservice.getCategorias().subscribe(
       (data: CategoriaNotasDTO[]) => {
-        this.nombrecat = data;
+        this.nombrecat= data;
       },
       (error) => {
-        console.error("Error al obtener la categoria:", error);
+        console.error("Error al obtener las notas:", error);
       }
     );
   }
 
   obtenerNotasPadre(): void {
     if (this.gradorecibido && this.bimestrerecibido && this.periodorecibido) {
-      this.notasPadreService.obtenerNotasPadre(this.gradorecibido, this.bimestrerecibido, this.periodorecibido, 2).subscribe(
+      this.notasPadreService.obtenerNotasPadre(this.gradorecibido, this.bimestrerecibido, this.periodorecibido,2).subscribe(
         (data: NotasPorPadreDTO[]) => {
           if (data.length === 0) {
             console.warn('No se encontraron notas para los alumnos.');
@@ -224,7 +221,7 @@ export class RegistroNotasPadreComponent implements OnInit {
 
     const idbimestre = this.bimestrerecibido;
     const idgrado = this.gradorecibido;
-    const tiposDeNotaIds = this.tiponota.map(tipo => tipo.idtipoNotas);
+    const tiposDeNotaIds = this.tiponota.filter(tipo => tipo.idcategoriaNotas === 2).map(tipo=> tipo.idtipoNotas);
 
 
     for (let index = 0; index < alumnos.length; index++) {

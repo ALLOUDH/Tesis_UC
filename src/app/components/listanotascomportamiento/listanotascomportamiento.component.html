@@ -114,17 +114,16 @@
               <div class="card-body card-block">
                 <div class="card-body--">
                   <div class="table-stats order-table ov-h">
-                    <div class="content text-center " *ngIf="notascomporform.get('selectGradoAcademico')?.value && notascomporform.get('selectUnidadAcademica')?.value" && >
-                    <strong class="user-name-txt">Notas de comportamiento del {{ obtenerGradoNombre() }} en la {{ obtenerUnidadNombre() }}</strong>
+                    <div class="content text-center" *ngIf="notascomporform.get('selectGradoAcademico')?.value && notascomporform.get('selectUnidadAcademica')?.value">
+                      <strong class="user-name-txt">Notas de comportamiento del {{ obtenerGradoNombre() }} en la {{ obtenerUnidadNombre() }}</strong>
                     </div>
-                    <!-- Tabla para mostrar los alumnos y sus notas -->
-                    <table class="table" *ngIf="!mostrarDatos || notasPorAlumno.length > 0 || !notascomporform.get('selectGradoAcademico')?.value">
+                    <table class="table" *ngIf="notasPorAlumno.length > 0">
                       <thead>
                         <tr>
                           <th>#</th>
                           <th>Nombre Completo</th>
                           <th *ngFor="let tipoNota of otherTipoNota">{{ tipoNota.tipNoNombre }}</th>
-                          <th>Promedio</th> 
+                          <th>Promedio</th>
                           <th>Acciones</th>
                         </tr>
                       </thead>
@@ -133,24 +132,24 @@
                           <td>{{ i + 1 }}</td>
                           <td>{{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</td>
                           <td *ngFor="let tipoNota of otherTipoNota">
-                            {{ alumno.notas[tipoNota.idtipoNotas] || '00' }}
+                            {{ alumno.notas[tipoNota.idtipoNotas] || '00.00' }}
                           </td>
-                          <td>{{ alumno.promedio | number:'1.2-2' }}</td> 
+                          <td>{{ alumno.promedio | number:'1.2-2' }}</td>
                           <td>
                             <button type="button"
-                            class="btn btn-primary btn-sm button-color-primary"
-                            data-toggle="tooltip" data-placement="top"
-                            title="Editar alumno." style="margin-right: 5px;"
-                            (click)="abrirModalEdicion(alumno)">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-                        </td>
+                              class="btn btn-primary btn-sm button-color-primary"
+                              data-toggle="tooltip" data-placement="top"
+                              title="Editar alumno."
+                              (click)="abrirModalEdicion(alumno)">
+                              <i class="fa fa-pencil"></i>
+                            </button>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
-                    <div class="content text-center" *ngIf="!mostrarDatos">
-                        <p class="text-muted user-name-txt">Seleccione un grado y una unidad para visualizar las notas.</p>
-                      </div>
+                    <div class="content text-center" *ngIf="notasPorAlumno.length === 0">
+                      <p class="text-muted user-name-txt">Seleccione un grado y una unidad para visualizar las notas.</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -159,6 +158,6 @@
         </div>
       </div>
     </div>
-</section>
-
+  </section>
+  
   

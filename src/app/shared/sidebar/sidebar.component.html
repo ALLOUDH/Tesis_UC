@@ -40,9 +40,8 @@
                     <a (click)="AdministrarNotasRegistroAuxiliar()" style="cursor: pointer;"><i
                             class="menu-icon fa fa-bar-chart"></i>Notas Registro Auxiliar</a>
                 </li>
-
-                <li class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                <!-- <li class="menu-item-has-children dropdown">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Notas Conducta</a>
                     <ul class="sub-menu children dropdown-menu">
                         <li class="link-pointer"><i class="fa fa-puzzle-piece"></i><a
@@ -50,6 +49,10 @@
                         <li class="link-pointer"><i class="fa fa-id-badge"></i><a
                                 (click)="VerNotasConducta()">Ver Notas</a></li>
                     </ul>
+                </li>-->
+                <li>
+                    <a (click)="AdministrarNotasConducta()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Notas Conducta</a>
                 </li>
 
                 <li>
@@ -185,7 +188,8 @@
                     <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Notas Academicas</a>
                 </li>
                 <li>
-                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Notas Comportamiento</a>
+                    <a (click)="VerNotasConductaAlumno()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Notas Comportamiento</a>
                 </li>
                 <li>
                     <a href="#"> <i class="menu-icon fa fa-tasks"></i>Notas del padre</a>

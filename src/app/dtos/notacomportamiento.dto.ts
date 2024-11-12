@@ -1,6 +1,5 @@
 export interface NotaDTO {
     idalumno: number;
-    NotFechaRegistro: string; 
     NotNotaNumerica: number;
 }
 

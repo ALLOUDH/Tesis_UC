@@ -16,8 +16,8 @@ export class NotasPadreService {
     return this.http.post(`${this.baseUrl}NotasApoderado/RegistrarNotasPadre`, data);
   }
 
-  obtenerNotasPadre(idGrado: number, idBimestre: number, idPeriodo: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}NotasApoderado/ObtenerNotasPadre/${idGrado}/${idBimestre}/${idPeriodo}`);
+  obtenerNotasPadre(idGrado: number, idBimestre: number, idPeriodo: number, idCategoriaNotas: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}NotasApoderado/ObtenerNotasPadre/${idGrado}/${idBimestre}/${idPeriodo}/${idCategoriaNotas}`);
   }
 
   actualizarNotasPadre(data: any): Observable<any> {

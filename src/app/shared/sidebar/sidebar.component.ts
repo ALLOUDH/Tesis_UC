@@ -149,4 +149,10 @@ export class SidebarComponent {
       window.location.reload();
     });;
   };
+
+  VerNotasConductaAlumno(){
+    this.router.navigate(['/ver-notas-conducta']).then(() => {
+      window.location.reload();
+    });;
+  };
 }

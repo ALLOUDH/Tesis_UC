@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NotaComportamientoDTO } from '../dtos/notacomportamiento.dto';
 import { NotasPorAlumnoDTO } from '../dtos/listanotacomportamiento.dto';
+import { AlumnoNotaComportamientoDTO } from '../dtos/ver-nota-comportamiento.dto';
 
 @Injectable({
     providedIn: 'root'
@@ -27,5 +28,14 @@ export class NotasComportamientoService {
     actualizarNotas(notasActualizadas: NotaComportamientoDTO): Observable<any> {
         return this.http.put(`${this.apiUrl}ActualizarNotasComportamiento`, notasActualizadas);
     }
+
+    obtenerNotasPorAlumno(idAlumno: number, idPeriodo: number) {
+        return this.http.get<AlumnoNotaComportamientoDTO>(`${this.apiUrl}ObtenerNotasPorAlumno?idAlumno=${idAlumno}&idPeriodo=${idPeriodo}`);
+      }
+      
+    
+    obtenerIdAlumnoPorUsuario(idUsuario: number): Observable<number> {
+        return this.http.get<number>(`${this.apiUrl}ObtenerIdAlumnoPorUsuario/${idUsuario}`);
+      }
       
 }
