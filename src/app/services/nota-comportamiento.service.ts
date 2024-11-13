@@ -21,8 +21,8 @@ export class NotasComportamientoService {
     }
     
 
-    obtenerNotas(idGrado: number, idUnidad: number): Observable<NotasPorAlumnoDTO[]> {
-        return this.http.get<NotasPorAlumnoDTO[]>(`${this.apiUrl}ObtenerNotasPorGradoYUnidad?idGrado=${idGrado}&idUnidad=${idUnidad}`);
+    obtenerNotas(idGrado: number, idUnidad: number, idPeriodo: number): Observable<NotasPorAlumnoDTO[]> {
+        return this.http.get<NotasPorAlumnoDTO[]>(`${this.apiUrl}ObtenerNotasPorGradoYUnidadYPeriodo?idGrado=${idGrado}&idUnidad=${idUnidad}&idPeriodo=${idPeriodo}`);
     }
 
     actualizarNotas(notasActualizadas: NotaComportamientoDTO): Observable<any> {

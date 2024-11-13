@@ -91,7 +91,7 @@ forkJoin([
 
   obtenerNotasComportamiento(): void {
     if (this.gradorecibido && this.unidadrecibida && this.periodorecibido) {
-      this.notasComportamientoService.obtenerNotas(this.gradorecibido, this.unidadrecibida).subscribe(
+      this.notasComportamientoService.obtenerNotas(this.gradorecibido, this.unidadrecibida, this.periodorecibido).subscribe(
         (data: NotasPorAlumnoDTO[]) => {
           this.alumnos = data;
           this.actualizarAlumnosFormArray(this.alumnos.length);

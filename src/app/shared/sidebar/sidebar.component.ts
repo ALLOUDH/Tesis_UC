@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class SidebarComponent {
 
   userRole: string | null = null;
+  esUsuarioAutorizado: boolean = false;
 
   constructor(
     private accesoService: AccesoService,
@@ -18,7 +19,17 @@ export class SidebarComponent {
     this.userRole = this.accesoService.getUserRole();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // Primero, verifica si el usuario es admin
+    if (this.accesoService.isAdmin()) {
+      this.esUsuarioAutorizado = true;
+    } else {
+      // Si no es admin, verifica si es auxiliar
+      this.accesoService.isAuxiliar().subscribe((esAuxiliar) => {
+        this.esUsuarioAutorizado = esAuxiliar;
+      });
+    }
+  }
 
   isAdmin(): boolean {
     return this.userRole === 'Admin';
@@ -33,6 +44,7 @@ export class SidebarComponent {
     return role === 'Estudiante' || role === 'Padre';
   }
 
+  
   RegistrarAlumno() {
     this.router.navigate(['/registro-alumno']).then(() => {
       window.location.reload();

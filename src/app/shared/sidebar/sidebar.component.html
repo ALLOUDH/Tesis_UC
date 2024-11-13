@@ -38,7 +38,7 @@
                 <li class="menu-title">Notas</li><!-- /.menu-title -->
                 <li>
                     <a (click)="AdministrarNotasRegistroAuxiliar()" style="cursor: pointer;"><i
-                            class="menu-icon fa fa-bar-chart"></i>Notas Registro Auxiliar</a>
+                            class="menu-icon fa fa-bar-chart"></i>Notas Academicas</a>
                 </li>
                 <!-- <li class="menu-item-has-children dropdown">
                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -129,31 +129,23 @@
                 </li>
                 <li class="menu-title">Notas</li><!-- /.menu-title -->
 
+                <li *ngIf="!esUsuarioAutorizado">
+                    <a (click)="AdministrarNotasRegistroAuxiliar()" style="cursor: pointer;">
+                      <i class="menu-icon fa fa-bar-chart"></i>Notas Academicas
+                    </a>
+                </li>
+                <li *ngIf="esUsuarioAutorizado">
+                    <a (click)="AdministrarNotasPadre()" style="cursor: pointer;">
+                      <i class="menu-icon fa fa-bar-chart"></i>Notas de Padre
+                    </a>
+                </li>
 
-                <li class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Registro Auxiliar</a>
-                    <ul class="sub-menu children dropdown-menu">
-                        <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
-                        <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas</a></li>
-                    </ul>
+                <li *ngIf="esUsuarioAutorizado">
+                    <a (click)="AdministrarNotasConducta()" style="cursor: pointer;">
+                      <i class="menu-icon fa fa-bar-chart"></i>Notas Conducta
+                    </a>
                 </li>
-                <li class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Notas de Padre</a>
-                    <ul class="sub-menu children dropdown-menu">
-                        <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
-                        <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas </a></li>
-                    </ul>
-                </li>
-                <li class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Comportamiento</a>
-                    <ul class="sub-menu children dropdown-menu">
-                        <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Registrar Nota</a></li>
-                        <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Administrar Notas</a></li>
-                    </ul>
-                </li>
+
                 <li>
                     <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Ver Boleta de Notas</a>
                 </li>

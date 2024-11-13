@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { appsetings } from './auth.connection.services';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { ResponseAppDTO } from '../auth/auth-dtos/responseapp.dto';
 import { LoginDTO } from '../auth/auth-dtos/login.dto';
 import { jwtDecode } from 'jwt-decode';
@@ -69,6 +69,22 @@ export class AccesoService {
       return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']; // Cambia aquí
     }
     return null;
+  }
+
+  isAuxiliar(): Observable<boolean> {
+    const userId = this.getUserID();
+    if (!userId) {
+      return of(false); // Si no hay un ID, no es auxiliar
+    }
+    return this.http.get<{ esAuxiliar: boolean }>(`${this.baseUrl}Acceso/docentes/auxiliar/${userId}`)
+      .pipe(
+        map(response => response.esAuxiliar),
+        catchError(() => of(false)) // Si hay algún error, no es auxiliar
+      );
+  }
+  
+  isAdmin(): boolean {
+    return this.getUserRole() === 'Admin';
   }
 
   registrarAlumno(objeto: any): Observable<ResponseAppDTO> {

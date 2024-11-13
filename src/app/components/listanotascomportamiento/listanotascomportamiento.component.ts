@@ -143,7 +143,7 @@ export class ListanotascomportamientoComponent {
     return !!(terminobusqueda || nroDocumento || gradoAcademico );
   }
 
-  obtenerNotas(): void {
+  /*obtenerNotas(): void {
     const idGrado = this.notascomporform.get('selectGradoAcademico')?.value;
     const idUnidad = this.notascomporform.get('selectUnidadAcademica')?.value;
   
@@ -168,7 +168,7 @@ export class ListanotascomportamientoComponent {
     } else {
       Swal.fire('Error', 'Seleccione un grado y una unidad.', 'warning');
     }
-  }
+  }*/
   
   
 
@@ -254,7 +254,7 @@ export class ListanotascomportamientoComponent {
     Promise.all(actualizacionPromesas)
       .then(() => {
         Swal.fire('Éxito', 'Todas las notas fueron actualizadas correctamente', 'success');
-        this.obtenerNotas();
+       // this.obtenerNotas();
       })
       .catch(() => {
         Swal.fire('Error', 'Hubo un problema al actualizar algunas notas.', 'error');
