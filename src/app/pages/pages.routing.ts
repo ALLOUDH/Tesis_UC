@@ -26,6 +26,7 @@ import { VerFaltasTardanzasComponent } from "../components/ver-faltas-tardanzas/
 import { AsignardocentesComponent } from "../components/asignardocentes/asignardocentes.component";
 import { ListanotascomportamientoComponent } from "../components/listanotascomportamiento/listanotascomportamiento.component";
 import { RegistrarAsistenciaComponent } from "../components/registrar-asistencia/registrar-asistencia.component";
+import { VerAsistenciaAlumnoComponent } from "../components/ver-asistencia-alumno/ver-asistencia-alumno.component";
 
 const routes: Routes = [
     {
@@ -60,6 +61,7 @@ const routes: Routes = [
             { path: 'registrocomentario', component: RegistroComentarioComponent},
             { path: 'asignardocentes', component: AsignardocentesComponent},
             { path: 'registrarasistencia', component: RegistrarAsistenciaComponent},
+            { path: 'verasistenciaalumno', component: VerAsistenciaAlumnoComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },

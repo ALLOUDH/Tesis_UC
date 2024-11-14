@@ -35,6 +35,7 @@ import { PruebaDesignsComponent } from './prueba-designs/prueba-designs.componen
 import { ListanotascomportamientoComponent } from './listanotascomportamiento/listanotascomportamiento.component';
 import { EditarNotasComportamientoComponent } from './listanotascomportamiento/editar-notas-comportamiento/editar-notas-comportamiento.component';
 import { RegistrarAsistenciaComponent } from './registrar-asistencia/registrar-asistencia.component';
+import { VerAsistenciaAlumnoComponent } from './ver-asistencia-alumno/ver-asistencia-alumno.component';
 
 
 @NgModule({
@@ -71,6 +72,7 @@ import { RegistrarAsistenciaComponent } from './registrar-asistencia/registrar-a
     ListanotascomportamientoComponent,
     EditarNotasComportamientoComponent,
     RegistrarAsistenciaComponent,
+    VerAsistenciaAlumnoComponent,
   ],
   imports: [
     CommonModule,

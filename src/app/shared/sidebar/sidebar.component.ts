@@ -118,8 +118,8 @@ export class SidebarComponent {
     this.router.navigate(['/registrarasistencia']);
     };
   
-  VerAsistenciaPrueba() {
-    this.router.navigate(['/editarasistencia']);
+  VerAsistenciaAlumno() {
+    this.router.navigate(['/verasistenciaalumno']);
     };
   
 }

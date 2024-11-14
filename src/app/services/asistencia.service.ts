@@ -32,7 +32,15 @@ export class AsistenciaService {
     const params = new HttpParams()
       .set('ano', ano)
       .set('idAlumno', idAlumno.toString());
-    return this.http.get<ResumenAsistenciaDTO[]>(`${this.baseUrl}/obtenerResumenAsistencia`, { params });
+    return this.http.get<ResumenAsistenciaDTO[]>(`${this.baseUrl}/ObtenerResumenAsistenciaPorAno`, { params });
+  }
+
+  // Obtener el resumen de asistencia por alumno
+  obtenerResumenAsistenciaAlumno(ano: string, idAlumno: number): Observable<ResumenAsistenciaDTO[]> {
+    const params = new HttpParams()
+      .set('ano', ano)
+      .set('idAlumno', idAlumno.toString());
+    return this.http.get<ResumenAsistenciaDTO[]>(`${this.baseUrl}/ObtenerResumenAsistenciaPorAnoYAlumno`, { params });
   }
 
   // Obtener los años con registros de asistencia
