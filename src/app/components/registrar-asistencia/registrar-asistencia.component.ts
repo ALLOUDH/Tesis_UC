@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ListaAlumnosDTO } from '../../dtos/lista-alumnos.dto';
 import { OthersIntDTO } from '../../dtos/other.dto';
@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./registrar-asistencia.component.css']
 })
 export class RegistrarAsistenciaComponent implements OnInit {
+  @ViewChild('rellenarCheckboxRef') rellenarCheckboxRef!: ElementRef; // Referencia al checkbox
   listaasistenciaform: FormGroup;
   alumnos: ListaAlumnosDTO[] = [];
   otherGradoAcademico: OthersIntDTO[] = [];
@@ -43,6 +44,7 @@ export class RegistrarAsistenciaComponent implements OnInit {
     // Escuchar cambios en el campo de fecha
     this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.valueChanges.subscribe(() => {
       this.autoRellenarAsistencia(); // Llama a la función al cambiar la fecha
+      this.desmarcarCheckbox(); // Desmarcar checkbox
   });
   }
   
@@ -67,6 +69,7 @@ export class RegistrarAsistenciaComponent implements OnInit {
       (data: ListaAlumnosDTO[]) => {
         this.alumnos = data.filter(alumno => alumno.idgrado === gradoAcademico);
         this.autoRellenarAsistencia();  // Auto rellenar después de obtener alumnos
+        this.desmarcarCheckbox(); // Desmarcar checkbox
       },
       (error) => {
         console.error('Error al obtener los alumnos', error);
@@ -75,34 +78,56 @@ export class RegistrarAsistenciaComponent implements OnInit {
     );
   }
 
-  // Autollenado de asistencia
-autoRellenarAsistencia() {
-  const fechaRegistro = this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.value;
-
-  if (fechaRegistro) {
-      const fechaFormateada = this.formatearFecha(new Date(fechaRegistro));
-
-      // Llamada al servicio para obtener asistencia por fecha
-      this.asistenciaService.obtenerAsistenciaPorFecha(fechaFormateada).subscribe(
-          (asistencias: AsistenciaDTO[]) => {
-              // Limpiar valores previos
-                this.asistenciaSeleccionada = {};
-                this.descripcionAsistencia = {};
-              // Rellenar radio buttons y descripciones según los datos obtenidos
-              asistencias.forEach(asistencia => {
-                  this.asistenciaSeleccionada[asistencia.idalumno] = asistencia.asisTipo === 'Asistio' ? 1 :
-                                                                    asistencia.asisTipo === 'Tarde' ? 2 : 3;
-                  this.descripcionAsistencia[asistencia.idalumno] = asistencia.asisDescripcion;
-              });
-          },
-          (error) => {
-              console.error('Error al obtener asistencia por fecha', error);
-              Swal.fire('Error', 'No se pudo cargar la asistencia previa.', 'error');
-          }
-      );
+  // Método para desmarcar el checkbox manualmente
+  desmarcarCheckbox() {
+    if (this.rellenarCheckboxRef) {
+      this.rellenarCheckboxRef.nativeElement.checked = false;
+    }
   }
-}
-    
+
+  // Autollenado de asistencia
+  autoRellenarAsistencia() {
+    const fechaRegistro = this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.value;
+
+    if (fechaRegistro) {
+        const fechaFormateada = this.formatearFecha(new Date(fechaRegistro));
+
+        // Llamada al servicio para obtener asistencia por fecha
+        this.asistenciaService.obtenerAsistenciaPorFecha(fechaFormateada).subscribe(
+            (asistencias: AsistenciaDTO[]) => {
+                // Limpiar valores previos
+                  this.asistenciaSeleccionada = {};
+                  this.descripcionAsistencia = {};
+                // Rellenar radio buttons y descripciones según los datos obtenidos
+                asistencias.forEach(asistencia => {
+                    this.asistenciaSeleccionada[asistencia.idalumno] = asistencia.asisTipo === 'Asistio' ? 1 :
+                                                                      asistencia.asisTipo === 'Tarde' ? 2 : 3;
+                    this.descripcionAsistencia[asistencia.idalumno] = asistencia.asisDescripcion;
+                });
+            },
+            (error) => {
+                console.error('Error al obtener asistencia por fecha', error);
+                Swal.fire('Error', 'No se pudo cargar la asistencia previa.', 'error');
+            }
+        );
+    }
+  }
+
+  rellenarAsistencia(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+  
+    if (checked) {
+      this.alumnos.forEach(alumno => {
+        this.asistenciaSeleccionada[alumno.idalumno] = 1; // "Asistió" corresponde a 1
+      });
+    } else {
+      // Si se desmarca, limpiamos la selección
+      this.alumnos.forEach(alumno => {
+        delete this.asistenciaSeleccionada[alumno.idalumno];
+      });
+    }
+  }
+  
   // Guardar la asistencia de los alumnos
   GuardarAsistencia() {
     const tipoAsistenciaMap: { [key: number]: string } = {

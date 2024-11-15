@@ -76,8 +76,8 @@
                   <tbody>
                     <tr *ngFor="let mes of meses">
                       <td>{{ mes | titlecase }}</td>
-                      <td class="text-center">{{ asistenciaMap[mes] ? asistenciaMap[mes].tardanzas : '-' }}</td>
-                      <td class="text-center">{{ asistenciaMap[mes] ? asistenciaMap[mes].faltas : '-' }}</td>
+                      <td class="text-center">{{ asistenciaMap[mes] ? asistenciaMap[mes].tardanzas : 0 }}</td>
+                      <td class="text-center">{{ asistenciaMap[mes] ? asistenciaMap[mes].faltas : 0 }}</td>
                     </tr>
                   </tbody>
                 </table>

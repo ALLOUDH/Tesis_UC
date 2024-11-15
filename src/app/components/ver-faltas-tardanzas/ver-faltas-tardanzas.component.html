@@ -84,6 +84,7 @@
                         <th rowspan="2" class="widthtablas">#</th>
                         <th rowspan="2">Nombre Completo</th>
                         <th colspan="11" class="text-center">TARDANZAS</th>
+                        <th class="text-center separator"></th>
                         <th colspan="11" class="text-center">FALTAS</th>
                       </tr>
                       <tr>
@@ -99,6 +100,7 @@
                         <th class="text-center">Nov</th>
                         <th class="text-center">Dic</th>
                         <th class="text-center">Total</th>
+                        <td class="separator"></td>
                         <!-- Faltas Meses -->
                         <th class="text-center">Mar</th>
                         <th class="text-center">Abr</th>
@@ -124,6 +126,8 @@
                         </ng-container>
                         <td class="text-center text-primary">{{ getTotalTardanzas(alumno.idalumno) }}</td>
                         
+                        <td class="separator"></td> <!-- Separador -->
+
                         <!-- Faltas por mes -->
                         <ng-container *ngFor="let mes of meses">
                           <td class="text-center">{{ getFaltasMes(alumno.idalumno, mes) }}</td>
