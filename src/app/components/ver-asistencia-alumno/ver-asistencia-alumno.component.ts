@@ -16,16 +16,13 @@ import { ListaAlumnosDTO } from '../../dtos/lista-alumnos.dto';
 })
 export class VerAsistenciaAlumnoComponent implements OnInit {
   listaasistenciaform: FormGroup;
-  alumno: ListaAlumnosDTO[] = [];
+  alumno: ListaAlumnosDTO = new ListaAlumnosDTO();
   anos: string[] = [];  // Para almacenar los años únicos
   resumenAsistencia: ResumenAsistenciaDTO[] = [];
-  meses = ['marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];  
+  meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  asistenciaMap: { [mes: string]: { tardanzas: number, faltas: number } } = {}; // Mapa para almacenar los datos por mes
+  idalumno: number | undefined; // Inicializa con undefined
   
-  // Estructura para mapear las tardanzas y faltas por alumno y mes
-  asistenciaMap: { [mes: string]: { tardanzas: number, faltas: number } } = {};
-
-  idalumno: number | null = null; // Nueva variable para almacenar el idalumno
-
   constructor(
     private vistasService: VistasService,
     private gradoAcademicoService: GradoAcademicoService,
@@ -48,27 +45,11 @@ export class VerAsistenciaAlumnoComponent implements OnInit {
     );
 
     const userID = this.accesoService.getUserID();
+
     if (userID !== null) {
       console.log('ID del usuario:', userID);
+      this.obtenerDatosAlumno(userID);  // Llamada al servicio para obtener los datos del alumno
 
-      // Llamamos al servicio para obtener la lista de alumnos
-      this.vistasService.obtenerAlumnos().subscribe(
-        (alumnos: ListaAlumnosDTO[]) => {
-          // Filtramos el alumno que coincida con el userID
-          const alumnoEncontrado = alumnos.find(alumno => alumno.idusuario === userID);
-          if (alumnoEncontrado) {
-            this.idalumno = alumnoEncontrado.idalumno;
-            console.log('ID del alumno encontrado:', alumnoEncontrado.idalumno);
-          } else {
-            console.warn('No se encontró ningún alumno con el ID especificado.');
-            this.MostrarMensajeError("No se encontró el alumno con el ID especificado.", "Advertencia");
-          }
-        },
-        error => {
-          console.error('Error al obtener los alumnos:', error);
-          this.MostrarMensajeError("Hubo un problema al obtener los datos de los alumnos.", "Error");
-        }
-      );
     } else {
       console.error('Error: userID es null');
       this.MostrarMensajeError("No se pudo obtener el ID del usuario", "Error");
@@ -76,59 +57,57 @@ export class VerAsistenciaAlumnoComponent implements OnInit {
 
   }
 
+  // Método para obtener los datos del alumno por su ID de usuario
+  obtenerDatosAlumno(userID: number): void {
+    this.vistasService.obtenerAlumnoPorUsuario(userID).subscribe(
+      (alumno: ListaAlumnosDTO) => {
+        console.log('ID del alumno:', alumno.idalumno); // Muestra solo el idalumno en consola
+        this.idalumno = alumno.idalumno;  // Asigna el idalumno a la propiedad de la clase
+      },
+      error => {
+        console.error('Error al obtener los datos del alumno:', error);
+        this.MostrarMensajeError("No se pudieron obtener los datos del alumno", "Error");
+      }
+    );
+  }
+
   // Método que se llama cuando se selecciona un periodo (año)
   onPeriodoChanged(event: any) {
     const periodo = event.value;
     console.log('Año seleccionado:', periodo);
 
-    if (this.idalumno !== null) {
+    if (this.idalumno) {  // Verifica si ya se ha obtenido el idalumno
       this.obtenerResumenAsistenciaAlumno(periodo, this.idalumno);
-      console.log('ID del alumno:', this.idalumno);
     } else {
-      console.warn("No se ha cargado el ID del alumno.");
-      this.MostrarMensajeError("Error al cargar el ID del alumno.", "Error");
+      console.error('El idalumno no está definido');
     }
   }
 
-  // Obtener el resumen de asistencia por año y alumno
+  // Método para obtener el resumen de asistencia por año y alumno
   obtenerResumenAsistenciaAlumno(periodo: string, idalumno: number) {
-    if (periodo) {
-      this.asistenciaService.obtenerResumenAsistenciaAlumno(periodo, idalumno).subscribe(
-        (data: ResumenAsistenciaDTO[]) => {
-          this.resumenAsistencia = data;
-          console.log('Resumen de asistencia:', this.resumenAsistencia);
-          this.organizarAsistenciaPorMes();
-        },
-        error => {
-          console.error('Error al obtener el resumen de asistencia:', error);
-          this.MostrarMensajeError("Hubo un problema al obtener el resumen de asistencia.", "Error");
+    this.asistenciaService.obtenerResumenAsistenciaAlumno(periodo, idalumno).subscribe(
+      (data: ResumenAsistenciaDTO[]) => {
+        this.resumenAsistencia = data;
+        console.log('Resumen de asistencia:', this.resumenAsistencia);
+
+        // Inicializar asistenciaMap en cada llamada
+        this.asistenciaMap = {};
+
+        // Llenar asistenciaMap con los datos de cada mes
+        for (let resumen of this.resumenAsistencia) {
+          const mes = resumen.resmasisMes.toLowerCase();
+          this.asistenciaMap[mes] = {
+            tardanzas: resumen.totalTardanzas,
+            faltas: resumen.totalFaltas
+          };
         }
-      );
-    }
+        console.log('Mapa de asistencia:', this.asistenciaMap);
+    },
+      error => {
+        this.MostrarMensajeError("Hubo un problema al obtener el resumen de asistencia.", "Error");
+      }
+    );
   }
-
-  organizarAsistenciaPorMes() {
-    this.asistenciaMap = {};
-    this.resumenAsistencia.forEach(registro => {
-      const { resmasisMes, totalTardanzas, totalFaltas } = registro;
-
-      // Guardar los datos de tardanzas y faltas para el mes correspondiente
-      this.asistenciaMap[resmasisMes] = {
-        tardanzas: totalTardanzas,
-        faltas: totalFaltas
-      };
-    });
-    console.log("Mapa de asistencia organizado:", this.asistenciaMap);
-  }
-
-  getTardanzasMes(idalumno: number, mes: string): number {
-    return this.asistenciaMap[mes]?.tardanzas || 0;
-  }
-
-  getFaltasMes(idalumno: number, mes: string): number {
-    return this.asistenciaMap[mes]?.faltas || 0;
-  }
-
 
   MostrarMensajeError(mensaje: string, titulo: string) {
     Swal.fire({
@@ -137,5 +116,5 @@ export class VerAsistenciaAlumnoComponent implements OnInit {
       icon: "error"
     });
   }
-
+  
 }
