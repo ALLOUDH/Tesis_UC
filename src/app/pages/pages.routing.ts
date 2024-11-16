@@ -29,6 +29,7 @@ import { ListanotascomportamientoComponent } from "../components/listanotascompo
 import { RegistrarAsistenciaComponent } from "../components/registrar-asistencia/registrar-asistencia.component";
 import { RegistroNotasComportamientoComponent } from "../components/administracion-notas-conducta/registro-notas-conducta/registro-notas-conducta.component";
 import { VerNotaComportamientoAlumnoComponent } from "../components/ver-nota-comportamiento-alumno/ver-nota-comportamiento-alumno.component";
+import { RegistroNotasAcademicasComponent } from "../components/administracion-notas-registro-auxiliar/registro-notas-academicas/registro-notas-academicas.component";
 
 const routes: Routes = [
     {
@@ -63,6 +64,7 @@ const routes: Routes = [
             { path: 'asignar-docentes', component: AsignardocentesComponent},
             { path: 'registro-notas-padre', component: RegistroNotasPadreComponent},
             { path: 'registro-notas-conducta', component: RegistroNotasComportamientoComponent},
+            { path: 'registro-notas-academicas', component: RegistroNotasAcademicasComponent},
             { path: 'lista-notas-conportamiento', component: ListanotascomportamientoComponent},
             { path: 'registrar-asistencia', component: RegistrarAsistenciaComponent},
             { path: 'ver-notas-conducta', component: VerNotaComportamientoAlumnoComponent},

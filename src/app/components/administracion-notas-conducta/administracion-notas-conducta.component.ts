@@ -9,6 +9,8 @@ import { PeriodoAcademicoDTO } from '../../dtos/periodoacademico.dto';
 import { UnidadAcademicaDTO } from '../../dtos/unidadacademica.dto';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { BimestreAcademicoDTO } from '../../dtos/bimestreacademico.dto';
+import { BimestreAcademicoService } from '../../services/bimestre-academico.service';
 
 @Component({
   selector: 'app-administracion-notas-conducta',
@@ -21,6 +23,9 @@ export class AdministracionNotasConductaComponent {
   otherEstadoUsuario: OthersIntDTO[] = [];
   unidadAcademica: UnidadAcademicaDTO[] = [];
   periodoAcademico: PeriodoAcademicoDTO[] = [];
+  unidadesFiltradas: UnidadAcademicaDTO[] = [];
+  bimestreAcademico: BimestreAcademicoDTO[] = [];
+  isDataLoaded = { periodos: false, bimestres: false, unidades: false };
 
   constructor(
     private route: Router,
@@ -28,6 +33,7 @@ export class AdministracionNotasConductaComponent {
     estadoUsuarioService: EstadoUsuarioService,
     gradoAcademicoService: GradoAcademicoService,
     private unidadAcademicoService: UnidadAcademicoService,
+    private bimestreAcademicoService: BimestreAcademicoService
   ) {
     this.otherEstadoUsuario = estadoUsuarioService.ObtenerEstadoUsuario();
     this.otherGradoAcademico = gradoAcademicoService.ObtenerGradoAcademico();
@@ -42,37 +48,94 @@ export class AdministracionNotasConductaComponent {
   }
 
   ngOnInit(): void {
-    this.unidadAcademicoService.getUnidad().subscribe(
-      (data: UnidadAcademicaDTO[]) => {
-        this.unidadAcademica = data;
-      },
-      (error) => {
-        console.error("Error al obtener las unidades académicas:", error);
-      }
-    );
-
-    this.periodoAcademicoService.getPeriodo().subscribe(
-      (data: PeriodoAcademicoDTO[]) => {
-        this.periodoAcademico = data;
-        this.setDefaultPeriodo();
-      },
-      (error) => {
-        console.error("Error al obtener los periodos:", error);
-      }
-    );
+    this.cargarDatos();
   }
-
-  private setDefaultPeriodo(): void {
-    const añoActual = new Date().getFullYear().toString();
-
-    const periodoEncontrado = this.periodoAcademico.find(periodo => periodo.peNombre.includes(añoActual));
-
-    if (periodoEncontrado) {
-      this.notascomportamientoform.patchValue({
-        selectPeriodo: periodoEncontrado.idperiodo,
+    // Cargar Unidades
+    private cargarDatos(): void {
+      // Cargar periodos
+      this.periodoAcademicoService.getPeriodo().subscribe(
+        (data: PeriodoAcademicoDTO[]) => {
+          this.periodoAcademico = data;
+          this.isDataLoaded.periodos = true;
+          this.verificarCargaCompleta();
+        },
+        (error) => console.error('Error al cargar periodos:', error)
+      );
+  
+      // Cargar bimestres
+      this.bimestreAcademicoService.getBimestre().subscribe(
+        (data: BimestreAcademicoDTO[]) => {
+          this.bimestreAcademico = data;
+          this.isDataLoaded.bimestres = true;
+          this.verificarCargaCompleta();
+        },
+        (error) => console.error('Error al cargar bimestres:', error)
+      );
+  
+      // Cargar unidades
+      this.unidadAcademicoService.getUnidad().subscribe(
+        (data: UnidadAcademicaDTO[]) => {
+          this.unidadAcademica = data;
+          this.isDataLoaded.unidades = true;
+          this.verificarCargaCompleta();
+        },
+        (error) => console.error('Error al cargar unidades:', error)
+      );
+  
+      // Suscribir a los cambios en el periodo
+      this.notascomportamientoform.get('selectPeriodo')?.valueChanges.subscribe((selectedPeriodoId) => {
+        if (selectedPeriodoId) {
+          this.filtrarUnidades(selectedPeriodoId);
+        } else {
+          this.unidadesFiltradas = [];
+        }
       });
     }
+
+    private verificarCargaCompleta(): void {
+      if (this.isDataLoaded.periodos && this.isDataLoaded.bimestres && this.isDataLoaded.unidades) {
+        this.setDefaultPeriodo();
+      }
+    }
+
+  
+
+    private setDefaultPeriodo(): void {
+      const añoActual = new Date().getFullYear().toString();
+      const periodoEncontrado = this.periodoAcademico.find((periodo) => periodo.peNombre.includes(añoActual));
+  
+      if (periodoEncontrado) {
+        this.notascomportamientoform.patchValue({ selectPeriodo: periodoEncontrado.idperiodo });
+        this.filtrarUnidades(periodoEncontrado.idperiodo);
+      } else {
+        console.warn('No se encontró un periodo para el año actual.');
+      }
+    }
+
+  private filtrarUnidades(idPeriodo: number): void {
+    console.log('Filtrando unidades para idPeriodo:', idPeriodo);
+  
+    // Busca todos los bimestres asociados al periodo seleccionado
+    const bimestresDelPeriodo = this.bimestreAcademico.filter((bimestre) => bimestre.idperiodo === idPeriodo);
+    console.log('Bimestres encontrados para el periodo:', bimestresDelPeriodo);
+  
+    if (bimestresDelPeriodo.length === 0) {
+      console.warn(`No se encontraron bimestres para el periodo con ID: ${idPeriodo}`);
+      this.unidadesFiltradas = [];
+      return;
+    }
+  
+    const idsBimestres = bimestresDelPeriodo.map((bimestre) => bimestre.idbimestre);
+  
+    // Filtra las unidades que pertenecen a esos bimestres
+    this.unidadesFiltradas = this.unidadAcademica.filter((unidad) => idsBimestres.includes(unidad.idbimestre));
+    console.log('Unidades filtradas:', this.unidadesFiltradas);
+  
+    if (this.unidadesFiltradas.length === 0) {
+      console.warn(`No se encontraron unidades para los bimestres: ${idsBimestres}`);
+    }
   }
+  
 
   EnviarDatos(grado: number) {
     const selectedPeriodo = this.notascomportamientoform.get('selectPeriodo')?.value;

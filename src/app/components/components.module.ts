@@ -37,6 +37,7 @@ import { RegistrarAsistenciaComponent } from './registrar-asistencia/registrar-a
 import { ListanotascomportamientoComponent } from './listanotascomportamiento/listanotascomportamiento.component';
 import { RegistroNotasComportamientoComponent } from './administracion-notas-conducta/registro-notas-conducta/registro-notas-conducta.component';
 import { VerNotaComportamientoAlumnoComponent } from './ver-nota-comportamiento-alumno/ver-nota-comportamiento-alumno.component';
+import { RegistroNotasAcademicasComponent } from './administracion-notas-registro-auxiliar/registro-notas-academicas/registro-notas-academicas.component';
 
 
 @NgModule({
@@ -75,7 +76,8 @@ import { VerNotaComportamientoAlumnoComponent } from './ver-nota-comportamiento-
     RegistrarAsistenciaComponent,
     ListanotascomportamientoComponent,
     RegistroNotasComportamientoComponent,
-    VerNotaComportamientoAlumnoComponent
+    VerNotaComportamientoAlumnoComponent,
+    RegistroNotasAcademicasComponent
   ],
   imports: [
     CommonModule,
