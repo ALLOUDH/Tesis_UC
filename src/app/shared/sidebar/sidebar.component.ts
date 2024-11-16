@@ -155,7 +155,7 @@ export class SidebarComponent {
   };
 
   RegistrarAsistencia() {
-    this.router.navigate(['/registrar-asistencia']).then(() => {
+    this.router.navigate(['/registrarasistencia']).then(() => {
       window.location.reload();
     });;
   };
