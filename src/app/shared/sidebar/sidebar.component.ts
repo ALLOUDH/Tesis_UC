@@ -111,10 +111,8 @@ export class SidebarComponent {
     });;
   };
   EditarAsistencia() {
-    this.router.navigate(['/editar-asistencia']).then(() => {
-      window.location.reload();
-    });;
-  };
+    this.router.navigate(['/registrarasistencia']);
+    };
   VerFaltasTardanzas() {
     this.router.navigate(['/ver-faltas-tardanzas']).then(() => {
       window.location.reload();
@@ -167,4 +165,9 @@ export class SidebarComponent {
       window.location.reload();
     });;
   };
+  
+  VerAsistenciaAlumno() {
+    this.router.navigate(['/verasistenciaalumno']);
+    };
+  
 }

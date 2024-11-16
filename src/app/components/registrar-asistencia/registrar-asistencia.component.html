@@ -4,7 +4,7 @@
         <div class="col-sm-4">
           <div class="page-header float-left">
             <div class="page-title">
-              <h1>Registrar Asistencia</h1>
+              <h1>Administrar Asistencia</h1>
             </div>
           </div>
         </div>
@@ -13,7 +13,7 @@
             <div class="page-title">
               <ol class="breadcrumb d-flex justify-content-end">
                 <li><a href="#">Inicio</a></li>
-                <li class="active">Registrar Asistencia</li>
+                <li class="active">Administrar Asistencia</li>
               </ol>
             </div>
           </div>
@@ -47,17 +47,33 @@
                     <div class="col-lg-4">
                       <div class="mb-3">
                         <label for="inputFechaRegistroAsistencia" class="form-label">Fecha:</label>
-                        <input 
-                          type="date" 
-                          formControlName="inputFechaRegistroAsistencia" 
-                          class="form-control" />
+                        <dx-date-box class="form-control" type="date" formControlName="inputFechaRegistroAsistencia" 
+                            [showClearButton]="true" [displayFormat]="'dd/MM/yyyy'" placeholder="dd/MM/yyyy" >
+                        </dx-date-box>
                       </div>
                     </div>
-                    <div class="col-lg-4 d-flex align-items-end justify-content-end">
-                      <button type="button" class="btn btn-primary mx-2" (click)="obtenerAlumnos()">Buscar</button>
+                    <div class="col-lg-4 d-flex align-items-center">
+                      <div class="form-check d-flex align-items-center">
+                        <input
+                          type="checkbox"
+                          class="form-check-input"
+                          id="rellenarCheckbox"
+                          #rellenarCheckboxRef
+                          (change)="rellenarAsistencia($event)">
+                        <label class="form-check-label ms-2" for="rellenarCheckbox">
+                          Rellenar "Asistió" a todos
+                        </label>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row mt-3">
+                    <div class="col-lg-12 d-flex justify-content-end">
                       <button type="button" class="btn btn-danger" (click)="LimpiarFormulario()">Limpiar</button>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -67,52 +83,70 @@
     </form>
   </section>
   
-  <section id="lista-alumnos" *ngIf="alumnos.length > 0">
+<section id="lista-alumnos" *ngIf="alumnos.length > 0">
     <div class="content">
-      <div class="animated fadeIn">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-body card-block">
-                <div class="table-stats order-table ov-h">
-          <table class="table">
-            <thead class="bg-primary text-white">
-              <tr>
-                <th>#</th>
-                <th>Apellido Paterno</th>
-                <th>Apellido Materno</th>
-                <th>Nombre</th>
-                <th>Asistencia</th>
-                <th>Descripción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let alumno of alumnos; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ alumno.usApellidoPaterno }}</td>
-                <td>{{ alumno.usApellidoMaterno }}</td>
-                <td>{{ alumno.usNombre }}</td>
-                <td>
-                  <label><input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="1" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Asistió</label>
-                  <label><input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="2" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Tarde</label>
-                  <label><input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="3" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Faltó</label>
-                </td>
-                <td>
-                  <input type="text" [(ngModel)]="descripcionAsistencia[alumno.idalumno]" class="form-control" placeholder="Opcional" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body card-block">
+                            <div class="table-stats order-table ov-h">
+                                <table class="table ">
+                                    <thead class="bg-primary text-white">
+                                        <tr>
+                                            <th class="widthtablas">#</th>
+                                            <th class="text-center">Apellido Paterno</th>
+                                            <th class="text-center">Apellido Materno</th>
+                                            <th class="text-center">Nombre</th>
+                                            <th class="text-center">Asistencia</th>
+                                            <th class="text-center">Descripción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr  *ngFor="let alumno of alumnos; let i = index">
+                                            <td class="widthtablas">{{ i + 1 }}</td>
+                                            <td class="text-center">{{ alumno.usApellidoPaterno }}</td>
+                                            <td class="text-center">{{ alumno.usApellidoMaterno }}</td>
+                                            <td class="text-center">{{ alumno.usNombre }}</td>
+                                            <td class="text-center">
+                                                <label class="margin-right-15">
+                                                    <input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="1" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Asistió
+                                                </label>
+                                                <label class="margin-right-15">
+                                                    <input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="2" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Tarde
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="asistencia_{{ alumno.idalumno }}" [value]="3" [(ngModel)]="asistenciaSeleccionada[alumno.idalumno]"> Faltó
+                                                </label>
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="text" placeholder="Opcional"
+                                                [(ngModel)]="descripcionAsistencia[alumno.idalumno]" class="form-control" maxlength="100">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> <!-- /.table-stats -->
 
-        <div class="text-right mt-3">
-          <button type="button" class="btn btn-primary" (click)="GuardarAsistencia()">Guardar</button>
+                            <div class="row">
+                                <div class="col-lg-12 text-right">
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary button-color-primary margin-right-5" (click)="GuardarAsistencia()">
+                                            <i class="fa fa-lg fa-fw fa-save"></i> Guardar
+                                        </button>
+                                        <button type="button" class="btn btn-danger button-color-danger" (click)="LimpiarFormulario()">
+                                            <i class="fa fa-lg fa-fw fa-times"></i> Cancelar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
-</div>
-</div>
 </section>
+
   

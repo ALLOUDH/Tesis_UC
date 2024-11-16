@@ -18,6 +18,11 @@ export class VistasService {
     return this.http.get<ListaAlumnosDTO[]>(`${this.baseUrl}Vistas/ObtenerAlumnos`);
   }
 
+  // Método para obtener un alumno por su Idusuario
+  obtenerAlumnoPorUsuario(idusuario: number): Observable<ListaAlumnosDTO> {
+    return this.http.get<ListaAlumnosDTO>(`${this.baseUrl}Vistas/ObtenerAlumnoPorUsuario/${idusuario}`);
+  }
+
   cambiarEstadoUsuario(id: number, nuevoEstado: boolean): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}Vistas/EliminarUsuario/${id}`, nuevoEstado);
   }
