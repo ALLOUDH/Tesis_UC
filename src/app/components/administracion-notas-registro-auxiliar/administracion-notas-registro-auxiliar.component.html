@@ -78,11 +78,10 @@
                   <!-- Mostrar Grado -->
                   <div class="col-lg-8 mx-auto">
                     <div class="mb-3 text-center">
-                      <label for="inputGrado{{i + 1}}" class="form-label label-custom-medium">Grado:</label>
-                      <input type="text" 
-                             class="form-control readonly-input text-center"
-                             [value]="grado.nombre" 
-                             readonly>
+                      <label for="selectGrado{{i + 1}}" class="form-label label-custom-medium">Grado:</label>
+                      <select id="selectGrado{{i + 1}}" class="form-control" disabled>
+                        <option selected>{{ grado.nombre }}</option>
+                      </select>
                     </div>
                   </div>
                   
@@ -108,7 +107,7 @@
                     <div class="mb-3 text-center">
                     <label for="selectAsignatura" class="form-label label-custom-medium">Asignatura:</label>
                     <dx-select-box
-                      *ngIf="asignaturasFiltradas.length > 0"
+                      *ngIf="asignaturasFiltradas.length > 1"
                       placeholder="Seleccione una asignatura"
                       class="text-color-placeholder text-center"
                       [dataSource]="asignaturasFiltradas"

@@ -151,11 +151,11 @@
                 </li>
 
                 <li class="menu-title">Asistencia</li><!-- /.menu-title -->
-                <li>
+                <li *ngIf="esUsuarioAutorizado">
                     <a (click)="RegistrarAsistencia()" style="cursor: pointer;"><i
                             class="menu-icon fa fa-bar-chart"></i>Registrar Asistencia</a>
                 </li>
-                <li>
+                <li *ngIf="esUsuarioAutorizado">
                     <a (click)="VerFaltasTardanzas()" style="cursor: pointer;"><i
                             class="menu-icon fa fa-bar-chart"></i>Ver Faltas y Tardanzas</a>
                 </li>

@@ -67,7 +67,7 @@ const routes: Routes = [
             { path: 'registro-notas-conducta', component: RegistroNotasComportamientoComponent},
             { path: 'registro-notas-academicas', component: RegistroNotasAcademicasComponent},
             { path: 'lista-notas-conportamiento', component: ListanotascomportamientoComponent},
-            { path: 'registrar-asistencia', component: RegistrarAsistenciaComponent},
+            { path: 'registrarasistencia', component: RegistrarAsistenciaComponent},
             { path: 'ver-notas-conducta', component: VerNotaComportamientoAlumnoComponent},
             { path: 'verasistenciaalumno', component: VerAsistenciaAlumnoComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
