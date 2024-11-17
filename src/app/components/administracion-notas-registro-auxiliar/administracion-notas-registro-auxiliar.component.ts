@@ -30,6 +30,8 @@ export class AdministracionNotasRegistroAuxiliarComponent {
   usuarioId: number | null = null;
   asignaturasFiltradas: AsignaturaDTO[] = [];
 
+  
+
   constructor(
     private route: Router,
     private periodoAcademicoService: PeriodoAcademicoService,
@@ -82,16 +84,6 @@ export class AdministracionNotasRegistroAuxiliarComponent {
       }
     });
 
-    if (this.otherGradoAcademico.length > 0) {
-      const gradoId = this.otherGradoAcademico[0]?.id;
-      if (typeof gradoId === 'number') {
-        console.log("Cargando asignaturas para el primer grado:", gradoId);
-        this.filtrarAsignaturasPorGrado(gradoId);
-      } else {
-        console.error("El ID del primer grado no es un número:", gradoId);
-      }
-    }
-    
     this.periodoAcademicoService.getPeriodo().subscribe(
       (data: PeriodoAcademicoDTO[]) => {
         this.periodoAcademico = data;
@@ -101,6 +93,7 @@ export class AdministracionNotasRegistroAuxiliarComponent {
         console.error("Error al obtener los periodos:", error);
       }
     );
+    
 
   }
 
@@ -121,6 +114,7 @@ export class AdministracionNotasRegistroAuxiliarComponent {
         data.forEach(grado => {
           if (typeof grado.idGrado === 'number') {
             this.asignaturasPorGrado[grado.idGrado] = grado.asignaturas || [];
+            this.filtrarAsignaturasPorGrado(grado.idGrado);
           }
         });
   
@@ -130,7 +124,8 @@ export class AdministracionNotasRegistroAuxiliarComponent {
         const firstGradoId = this.otherGradoAcademico[0]?.id;
         if (typeof firstGradoId === 'number') {
           this.filtrarAsignaturasPorGrado(firstGradoId);
-        } else {
+        } 
+        else {
           console.error("El ID del primer grado no es válido:", firstGradoId);
         }
       },
@@ -140,16 +135,19 @@ export class AdministracionNotasRegistroAuxiliarComponent {
       }
     );
   }
+
+  
+  
   filtrarAsignaturasPorGrado(gradoId: number): void {
-    console.log("Intentando filtrar asignaturas para el grado ID:", gradoId);
     if (this.asignaturasPorGrado[gradoId]) {
       this.asignaturasFiltradas = this.asignaturasPorGrado[gradoId];
     } else {
       this.asignaturasFiltradas = [];
-      console.warn("No se encontraron asignaturas para el grado:", gradoId);
+      console.error("No se encontraron asignaturas para el grado con ID:", gradoId);
     }
-    console.log("Asignaturas filtradas:", this.asignaturasFiltradas);
+    console.log("Asignaturas filtradas para el grado", gradoId, ":", this.asignaturasFiltradas);
   }
+  
   
 //selecciona el periodo de acuerdo al año actual
   private setDefaultPeriodo(): void {
@@ -167,6 +165,8 @@ export class AdministracionNotasRegistroAuxiliarComponent {
   private actualizarfiltrobimestre(idPeriodo: number): void {
     this.filtrarBimestreAcademico = this.bimestreAcademico.filter(bimestre => bimestre.idperiodo === idPeriodo);
   }
+
+
 
   EnviarDatos(grado: number) {
     const selectedPeriodo = this.notasacademicasform.get('selectPeriodo')?.value;

@@ -1,3 +1,42 @@
+.gradient-custom-3 {
+    --x-0: 23%;
+    --y-0: 64%;
+    --c-0: hsla(220.23529411764704, 72%, 22%, 1);
+    --y-1: 64%;
+    --x-1: 24%;
+    --c-1: hsla(211.26760563380282, 60%, 77%, 1);
+    --y-2: 58%;
+    --c-2: hsla(220, 72%, 22%, 1);
+    --x-2: 47%;
+    --c-3: hsla(220, 72%, 22%, 1);
+    --x-3: 15%;
+    --y-3: 69%;
+    --y-4: 36%;
+    --x-4: 95%;
+    --c-4: hsla(211.26760563380282, 60%, 77%, 1);
+    ;
+    background-color: hsla(231, 96%, 54%, 1);
+    background-image:
+        url('../images/SanCarlos_Login.jpg'),
+        /* Imagen de fondo */
+        radial-gradient(circle at var(--x-0) var(--y-0), var(--c-0), transparent),
+        radial-gradient(circle at var(--x-1) var(--y-1), var(--c-1), transparent),
+        radial-gradient(circle at var(--x-2) var(--y-2), var(--c-2), transparent),
+        radial-gradient(circle at var(--x-3) var(--y-3), var(--c-3), transparent),
+        radial-gradient(circle at var(--x-4) var(--y-4), var(--c-4), transparent);
+
+    background-size: cover, auto, auto, auto, auto, auto;
+    /* Ajusta el tamaño de la imagen y gradientes */
+    background-position: center right -30rem, center, center, center, center, center;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    background-blend-mode: overlay, normal, normal, normal, normal, normal;
+    /* Combina la imagen con los gradientes */
+    animation: hero-gradient-animation 10s linear infinite alternate-reverse;
+
+    border-radius: .3rem; /* Ajusta el radio de los bordes aquí */
+    overflow: hidden;
+}
+
 .gradient-custom-2 {
     --x-0: 23%;
     --y-0: 64%;
@@ -16,10 +55,16 @@
     --c-4: hsla(211.26760563380282, 60%, 77%, 1);
     ;
     background-color: hsla(231, 96%, 54%, 1);
-    background-image: radial-gradient(circle at var(--x-0) var(--y-0), var(--c-0) var(--s-start-0), transparent var(--s-end-0)), radial-gradient(circle at var(--x-1) var(--y-1), var(--c-1) var(--s-start-1), transparent var(--s-end-1)), radial-gradient(circle at var(--x-2) var(--y-2), var(--c-2) var(--s-start-2), transparent var(--s-end-2)), radial-gradient(circle at var(--x-3) var(--y-3), var(--c-3) var(--s-start-3), transparent var(--s-end-3)), radial-gradient(circle at var(--x-4) var(--y-4), var(--c-4) var(--s-start-4), transparent var(--s-end-4));
+    background-image:
+        radial-gradient(circle at var(--x-0) var(--y-0), var(--c-0) var(--s-start-0), transparent var(--s-end-0)),
+        radial-gradient(circle at var(--x-1) var(--y-1), var(--c-1) var(--s-start-1), transparent var(--s-end-1)),
+        radial-gradient(circle at var(--x-2) var(--y-2), var(--c-2) var(--s-start-2), transparent var(--s-end-2)),
+        radial-gradient(circle at var(--x-3) var(--y-3), var(--c-3) var(--s-start-3), transparent var(--s-end-3)),
+        radial-gradient(circle at var(--x-4) var(--y-4), var(--c-4) var(--s-start-4), transparent var(--s-end-4));
     animation: hero-gradient-animation 10s linear infinite alternate-reverse;
     background-blend-mode: normal, normal, normal, normal, normal;
 }
+
 .gradiente-custom-1 {
     --y-0: 96%;
     --x-0: 11%;
@@ -38,7 +83,11 @@
     --y-4: 63%;
     ;
     background-color: hsla(242, 93%, 25%, 1);
-    background-image: radial-gradient(circle at var(--x-0) var(--y-0), var(--c-0) var(--s-start-0), transparent var(--s-end-0)), radial-gradient(circle at var(--x-1) var(--y-1), var(--c-1) var(--s-start-1), transparent var(--s-end-1)), radial-gradient(circle at var(--x-2) var(--y-2), var(--c-2) var(--s-start-2), transparent var(--s-end-2)), radial-gradient(circle at var(--x-3) var(--y-3), var(--c-3) var(--s-start-3), transparent var(--s-end-3)), radial-gradient(circle at var(--x-4) var(--y-4), var(--c-4) var(--s-start-4), transparent var(--s-end-4));
+    background-image: radial-gradient(circle at var(--x-0) var(--y-0), var(--c-0) var(--s-start-0), transparent var(--s-end-0)),
+        radial-gradient(circle at var(--x-1) var(--y-1), var(--c-1) var(--s-start-1), transparent var(--s-end-1)),
+        radial-gradient(circle at var(--x-2) var(--y-2), var(--c-2) var(--s-start-2), transparent var(--s-end-2)),
+        radial-gradient(circle at var(--x-3) var(--y-3), var(--c-3) var(--s-start-3), transparent var(--s-end-3)),
+        radial-gradient(circle at var(--x-4) var(--y-4), var(--c-4) var(--s-start-4), transparent var(--s-end-4));
     animation: hero-gradient-animation 5s linear infinite alternate-reverse;
     background-blend-mode: normal, normal, normal, normal, normal;
 }
@@ -270,7 +319,7 @@
 }
 
 .text-color {
-    color: rgb(196, 196, 196); 
+    color: rgb(196, 196, 196);
     text-align: justify;
 }
 

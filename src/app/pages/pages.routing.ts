@@ -31,6 +31,9 @@ import { RegistroNotasComportamientoComponent } from "../components/administraci
 import { VerNotaComportamientoAlumnoComponent } from "../components/ver-nota-comportamiento-alumno/ver-nota-comportamiento-alumno.component";
 import { RegistroNotasAcademicasComponent } from "../components/administracion-notas-registro-auxiliar/registro-notas-academicas/registro-notas-academicas.component";
 import { VerAsistenciaAlumnoComponent } from "../components/ver-asistencia-alumno/ver-asistencia-alumno.component";
+import { VerNotaPadreComponent } from "../components/ver-nota-padre/ver-nota-padre.component";
+import { VerComentariosComponent } from "../components/ver-comentarios/ver-comentarios.component";
+import { VerIncidenciasComponent } from "../components/ver-incidencias/ver-incidencias.component";
 
 const routes: Routes = [
     {
@@ -70,6 +73,9 @@ const routes: Routes = [
             { path: 'registrarasistencia', component: RegistrarAsistenciaComponent},
             { path: 'ver-notas-conducta', component: VerNotaComportamientoAlumnoComponent},
             { path: 'verasistenciaalumno', component: VerAsistenciaAlumnoComponent},
+            { path: 'ver-notas-padre', component: VerNotaPadreComponent},
+            { path: 'ver-comentarios', component: VerComentariosComponent},
+            { path: 'ver-incidencias', component: VerIncidenciasComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },
