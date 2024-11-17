@@ -39,6 +39,7 @@ export class RegistroNotasPadreComponent implements OnInit {
   notas: any;
   tiponota: TipoNotasDTO[] = [];
   nombrecat: CategoriaNotasDTO[] = [];
+  tipoNotaControlMap: { [key: number]: string } = {};
 
   constructor(
     private router: Router,
@@ -208,7 +209,7 @@ export class RegistroNotasPadreComponent implements OnInit {
   actualizarAlumnosFormArray(cantidadAlumnos: number): void {
     const alumnosFormArray = this.notaspadreform.get('alumnosFormArray') as FormArray;
     alumnosFormArray.clear();
-  
+
     for (let i = 0; i < cantidadAlumnos; i++) {
       alumnosFormArray.push(this.crearFormGroupAlumno(i));
     }
@@ -233,6 +234,14 @@ export class RegistroNotasPadreComponent implements OnInit {
     const idbimestre = this.bimestrerecibido;
     const idgrado = this.gradorecibido;
     const tiposDeNotaIds = this.tiponota.filter(tipo => tipo.idcategoriaNotas === this.categoriarecibida).map(tipo => tipo.idtipoNotas);
+
+    // Crear el mapeo para asociar cada ID de tipo de nota con un nombre de control
+    this.tipoNotaControlMap = {}; // Reinicia el mapeo antes de usarlo
+    tiposDeNotaIds.forEach((tipoNotaId, index) => {
+      this.tipoNotaControlMap[tipoNotaId] = `inputNotaPadre${index + 1}`;
+    });
+
+    console.log('Mapeo de tipos de nota:', this.tipoNotaControlMap);
 
 
     for (let index = 0; index < alumnos.length; index++) {
