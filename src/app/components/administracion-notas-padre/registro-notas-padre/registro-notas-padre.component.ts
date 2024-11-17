@@ -39,7 +39,6 @@ export class RegistroNotasPadreComponent implements OnInit {
   notas: any;
   tiponota: TipoNotasDTO[] = [];
   nombrecat: CategoriaNotasDTO[] = [];
-  tipoNotaControlMap: { [key: number]: string } = {};
 
   constructor(
     private router: Router,
@@ -182,15 +181,14 @@ export class RegistroNotasPadreComponent implements OnInit {
             this.alumnos.forEach((alumno, index) => {
               const alumnoFormGroup = (this.notaspadreform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
 
-              // Asigna cada tipo de nota a su campo correspondiente
-              for (let tipoNota in alumno.notas) {
-                const controlName = `inputNotaPadre${tipoNota}`; // Clave construida
-                console.log('Asignando nota:', alumno.notas[tipoNota], 'a control:', controlName);
+              // Asigna las notas a los tres inputs (inputNotaPadre1, inputNotaPadre2, inputNotaPadre3)
+              const notasArray = Object.values(alumno.notas).filter(nota => nota !== null);
 
-                if (alumnoFormGroup.get(controlName)) {
-                  alumnoFormGroup.get(controlName)?.setValue(alumno.notas[tipoNota]);
-                } else {
-                  console.warn(`Control ${controlName} no encontrado para tipo de nota: ${tipoNota}`);
+              for (let i = 0; i < 3; i++) {
+                if (notasArray[i] !== undefined) {
+                  const controlName = `inputNotaPadre${i + 1}`;  // Mapear al inputNotaPadre1, 2, 3
+                  console.log('Asignando nota:', notasArray[i], 'a control:', controlName);
+                  alumnoFormGroup.get(controlName)?.setValue(notasArray[i]);
                 }
               }
 
@@ -234,14 +232,6 @@ export class RegistroNotasPadreComponent implements OnInit {
     const idbimestre = this.bimestrerecibido;
     const idgrado = this.gradorecibido;
     const tiposDeNotaIds = this.tiponota.filter(tipo => tipo.idcategoriaNotas === this.categoriarecibida).map(tipo => tipo.idtipoNotas);
-
-    // Crear el mapeo para asociar cada ID de tipo de nota con un nombre de control
-    this.tipoNotaControlMap = {}; // Reinicia el mapeo antes de usarlo
-    tiposDeNotaIds.forEach((tipoNotaId, index) => {
-      this.tipoNotaControlMap[tipoNotaId] = `inputNotaPadre${index + 1}`;
-    });
-
-    console.log('Mapeo de tipos de nota:', this.tipoNotaControlMap);
 
 
     for (let index = 0; index < alumnos.length; index++) {
