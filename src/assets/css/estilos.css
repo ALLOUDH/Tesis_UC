@@ -22,9 +22,19 @@
     border-color: #FB9678;
 }
 
+.btn-orange:hover {
+    background-color: rgb(184, 110, 87);
+    border-color: rgb(184, 110, 87);
+}
+
 .btn-skyblue {
     background-color: #00C292;
     border-color: #00C292;
+}
+
+.btn-skyblue:hover {
+    background-color: #019e77;
+    border-color: #019e77;
 }
 
 .traffic-chart {
@@ -172,20 +182,25 @@
 }
 
 .card-left {
-    width: 70%; /* Ajusta según la proporción que necesites */
+    width: 70%;
+    /* Ajusta según la proporción que necesites */
     display: inline-block;
 }
 
 .card-right {
-    width: 30%; /* Ajusta según la proporción que necesites */
+    width: 30%;
+    /* Ajusta según la proporción que necesites */
     display: inline-block;
     text-align: right;
-    vertical-align: middle; /* Alinea el ícono verticalmente */
+    vertical-align: middle;
+    /* Alinea el ícono verticalmente */
 }
 
 .card-right .icon {
-    line-height: 1; /* Asegura que el ícono no se desplace */
-    margin-top: 10px; /* Si necesitas más espacio arriba */
+    line-height: 1;
+    /* Asegura que el ícono no se desplace */
+    margin-top: 10px;
+    /* Si necesitas más espacio arriba */
 }
 
 .text-area-style {
@@ -194,15 +209,21 @@
 }
 
 .footer-comment {
-    display: block; /* Asegúrate de que esté en bloque */
-    width: 100%; /* Ocupa todo el ancho del sidebar */
-    margin-top: 10px; /* Espaciado superior */
-    text-align: center; /* Centrar texto */
+    display: block;
+    /* Asegúrate de que esté en bloque */
+    width: 100%;
+    /* Ocupa todo el ancho del sidebar */
+    margin-top: 10px;
+    /* Espaciado superior */
+    text-align: center;
+    /* Centrar texto */
 }
 
 .footer-comment p {
-    margin: 5px 0; /* Espaciado entre párrafos */
-    font-size: 14px; /* Ajusta el tamaño de la fuente según tus necesidades */
+    margin: 5px 0;
+    /* Espaciado entre párrafos */
+    font-size: 14px;
+    /* Ajusta el tamaño de la fuente según tus necesidades */
 }
 
 .eviar-comentarios-reportes {
@@ -230,4 +251,119 @@
 .center-content {
     margin-right: auto;
     margin-left: auto;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.header-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.avatar-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    /* Ajusta el tamaño según sea necesario */
+    font-weight: 600;
+    /* Opcional: Define el grosor de la fuente */
+}
+
+.comentarios-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Espacio entre cada comentario */
+}
+
+.comentario-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comentario {
+    display: flex;
+    flex-direction: column;
+}
+
+.comentario-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.comentario-header h5 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.comentario-body {
+    margin-bottom: 10px;
+}
+
+.comentario-body p {
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+.comentario-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.comentario-footer button {
+    font-size: 0.9rem;
+}
+
+.tittle-text {
+    color: #585858;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: -3px;
+}
+
+.tittle-text-sm {
+    color: #585858;
+    font-size: 1rem;
+    margin-bottom: -3px;
+    font-weight: 600;
+}
+
+.description-text {
+    color: #878787;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+/* Estilo solo para el div con clase .incidencia-container */
+.incidencia-container {
+    align-items: center;
+    /* Centra los elementos verticalmente */
+    justify-content: start;
+    /* Alinea a la izquierda */
+}
+
+.incidencia-container .badge {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.incidencia-container .badge-complete {
+    background: #00c292;
+    /* Verde */
+}
+
+.incidencia-container .badge-pending {
+    background: #fb9678;
+    /* Rojo */
 }

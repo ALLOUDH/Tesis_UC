@@ -4,7 +4,7 @@
             <div class="col-sm-4">
                 <div class="page-header float-left">
                     <div class="page-title">
-                        <h1>Lista de Alumnos</h1>
+                        <h1>Notas de Padre</h1>
                     </div>
                 </div>
             </div>
@@ -13,7 +13,8 @@
                     <div class="page-title">
                         <ol class="breadcrumb d-flex justify-content-end">
                             <li><a href="#">Inicio</a></li>
-                            <li><a href="#">Lista de Alumnos</a></li>
+                            <li><a href="#">Notas de Padre</a></li>
+                            <li><a href="#">Registro notas de Padre</a></li>
                         </ol>
                     </div>
                 </div>
@@ -21,83 +22,29 @@
         </div>
     </div>
 </div>
-<section id="section-buscar-alumno">
+<section class="text-center" id="section-buscar-alumno">
     <form novalidate="novalidate" [formGroup]="notaspadreform">
         <div class="content">
             <div class="animated fadeIn">
-                <div class="row">
-                    <div class="col-lg-12">
+                <div class="row justify-content-center"> <!-- Centra el contenido dentro de la fila -->
+                    <div class="col-lg-12"> <!-- Usar col-lg-12 para mantener el tamaño completo -->
                         <div class="card">
                             <div class="card-body card-block">
-                                <div class="col-lg-12 text-right col-sm-9">
-                                    <div class="mb-3">
-                                        <div class="d-flex justify-content-end">
-                                            <button type="button" class="btn btn-success btn-sm button-color-success">
-                                                <i class="fa fa-lg fa-fw fa-user-plus"></i> Nuevo
-                                            </button>
-                                        </div>
+                                <div class="row justify-content-center"> <!-- Centra los elementos en cada fila -->
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="inputGradoAcademico" class="form-label label-custom-medium">Grado:</label>
+                                        <input type="text" class="form-control text-center readonly-input"
+                                               formControlName="inputGradoAcademico" readonly>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1"
-                                                    class="form-label label-custom-medium">Estudiante:</label>
-                                                <dx-autocomplete placeholder="Escriba el nombre del paciente."
-                                                    formControlName="inputEstudiante" [dataSource]="listadoalumnos">
-                                                </dx-autocomplete>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1"
-                                                    class="form-label label-custom-medium">Nro. de
-                                                    documento:</label>
-                                                <input type="text" class="form-control" id="exampleFormControlInput1"
-                                                    placeholder="Ingrese el número de documento."
-                                                    formControlName="inputNroDocumento"
-                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                                    maxlength="8">
-                                            </div>
-                                        </div>
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="inputBimestreAcademico" class="form-label label-custom-medium">Bimestre:</label>
+                                        <input type="text" class="form-control text-center readonly-input"
+                                               formControlName="inputBimestreAcademico" readonly>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1"
-                                                    class="form-label label-custom-medium">Grado:</label>
-                                                <dx-select-box placeholder="Seleccione una opción."
-                                                    class="text-color-placeholder" displayExpr="nombre" valueExpr="id"
-                                                    [dataSource]="otherGradoAcademico"
-                                                    [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
-                                                    [showClearButton]="true"
-                                                    formControlName="selectGradoAcademico"></dx-select-box>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1"
-                                                    class="form-label label-custom-medium">Bimestre:</label>
-                                                <dx-select-box placeholder="Seleccione una opción."
-                                                    class="text-color-placeholder" [dataSource]="bimestreAcademico"
-                                                    displayExpr="biNombre" valueExpr="idbimestre"
-                                                    [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
-                                                    [showClearButton]="true" formControlName="selectBimestre">
-                                                </dx-select-box>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1"
-                                                    class="form-label label-custom-medium">Estado:</label>
-                                                <dx-select-box placeholder="Seleccione una opción."
-                                                    class="text-color-placeholder" displayExpr="nombre" valueExpr="id"
-                                                    [dataSource]="otherEstadoUsuario"
-                                                    [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
-                                                    [showClearButton]="true"
-                                                    formControlName="selectEstadoUsuario"></dx-select-box>
-                                            </div>
-                                        </div>
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="inputPeriodoAcademico" class="form-label label-custom-medium">Periodo:</label>
+                                        <input type="text" class="form-control text-center readonly-input"
+                                               formControlName="inputPeriodoAcademico" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +70,6 @@
                                                 <tr>
                                                     <th class="widthtablas">#</th>
                                                     <th class="text-center">Alumno</th>
-                                                    <th class="text-center">Grado</th>
                                                     <th class="text-center">Respeta el Reglamento Interno</th>
                                                     <th class="text-center">Es responsable con su hijo(a)</th>
                                                     <th class="text-center">No permite el uso del celular a su hijo(a)
@@ -136,7 +82,6 @@
                                                     *ngFor="let alumno of alumnos; let i = index" [formGroupName]="i">
                                                     <td class="widthtablas">{{ i + 1 }}</td>
                                                     <td class="text-center">{{ alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno }}</td>
-                                                    <td class="text-center">{{ this.gradorecibido }}</td>
                                                     <!-- Inputs de notas -->
                                                     <td class="text-center">
                                                         <input type="text" class="form-control input-nota text-center"

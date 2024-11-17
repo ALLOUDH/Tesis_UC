@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AccesoService } from '../../../services/acceso.service';
 import { PrimerAccesoDTO } from '../../auth-dtos/primer-acceso.dto';
+import { PasswordValidatorService } from '../../../services/password-validator.service';
 
 @Component({
   selector: 'app-primer-acceso',
@@ -14,16 +15,20 @@ export class PrimerAccesoComponent {
   primeraccesoform: FormGroup;
 
   constructor
-  (
-    private accesService: AccesoService,
-    private formBuilder: FormBuilder,
-    private modalService: BsModalService,
-    private bsModalPrimerAcceso: BsModalRef,
-  )
-  {
-    this.primeraccesoform =  new FormGroup({
+    (
+      private accesService: AccesoService,
+      private formBuilder: FormBuilder,
+      private modalService: BsModalService,
+      private bsModalPrimerAcceso: BsModalRef,
+      private passwordValidatorService: PasswordValidatorService,
+    ) {
+    this.primeraccesoform = new FormGroup({
       inputCorreoElectronico: new FormControl('', [Validators.required, Validators.email]),
-      inputPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      inputPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        this.passwordValidatorService.validatePassword
+      ]),
       inputConfirmPassword: new FormControl('', [Validators.required]),
     }, { validators: this.passwordMatchValidator });
   }
@@ -55,7 +60,7 @@ export class PrimerAccesoComponent {
     };
 
     if (this.primeraccesoform.valid) {
-      this.accesService.actualizarDatosPrimerAcceso(DatosPrimerAcceso).subscribe( Response => {
+      this.accesService.actualizarDatosPrimerAcceso(DatosPrimerAcceso).subscribe(Response => {
         if (Response.isSuccess) {
           this.MostrarMensajeExito('Datos guardados correctamente', 'Éxito');
           this.bsModalPrimerAcceso.hide();
@@ -70,7 +75,7 @@ export class PrimerAccesoComponent {
   }
 
   CerrarModal() {
-    this.MensajeAlerta("Estas segur@ de volver al inicio?","No podrás deshacer esta acción!");
+    this.MensajeAlerta("Estas segur@ de volver al inicio?", "No podrás deshacer esta acción!");
   }
 
   MostrarMensajeExito(titulo: string, mensaje: string) {

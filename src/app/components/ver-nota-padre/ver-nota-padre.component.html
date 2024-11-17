@@ -1,0 +1,103 @@
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <div class="row m-0">
+        <div class="col-sm-4">
+          <div class="page-header float-left">
+            <div class="page-title user-name-txt">
+              <h1>Notas de Padre</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div class="page-header float-right">
+            <div class="page-title">
+              <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
+                <li><a href="#">Inicio</a></li>
+                <li class="active">Ver notas de padre</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Formulario para el selector de periodo -->
+  <div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <div class="row m-0 align-items-center">
+        <div class="col-sm-4">
+          <div class="page-header float-left">
+            <div class="page-title user-name-txt d-flex align-items-center justify-content-start">
+              <i class="fa fa-calendar mr-3"></i>
+              <h1 class="user-name-txt mb-0">Periodos:</h1>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Selector de periodo alineado a la derecha -->
+        <div class="col-sm-8 text-right">
+          <form [formGroup]="notasForm" class="d-inline-block">
+            <div class="form-group mb-0">
+              <dx-select-box
+                placeholder="Seleccione una opción."
+                class="text-color-placeholder"
+                [dataSource]="periodoAcademico"
+                displayExpr="peNombre"
+                valueExpr="idperiodo"
+                [inputAttr]="{ 'aria-label': 'Periodo' }"
+                [showClearButton]="true"
+                formControlName="selectPeriodo"
+                (onValueChanged)="cargarNotasPorAlumno()">
+              </dx-select-box>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- Tabla de notas -->
+  <section id="ver-nota-comportamiento" class="text-center">
+    <div class="content">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-stats order-table ov-h">
+                  <table class="table" id="tablaNotasConducta">
+                    <thead class="bg-primary text-white">
+                      <tr>
+                        <th>Tipo de Nota</th>
+                        <th *ngFor="let bimestre of bimestreAcademico">{{ bimestre.biNombre}}</th>
+                        <th class="text-center">Promedio</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let tipoNota of tiponota">
+                        <td class="text-left">{{ tipoNota.tipNoNombre }}</td>
+                        <td *ngFor="let bimestre of bimestreAcademico">
+                          <span [ngClass]="obtenerColorNota(obtenerNota(bimestre.idbimestre, tipoNota.idtipoNotas))">
+                            {{ obtenerNota(bimestre.idbimestre, tipoNota.idtipoNotas) }}
+                          </span>
+                        </td>
+                        <td class="text-center">
+                          <span [ngClass]="obtenerColorNota(calcularPromedio(tipoNota.idtipoNotas))">
+                            {{ calcularPromedio(tipoNota.idtipoNotas) }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

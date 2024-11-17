@@ -167,4 +167,22 @@ export class SidebarComponent {
       window.location.reload();
     });;
   };
+
+  VerNotasPadre(){
+    this.router.navigate(['/ver-notas-padre']).then(() => {
+      window.location.reload();
+    });;
+  }
+
+  VerComentarios(){
+    this.router.navigate(['/ver-comentarios']).then(() => {
+      window.location.reload();
+    });;
+  }
+
+  VerIncidencias(){
+    this.router.navigate(['/ver-incidencias']).then(() => {
+      window.location.reload();
+    });;
+  }
 }

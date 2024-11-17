@@ -18,7 +18,7 @@
               <div *ngIf="Controls['inputPassword'].invalid && (Controls['inputPassword'].dirty || Controls['inputPassword'].touched)" class="text-error">
                 <div *ngIf="Controls['inputPassword']?.errors?.['required']">Campo obligatorio.</div>
                 <div *ngIf="Controls['inputPassword']?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres.</div>
-                <div *ngIf="Controls['inputPassword']?.errors?.['pattern']">La contraseña debe ser solo números.</div>
+                <div *ngIf="Controls['inputPassword']?.errors?.['passwordInvalid']">La contraseña debe contener al menos una letra y un número.</div>
               </div>
 
               <!-- Mensaje de error si la contraseña no coincide con el DNI -->
