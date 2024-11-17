@@ -158,38 +158,41 @@ export class RegistroNotasPadreComponent implements OnInit {
             this.alumnos = [];  // Asignar lista vacía
             this.actualizarAlumnosFormArray(0); // Asegúrate de actualizar el FormArray
           } else {
-            // Asigna los datos recibidos y calcula el promedio de cada alumno
+            // Mapeo y cálculo del promedio para cada alumno
             this.alumnos = data.map(alumno => {
               const notas = Object.values(alumno.notas).filter(nota => nota !== null) as number[];
               const promedio = notas.length > 0
                 ? Number((notas.reduce((a, b) => a + b, 0) / notas.length).toFixed(2)) // Calcula el promedio con 2 decimales
-                : 0; // Asegúrate de que sea un número
+                : 0;
 
               return {
-                idalumno: alumno.idalumno,  // Asegúrate de incluir el ID
+                idalumno: alumno.idalumno,
                 nombre: alumno.nombre,
                 apellidoPaterno: alumno.apellidoPaterno,
                 apellidoMaterno: alumno.apellidoMaterno,
                 notas: alumno.notas,
                 promedio: promedio
-              };  // Incluye el promedio y otros datos del alumno
+              };
             });
 
             this.actualizarAlumnosFormArray(this.alumnos.length); // Actualiza el FormArray
 
-            // Llena los inputs de notas en el formulario
+            // Asigna notas y promedios al formulario
             this.alumnos.forEach((alumno, index) => {
               const alumnoFormGroup = (this.notaspadreform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
 
-              // Asigna cada tipo de nota a su campo correspondiente en el formulario
-              for (let tipoNota in alumno.notas) {
-                const controlName = `inputNotaPadre${tipoNota}`;
-                if (alumnoFormGroup.get(controlName)) {
-                  alumnoFormGroup.get(controlName)?.setValue(alumno.notas[tipoNota]);
+              // Asigna las notas a los tres inputs (inputNotaPadre1, inputNotaPadre2, inputNotaPadre3)
+              const notasArray = Object.values(alumno.notas).filter(nota => nota !== null);
+
+              for (let i = 0; i < 3; i++) {
+                if (notasArray[i] !== undefined) {
+                  const controlName = `inputNotaPadre${i + 1}`;  // Mapear al inputNotaPadre1, 2, 3
+                  console.log('Asignando nota:', notasArray[i], 'a control:', controlName);
+                  alumnoFormGroup.get(controlName)?.setValue(notasArray[i]);
                 }
               }
 
-              // Establece el promedio en el campo correspondiente
+              // Asigna el promedio
               alumnoFormGroup.get('inputPromedioNotasPadre')?.setValue(alumno.promedio);
             });
           }
@@ -201,44 +204,7 @@ export class RegistroNotasPadreComponent implements OnInit {
     }
   }
 
-  // obtenerAlumnos() {
-  //   this.notasPadreService.obtenerAlumnosGradoPeriodo(this.gradorecibido, this.periodorecibido).subscribe(
-  //     (data: ListaAlumnosDTO[]) => {
-  //       if (data.length === 0) {
-  //         console.warn('No se encontraron alumnos registrados.');
-  //         this.alumnos = []; // Asignar lista vacía para actualizar la tabla
-  //       } else {
-  //         this.alumnos = data; // Asigna los datos obtenidos
-  //         this.actualizarAlumnosFormArray(data.length);
-  //         this.listadoalumnos = data.map(alumno =>
-  //           `${alumno.usNombre} ${alumno.usApellidoPaterno} ${alumno.usApellidoMaterno}`
-  //         ); // Llena el arreglo de nombres
-  //       }
-  //     },
-  //     (error) => {
-  //       console.error('Error al obtener los alumnos', error);
-  //     }
-  //   );
-  // this.vistasService.obtenerAlumnos().subscribe(
-  //   (data: ListaAlumnosDTO[]) => {
-  //     if (data.length === 0) {
-  //       console.warn('No se encontraron alumnos registrados.');
-  //       this.alumnos = []; // Asignar lista vacía para actualizar la tabla
-  //     } else {
-  //       this.alumnos = data; // Asigna los datos obtenidos
-  //       this.actualizarAlumnosFormArray(data.length);
-  //       this.listadoalumnos = data.map(alumno =>
-  //         `${alumno.usNombre} ${alumno.usApellidoPaterno} ${alumno.usApellidoMaterno}`
-  //       ); // Llena el arreglo de nombres
-  //     }
-  //   },
-  //   (error) => {
-  //     console.error('Error al obtener los alumnos', error);
-  //   }
-  // );
-  // }
-
-  actualizarAlumnosFormArray(cantidadAlumnos: number) {
+  actualizarAlumnosFormArray(cantidadAlumnos: number): void {
     const alumnosFormArray = this.notaspadreform.get('alumnosFormArray') as FormArray;
     alumnosFormArray.clear();
 
