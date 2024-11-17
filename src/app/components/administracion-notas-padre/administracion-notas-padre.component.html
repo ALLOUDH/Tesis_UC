@@ -22,6 +22,36 @@
         </div>
     </div>
 </div>
+
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <div class="row m-0 align-items-center">
+        <div class="col-sm-4">
+          <div class="page-header float-left">
+            <div class="page-title user-name-txt d-flex align-items-center justify-content-start">
+              <i class="fa fa-calendar mr-3"></i>
+              <h1 class="user-name-txt mb-0">Periodos:</h1>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Selector de periodo alineado a la derecha -->
+        <div class="col-sm-8 text-right">
+          <form [formGroup]="adminnotaspadre" class="d-inline-block">
+            <div class="form-group mb-0">
+                <dx-select-box placeholder="Seleccione una opción."
+                class="text-color-placeholder" displayExpr="peNombre"
+                valueExpr="idperiodo" [dataSource]="periodoAcademico"
+                [inputAttr]="{ 'aria-label': 'Periodo'}"
+                
+                formControlName="selectPeriodo"></dx-select-box>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <section id="section-buscar-alumno">
     <form novalidate="novalidate" [formGroup]="adminnotaspadre">
         <div class="content">
@@ -31,17 +61,7 @@
                         <div class="card">
                             <div class="card-body card-block">
                                 <div class="col-lg-12 col-sm-9">
-                                    <div class="col-lg-3 mx-auto">
-                                        <div class="mb-3 text-center">
-                                            <label for="exampleFormControlInput1"
-                                                class="form-label label-custom-medium">Periodo:</label>
-                                            <dx-select-box placeholder="Seleccione una opción."
-                                                class="text-color-placeholder" displayExpr="peNombre"
-                                                valueExpr="idperiodo" [dataSource]="periodoAcademico"
-                                                [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
-                                                formControlName="selectPeriodo"></dx-select-box>
-                                        </div>
-                                    </div>
+                                   
                                     <div class="col-lg-8 mx-auto">
                                         <div class="mb-3 text-center">
                                             <label for="exampleFormControlInput1"
@@ -55,6 +75,7 @@
                                             <label for="exampleFormControlInput1"
                                                 class="form-label label-custom-medium">Bimestre:</label>
                                             <dx-select-box placeholder="Seleccione una opción."
+                                            [dataSource]="bimestresFiltrados"
                                                 class="text-color-placeholder text-center" [dataSource]="bimestreAcademico"
                                                 displayExpr="biNombre" valueExpr="idbimestre"
                                                 [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
@@ -81,17 +102,7 @@
                         <div class="card">
                             <div class="card-body card-block text-center">
                                 <div class="col-lg-12  col-sm-9">
-                                    <div class="col-lg-3 mx-auto">
-                                        <div class="mb-3 text-center">
-                                            <label for="exampleFormControlInput1"
-                                                class="form-label label-custom-medium">Periodo:</label>
-                                            <dx-select-box placeholder="Seleccione una opción."
-                                                class="text-color-placeholder" displayExpr="peNombre"
-                                                valueExpr="idperiodo" [dataSource]="periodoAcademico"
-                                                [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
-                                                formControlName="selectPeriodo"></dx-select-box>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-lg-8 mx-auto">
                                         <div class="mb-3 text-center">
                                             <label for="exampleFormControlInput1"
@@ -105,6 +116,7 @@
                                             <label for="exampleFormControlInput1"
                                                 class="form-label label-custom-medium">Bimestre:</label>
                                             <dx-select-box placeholder="Seleccione una opción."
+                                            [dataSource]="bimestresFiltrados"
                                                 class="text-color-placeholder" [dataSource]="bimestreAcademico"
                                                 displayExpr="biNombre" valueExpr="idbimestre"
                                                 [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
@@ -131,17 +143,7 @@
                         <div class="card">
                             <div class="card-body card-block">
                                 <div class="col-lg-12  col-sm-9">
-                                    <div class="col-lg-3 mx-auto">
-                                        <div class="mb-3 text-center">
-                                            <label for="exampleFormControlInput1"
-                                                class="form-label label-custom-medium">Periodo:</label>
-                                            <dx-select-box placeholder="Seleccione una opción."
-                                                class="text-color-placeholder" displayExpr="peNombre"
-                                                valueExpr="idperiodo" [dataSource]="periodoAcademico"
-                                                [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
-                                                formControlName="selectPeriodo"></dx-select-box>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-lg-8 mx-auto">
                                         <div class="mb-3 text-center">
                                             <label for="exampleFormControlInput1"
@@ -155,6 +157,7 @@
                                             <label for="exampleFormControlInput1"
                                                 class="form-label label-custom-medium">Bimestre:</label>
                                             <dx-select-box placeholder="Seleccione una opción."
+                                            [dataSource]="bimestresFiltrados"
                                                 class="text-color-placeholder" [dataSource]="bimestreAcademico"
                                                 displayExpr="biNombre" valueExpr="idbimestre"
                                                 [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
@@ -181,17 +184,7 @@
                         <div class="card">
                             <div class="card-body card-block">
                                 <div class="col-lg-12  col-sm-9">
-                                    <div class="col-lg-3 mx-auto">
-                                        <div class="mb-3 text-center">
-                                            <label for="exampleFormControlInput1"
-                                                class="form-label label-custom-medium">Periodo:</label>
-                                            <dx-select-box placeholder="Seleccione una opción."
-                                                class="text-color-placeholder" displayExpr="peNombre"
-                                                valueExpr="idperiodo" [dataSource]="periodoAcademico"
-                                                [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
-                                                formControlName="selectPeriodo"></dx-select-box>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-lg-8 mx-auto">
                                         <div class="mb-3 text-center">
                                             <label for="exampleFormControlInput1"
@@ -205,6 +198,7 @@
                                             <label for="exampleFormControlInput1"
                                                 class="form-label label-custom-medium">Bimestre:</label>
                                             <dx-select-box placeholder="Seleccione una opción."
+                                            [dataSource]="bimestresFiltrados"
                                                 class="text-color-placeholder" [dataSource]="bimestreAcademico"
                                                 displayExpr="biNombre" valueExpr="idbimestre"
                                                 [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
@@ -231,17 +225,7 @@
                         <div class="card">
                             <div class="card-body card-block">
                                 <div class="col-lg-12  col-sm-9">
-                                    <div class="col-lg-3 mx-auto">
-                                        <div class="mb-3 text-center">
-                                            <label for="exampleFormControlInput1"
-                                                class="form-label label-custom-medium">Periodo:</label>
-                                            <dx-select-box placeholder="Seleccione una opción."
-                                                class="text-color-placeholder" displayExpr="peNombre"
-                                                valueExpr="idperiodo" [dataSource]="periodoAcademico"
-                                                [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
-                                                formControlName="selectPeriodo"></dx-select-box>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-lg-8 mx-auto">
                                         <div class="mb-3 text-center">
                                             <label for="exampleFormControlInput1"
@@ -255,6 +239,7 @@
                                             <label for="exampleFormControlInput1"
                                                 class="form-label label-custom-medium">Bimestre:</label>
                                             <dx-select-box placeholder="Seleccione una opción."
+                                            [dataSource]="bimestresFiltrados"
                                                 class="text-color-placeholder" [dataSource]="bimestreAcademico"
                                                 displayExpr="biNombre" valueExpr="idbimestre"
                                                 [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"

@@ -242,7 +242,7 @@ export class RegistroNotasPadreComponent implements OnInit {
       // Itera solo sobre los tipos de nota válidos
       // Itera sobre el arreglo de tiposDeNotaIds para acceder a cada tipo de nota correcto
       for (let tipoNotaIndex = 0; tipoNotaIndex < tiposDeNotaIds.length; tipoNotaIndex++) {
-        const tipoNota = tiposDeNotaIds[tipoNotaIndex];  // Obtiene el ID de tipo de nota correcto (10, 11, 12, etc.)
+        const tipoNota = tiposDeNotaIds[tipoNotaIndex]; 
         const notaControlName = `inputNotaPadre${tipoNotaIndex + 1}`; // Correspondencia con el nombre del input (1, 2, 3)
         const nota = alumnoFormGroup.get(notaControlName)?.value;
         console.log(`Nota para tipoNota ID ${tipoNota} de alumno ${idalumno}:`, nota);
