@@ -80,7 +80,12 @@ import { VerIncidenciasComponent } from './ver-incidencias/ver-incidencias.compo
     RegistrarAsistenciaComponent,
     ListanotascomportamientoComponent,
     RegistroNotasComportamientoComponent,
-    VerNotaComportamientoAlumnoComponent
+    VerNotaComportamientoAlumnoComponent,
+    VerComentariosComponent,
+    VerNotaPadreComponent,
+    VerIncidenciasComponent,
+    RegistroNotasAcademicasComponent,
+    VerAsistenciaAlumnoComponent
   ],
   imports: [
     CommonModule,
