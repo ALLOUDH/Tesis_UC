@@ -3,6 +3,7 @@ import { appsetings } from './auth.connection.services';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ResponseAppDTO } from '../auth/auth-dtos/responseapp.dto';
+import { VerComentarioDTO } from '../dtos/ver-comentario.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -49,5 +50,25 @@ export class AuditoriaService {
       totalIncidenciasPendientes: number; 
       totalComentarios: number
     }>(`${this.baseUrl}Auditoria/TotalIncidenciasComentarios`);
+  }
+
+  obtenerComentarios(pageNumber: number = 1, pageSize: number = 10): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}Auditoria/ObtenerComentarios?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+
+  eliminarComentario(idComentario: number): Observable<ResponseAppDTO> {
+    return this.http.delete<ResponseAppDTO>(`${this.baseUrl}Auditoria/EliminarComentario/${idComentario}`);
+  }
+
+  obtenerIncidencias(pageNumber: number = 1, pageSize: number = 10): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}Auditoria/ObtenerIncidencias?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+
+  actualizarEstadoIncidencia(idIncidencia: number, nuevoEstado: boolean): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}Auditoria/ActualizarEstadoIncidencia/${idIncidencia}`, nuevoEstado);
+  }
+
+  obtenerUsuarioPorId(idUsuario: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}Auditoria/ObtenerUsuarioPorId/${idUsuario}`);
   }
 }

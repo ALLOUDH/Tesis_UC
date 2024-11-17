@@ -15,6 +15,8 @@ import { TipoNotasDTO } from '../../../dtos/tiponotas.dto';
 import { TiponotasService } from '../../../services/tiponotas.service';
 import { CategoriaNotasDTO } from '../../../dtos/categorianotas.dto';
 import { CategorianotasService } from '../../../services/categorianotas.service';
+import { PeriodoAcademicoDTO } from '../../../dtos/periodoacademico.dto';
+import { PeriodoAcademicoService } from '../../../services/periodo-academico.service';
 
 @Component({
   selector: 'app-registro-notas-padre',
@@ -25,17 +27,18 @@ export class RegistroNotasPadreComponent implements OnInit {
   notaspadreform: FormGroup;
   alumnos: NotasPorPadreDTO[] = [];
   otherGradoAcademico: OthersIntDTO[] = [];
-  otherEstadoUsuario: OthersIntDTO[] = [];
   listadoalumnos: string[] = [];
   buscarAlumno: ListaAlumnosDTO[] = [];
   bimestreAcademico: BimestreAcademicoDTO[] = [];
+  periodoAcademico: PeriodoAcademicoDTO[] = [];
   datosrecibidos: any;
   gradorecibido: any;
   periodorecibido: any;
   bimestrerecibido: any;
+  categoriarecibida: any;
   notas: any;
-  tiponota: TipoNotasDTO[]=[];
-  nombrecat: CategoriaNotasDTO[]=[];
+  tiponota: TipoNotasDTO[] = [];
+  nombrecat: CategoriaNotasDTO[] = [];
 
   constructor(
     private router: Router,
@@ -43,19 +46,18 @@ export class RegistroNotasPadreComponent implements OnInit {
     private vistasService: VistasService,
     private notasPadreService: NotasPadreService,
     private bimestreAcademicoService: BimestreAcademicoService,
-    estadoUsuarioService: EstadoUsuarioService,
+    private periodoAcademicoService: PeriodoAcademicoService,
     gradoAcademicoService: GradoAcademicoService,
     private tipoNotaService: TiponotasService,
     private categorianotaservice: CategorianotasService,
   ) {
-    this.otherEstadoUsuario = estadoUsuarioService.ObtenerEstadoUsuario();
     this.otherGradoAcademico = gradoAcademicoService.ObtenerGradoAcademico();
     this.notaspadreform = this.fb.group({
       inputEstudiante: new FormControl(''),
       inputNroDocumento: new FormControl('', [Validators.pattern('^[0-9]*$')]),
-      selectGradoAcademico: new FormControl(''),
-      selectEstadoUsuario: new FormControl(''),
-      selectBimestre: new FormControl(''),
+      inputGradoAcademico: new FormControl(''),
+      inputBimestreAcademico: new FormControl(''),
+      inputPeriodoAcademico: new FormControl(''),
       alumnosFormArray: this.fb.array([])
     });
   }
@@ -69,10 +71,14 @@ export class RegistroNotasPadreComponent implements OnInit {
       this.periodorecibido = this.datosrecibidos.selectPeriodo;
       this.gradorecibido = this.datosrecibidos.gradoId;
       this.bimestrerecibido = this.datosrecibidos.selectBimestre;
+      this.categoriarecibida = this.datosrecibidos.categoriaId;
 
       console.log('Periodo recibido:', this.periodorecibido);
       console.log('Grado recibido:', this.gradorecibido);
       console.log('Bimestre recibido:', this.bimestrerecibido);
+      console.log('Categoría recibida:', this.categoriarecibida);
+
+      this.obtenerNombreGrado(this.gradorecibido);
 
     } else {
       console.log('No se recibieron datos.');
@@ -81,15 +87,26 @@ export class RegistroNotasPadreComponent implements OnInit {
     this.bimestreAcademicoService.getBimestre().subscribe(
       (data: BimestreAcademicoDTO[]) => {
         this.bimestreAcademico = data;
+        this.obtenerNombreBimestre(this.bimestrerecibido);
       },
       (error) => {
         console.error("Error al obtener los bimestres:", error);
       }
     );
 
+    this.periodoAcademicoService.getPeriodo().subscribe(
+      (data: PeriodoAcademicoDTO[]) => {
+        this.periodoAcademico = data;
+        this.obtenerNombrePeriodo(this.periodorecibido);
+      },
+      (error) => {
+        console.error("Error al obtener los periodos:", error);
+      }
+    );
+
     this.tipoNotaService.getTiposNota().subscribe(
       (data: TipoNotasDTO[]) => {
-        this.tiponota= data;
+        this.tiponota = data;
       },
       (error) => {
         console.error("Error al obtener las notas:", error);
@@ -97,7 +114,7 @@ export class RegistroNotasPadreComponent implements OnInit {
     );
     this.categorianotaservice.getCategorias().subscribe(
       (data: CategoriaNotasDTO[]) => {
-        this.nombrecat= data;
+        this.nombrecat = data;
       },
       (error) => {
         console.error("Error al obtener las notas:", error);
@@ -105,9 +122,36 @@ export class RegistroNotasPadreComponent implements OnInit {
     );
   }
 
+  obtenerNombreGrado(idGrado: number): void {
+    const grado = this.otherGradoAcademico.find(g => g.id === idGrado);
+    if (grado) {
+      this.notaspadreform.patchValue({ inputGradoAcademico: grado.nombre });
+    } else {
+      console.error('Grado no encontrado:', idGrado);
+    }
+  }
+
+  obtenerNombreBimestre(idBimestre: number): void {
+    const bimestre = this.bimestreAcademico.find(b => b.idbimestre === idBimestre);
+    if (bimestre) {
+      this.notaspadreform.patchValue({ inputBimestreAcademico: bimestre.biNombre });
+    } else {
+      console.error('Bimestre no encontrado:', idBimestre);
+    }
+  }
+
+  obtenerNombrePeriodo(idPeriodo: number): void {
+    const periodo = this.periodoAcademico.find(p => p.idperiodo === idPeriodo);
+    if (periodo) {
+      this.notaspadreform.patchValue({ inputPeriodoAcademico: periodo.peNombre });
+    } else {
+      console.error('Periodo no encontrado:', idPeriodo);
+    }
+  }
+
   obtenerNotasPadre(): void {
     if (this.gradorecibido && this.bimestrerecibido && this.periodorecibido) {
-      this.notasPadreService.obtenerNotasPadre(this.gradorecibido, this.bimestrerecibido, this.periodorecibido,2).subscribe(
+      this.notasPadreService.obtenerNotasPadre(this.gradorecibido, this.bimestrerecibido, this.periodorecibido, this.categoriarecibida).subscribe(
         (data: NotasPorPadreDTO[]) => {
           if (data.length === 0) {
             console.warn('No se encontraron notas para los alumnos.');
@@ -117,7 +161,7 @@ export class RegistroNotasPadreComponent implements OnInit {
             // Asigna los datos recibidos y calcula el promedio de cada alumno
             this.alumnos = data.map(alumno => {
               const notas = Object.values(alumno.notas).filter(nota => nota !== null) as number[];
-              const promedio = notas.length > 0 
+              const promedio = notas.length > 0
                 ? Number((notas.reduce((a, b) => a + b, 0) / notas.length).toFixed(2)) // Calcula el promedio con 2 decimales
                 : 0; // Asegúrate de que sea un número
 
@@ -221,7 +265,7 @@ export class RegistroNotasPadreComponent implements OnInit {
 
     const idbimestre = this.bimestrerecibido;
     const idgrado = this.gradorecibido;
-    const tiposDeNotaIds = this.tiponota.filter(tipo => tipo.idcategoriaNotas === 2).map(tipo=> tipo.idtipoNotas);
+    const tiposDeNotaIds = this.tiponota.filter(tipo => tipo.idcategoriaNotas === this.categoriarecibida).map(tipo => tipo.idtipoNotas);
 
 
     for (let index = 0; index < alumnos.length; index++) {
@@ -235,7 +279,7 @@ export class RegistroNotasPadreComponent implements OnInit {
         const tipoNota = tiposDeNotaIds[tipoNotaIndex];  // Obtiene el ID de tipo de nota correcto (10, 11, 12, etc.)
         const notaControlName = `inputNotaPadre${tipoNotaIndex + 1}`; // Correspondencia con el nombre del input (1, 2, 3)
         const nota = alumnoFormGroup.get(notaControlName)?.value;
-console.log(`Nota para tipoNota ID ${tipoNota} de alumno ${idalumno}:`, nota);
+        console.log(`Nota para tipoNota ID ${tipoNota} de alumno ${idalumno}:`, nota);
 
         if (nota !== null && nota !== '') { // Solo procesa si hay una nota válida
           const indexExistente = notasPorTipo.findIndex(notaTipo =>
@@ -281,6 +325,7 @@ console.log(`Nota para tipoNota ID ${tipoNota} de alumno ${idalumno}:`, nota);
           (response) => {
             console.log('Notas registradas con éxito:', response);
             this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
+            this.obtenerNotasPadre();
           },
           (error) => {
             console.error('Error al registrar notas:', error);
@@ -293,6 +338,7 @@ console.log(`Nota para tipoNota ID ${tipoNota} de alumno ${idalumno}:`, nota);
           (response) => {
             console.log('Notas actualizadas con éxito:', response);
             this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
+            this.obtenerNotasPadre();
           },
           (error) => {
             console.error('Error al actualizar notas:', error);
@@ -308,15 +354,6 @@ console.log(`Nota para tipoNota ID ${tipoNota} de alumno ${idalumno}:`, nota);
 
   LimpiarFormulario() {
     this.notaspadreform.reset();
-  }
-
-  validarCamposBusqueda(): boolean {
-    const terminobusqueda = this.notaspadreform.get('inputEstudiante')?.value;
-    const nroDocumento = this.notaspadreform.get('inputNroDocumento')?.value;
-    const gradoAcademico = this.notaspadreform.get('selectGradoAcademico')?.value;
-    const estadoUsuario = this.notaspadreform.get('selectEstadoUsuario')?.value;
-
-    return !!(terminobusqueda || nroDocumento || gradoAcademico || estadoUsuario === true || estadoUsuario === false);
   }
 
   MostrarMensajeExito(titulo: string, mensaje: string) {

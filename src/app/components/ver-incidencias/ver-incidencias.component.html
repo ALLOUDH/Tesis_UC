@@ -1,0 +1,97 @@
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title user-name-txt">
+                        <h1>Ver Incidencias</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#">Auditoria</a></li>
+                            <li class="active">Ver Incidencias</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="lista-incidencias">
+    <div class="content">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body card-block">
+                            <div class="card-body--">
+                                <!-- Lista de comentarios -->
+                                <div class="comentarios-list">
+                                    <div *ngFor="let incidencia of incidencias; let i = index" class="comentario-item">
+                                        <!-- Burbuja de comentario -->
+                                        <div class="comentario">
+                                            <div class="comentario-header">
+                                                <div class="incidencia-container">
+                                                    <p class="tittle-text d-inline-block" style="margin-right: 10px;">{{
+                                                        incidencia.audincTituloIncidencia }}</p>
+                                                    <span *ngIf="incidencia.audincEstadoIncidencia; else pendingBadge"
+                                                        class="badge badge-pending">Pendiente</span>
+                                                    <ng-template #pendingBadge>
+                                                        <span class="badge badge-complete">Resuelto</span>
+                                                    </ng-template>
+                                                </div>
+                                                <span class="fecha-comentario tittle-text">{{
+                                                    incidencia.audincFechaCreacion |
+                                                    date:'yyyy - MM - dd' }}</span>
+                                            </div>
+                                            <div class="comentario-body">
+                                                <p><strong class="usuario">Usuario: </strong>
+                                                    {{ incidencia.auditoria.usuario.nombre + " " +
+                                                    incidencia.auditoria.usuario.apellidoPaterno + " " +
+                                                    incidencia.auditoria.usuario.apellidoMaterno }}</p>
+                                                <p class="mt-4">{{incidencia.audincDescripcionIncidencia }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="incidencias-footer d-flex justify-content-end">
+                                            <button type="button"
+                                                [ngClass]="incidencia.audincEstadoIncidencia ? 'btn-success btn-sm btn btn btn-skyblue' : 'btn-success btn-sm btn btn-orange'"
+                                                (click)="cambiarEstadoIncidencia(incidencia)">
+                                                <i class="fa fa-refresh"></i> Cambiar estado
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 d-flex justify-content-center">
+                                    <!-- Botón para cargar menos incidencias -->
+                                    <div class="text-center mt-3" *ngIf="incidencias.length >= 5 && pageNumber > 1">
+                                        <button type="button" class="btn-success btn btn-orange"
+                                            (click)="cargarMenos()"><i class="fa fa-minus">&nbsp;&nbsp;</i>Cargar
+                                            menos</button>&nbsp;&nbsp;
+                                    </div>
+                                    <!-- Botón para cargar más incidencias -->
+                                    <div class="text-center mt-3" *ngIf="incidencias.length >= 5">
+                                        <button type="button" class="btn-success btn btn-skyblue"
+                                            (click)="cargarMas()"><i class="fa fa-plus">&nbsp;&nbsp;</i>Cargar
+                                            más</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

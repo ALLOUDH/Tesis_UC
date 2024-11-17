@@ -8,30 +8,25 @@
         </div>
     </div>
     <div class="top-right">
-        <div class="header-menu">
-            <div class="header-left">
-                <button class="search-trigger"><i class="fa fa-search"></i></button>
-                <div class="form-inline">
-                    <form class="search-form">
-                        <input class="form-control mr-sm-2 text-color-white" type="text" placeholder="Search ..." aria-label="Search">
-                        <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
-                    </form>
-                </div>
-            </div>
-
+        <div class="header-menu mt-2">
             <div class="user-area dropdown float-right d-flex align-items-center">
                 <div class="user-info mr-3">
                     <p class="user-name-txt mb-0">{{username}}</p>
-                    <p class="user-surname-txt mb-0">{{userRole}}</p>
+                    <p class="user-surname-txt mb-0 mt-1">{{userRole}}</p>
                 </div>
-    
-                <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false"><img class="user-avatar rounded-circle" src="./assets/images/admin.jpg" alt="User Avatar"></a>
-    
+
+                <!-- Avatar con Dropdown -->
+                <div class="user-avatar rounded-circle dropdown-toggle active" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    [ngStyle]="{'background-color': avatarColors.bgColor, 'color': avatarColors.textColor, 'cursor': 'pointer'}"
+                    style="display: flex; align-items: center; justify-content: center; font-size: 1.4rem; width: 40px; height: 40px; font-family: 'Inter', sans-serif;">
+                    {{ avatarText }}
+                </div>
+
+                <!-- Menú del Dropdown -->
                 <div class="user-menu dropdown-menu">
-                    <a class="nav-link" href="#"><i class="fa fa-user"></i>My Profile</a>
-                    <a class="nav-link" href="#"><i class="fa fa-user"></i>Notifications <span class="count">13</span></a>
-                    <a class="nav-link" href="#"><i class="fa fa-cog"></i>Settings</a>
+                    <a class="nav-link" (click)="MensajeInformacion()"><i class="fa fa-user"></i>My Profile</a>
+                    <a class="nav-link" (click)="MensajeInformacion()"><i class="fa fa-cog"></i>Settings</a>
                     <a class="nav-link" (click)="CerrarSesion()"><i class="fa fa-power-off"></i>Logout</a>
                 </div>
             </div>

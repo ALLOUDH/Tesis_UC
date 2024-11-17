@@ -18,8 +18,8 @@
                                 (click)="RegistrarAlumno()">Alumno</a></li>
                         <li class="link-pointer"><i class="fa fa-id-badge"></i><a
                                 (click)="RegistrarDocente()">Docente</a></li>
-                                <li class="link-pointer"><i class="fa fa-tasks"></i><a
-                                    (click)="AsignarDocente()">Asignaciones</a></li>
+                        <li class="link-pointer"><i class="fa fa-tasks"></i><a
+                                (click)="AsignarDocente()">Asignaciones</a></li>
 
                     </ul>
                 </li>
@@ -107,9 +107,14 @@
                     </ul>
                 </li>
 
-                <li class="menu-title">Comentarios</li><!-- /.menu-title -->
+                <li class="menu-title">Auditoria</li><!-- /.menu-title -->
                 <li>
-                    <a style="cursor: pointer;"><i class="menu-icon fa fa-bar-chart"></i>Ver Comentarios</a>
+                    <a class="link-pointer" (click)="VerComentarios()"><i class="menu-icon fa fa-bar-chart"></i>Ver
+                        Comentarios</a>
+                </li>
+                <li>
+                    <a class="link-pointer" (click)="VerIncidencias()"><i class="menu-icon fa fa-bar-chart"></i>Ver
+                        Incidencias</a>
                 </li>
                 <div class="footer-comment">
                     <p class="eviar-comentarios-reportes link-pointer" (click)="EnviarComentarios()">Enviar Comentarios
@@ -131,18 +136,18 @@
 
                 <li *ngIf="!esUsuarioAutorizado">
                     <a (click)="AdministrarNotasRegistroAuxiliar()" style="cursor: pointer;">
-                      <i class="menu-icon fa fa-bar-chart"></i>Notas Academicas
+                        <i class="menu-icon fa fa-bar-chart"></i>Notas Academicas
                     </a>
                 </li>
                 <li *ngIf="esUsuarioAutorizado">
                     <a (click)="AdministrarNotasPadre()" style="cursor: pointer;">
-                      <i class="menu-icon fa fa-bar-chart"></i>Notas de Padre
+                        <i class="menu-icon fa fa-bar-chart"></i>Notas de Padre
                     </a>
                 </li>
 
                 <li *ngIf="esUsuarioAutorizado">
                     <a (click)="AdministrarNotasConducta()" style="cursor: pointer;">
-                      <i class="menu-icon fa fa-bar-chart"></i>Notas Conducta
+                        <i class="menu-icon fa fa-bar-chart"></i>Notas Conducta
                     </a>
                 </li>
 
@@ -185,7 +190,8 @@
                             class="menu-icon fa fa-bar-chart"></i>Notas Comportamiento</a>
                 </li>
                 <li>
-                    <a href="#"> <i class="menu-icon fa fa-tasks"></i>Notas del padre</a>
+                    <a (click)="VerNotasPadre()" style="cursor: pointer;"> <i class="menu-icon fa fa-tasks"></i>Notas
+                        del padre</a>
                 </li>
 
                 <li class="menu-title">Asistencia</li><!-- /.menu-title -->

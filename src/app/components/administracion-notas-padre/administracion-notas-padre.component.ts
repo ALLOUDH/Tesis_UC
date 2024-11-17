@@ -9,6 +9,7 @@ import { BimestreAcademicoDTO } from '../../dtos/bimestreacademico.dto';
 import { PeriodoAcademicoDTO } from '../../dtos/periodoacademico.dto';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { CategorianotasService } from '../../services/categorianotas.service';
 
 @Component({
   selector: 'app-administracion-notas-padre',
@@ -28,6 +29,7 @@ export class AdministracionNotasPadreComponent {
     estadoUsuarioService: EstadoUsuarioService,
     gradoAcademicoService: GradoAcademicoService,
     private periodoAcademicoService: PeriodoAcademicoService,
+    private categorianotasService: CategorianotasService,
   ) {
     this.otherEstadoUsuario = estadoUsuarioService.ObtenerEstadoUsuario();
     this.otherGradoAcademico = gradoAcademicoService.ObtenerGradoAcademico();
@@ -76,30 +78,45 @@ export class AdministracionNotasPadreComponent {
   }
 
   EnviarDatos(grado: number) {
+    const nombreCategoria = 'Notas de padres'; // El nombre de la categoría que deseas buscar
 
-    // Obtener datos del formulario
-    const selectedPeriodo = this.adminnotaspadre.get('selectPeriodo')?.value;
-    const selectedBimestre = this.adminnotaspadre.get('selectBimestre')?.value;
+    // Obtener el ID de la categoría con el nombre especificado
+    this.categorianotasService.getCategorias().subscribe((categorias) => {
+      const categoriaComportamiento = categorias.find(categoria => categoria.catNombre === nombreCategoria);
 
-    // Obtener el grado específico basado en el parámetro 'grado'
-    // Obtener el ID del grado específico basado en el parámetro 'grado'
-    const selectedGrado = this.otherGradoAcademico[grado - 1]; // Accediendo al DTO
-    const gradoId = selectedGrado ? selectedGrado.id : null; // Obtener el ID del grado
+      if (categoriaComportamiento) {
+        // Solo después de encontrar la categoría, procede con la construcción de formData
+        const categoriaId = categoriaComportamiento.idcategoriaNotas;
 
-    if (selectedBimestre.length === 0) {
-      this.MostrarMensajeError('Seleccione un bimestre', 'Error');
-    } else {
-    const formData = {
-      selectPeriodo: selectedPeriodo,
-      selectBimestre: selectedBimestre,
-      gradoId: gradoId // Solo el grado que deseas enviar
-    };
+        // Obtener datos del formulario
+        const selectedPeriodo = this.adminnotaspadre.get('selectPeriodo')?.value;
+        const selectedBimestre = this.adminnotaspadre.get('selectBimestre')?.value;
 
-    localStorage.setItem('formData', JSON.stringify(formData));
-    // Navegar a la ruta y enviar los datos
-    this.route.navigate(['/registro-notas-padre'], { state: { data: formData } });
-    console.log(formData); // Para verificar en la consola
-    }
+        // Obtener el grado específico basado en el parámetro 'grado'
+        const selectedGrado = this.otherGradoAcademico[grado - 1];
+        const gradoId = selectedGrado ? selectedGrado.id : null;
+
+        if (selectedBimestre.length === 0) {
+          this.MostrarMensajeError('Seleccione un bimestre', 'Error');
+        } else {
+          // Crear el formData solo después de obtener todos los datos necesarios
+          const formData = {
+            categoriaId: categoriaId, // Ahora debería incluirse correctamente
+            selectPeriodo: selectedPeriodo,
+            selectBimestre: selectedBimestre,
+            gradoId: gradoId
+          };
+
+          // Guardar formData en localStorage
+          localStorage.setItem('formData', JSON.stringify(formData));
+          // Navegar a la ruta y enviar los datos
+          this.route.navigate(['/registro-notas-padre'], { state: { data: formData } });
+          console.log(formData); // Para verificar en la consola
+        }
+      } else {
+        this.MostrarMensajeError('Categoría no encontrada', 'Error');
+      }
+    });
   }
 
   MostrarMensajeExito(titulo: string, mensaje: string) {
