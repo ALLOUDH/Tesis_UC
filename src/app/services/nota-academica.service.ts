@@ -27,15 +27,12 @@ export class NotasAcademicasService {
     return this.http.get<AlumnoNotaDTO[]>(`${this.baseUrl}/ObtenerNotasAuxiliares?idGrado=${idGrado}&idSemana=${idSemana}&idUnidad=${idUnidad}&idBimestre=${idBimestre}&idPeriodo=${idPeriodo}`);
   }
 
-  // Guardar promedios
-  guardarPromedios(promedios: PromedioDTO[]): Observable<any> {
-    return this.http.post(`${this.baseUrl}/GuardarPromedios`, promedios);
+ 
+  guardarOActualizarPromedios(promedios: any[]): Observable<any> {
+    return this.http.post(`${this.baseUrl}/GuardarOActualizarPromedios`, promedios);
   }
-
-  // Actualizar promedios
-  actualizarPromedios(promedios: PromedioDTO[]): Observable<any> {
-    return this.http.put(`${this.baseUrl}/ActualizarPromedios`, promedios);
-  }
+  
+  
 
   obtenerGradosYAsignaturas(usuarioId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/ObtenerGradosYAsignaturas?usuarioId=${usuarioId}`);

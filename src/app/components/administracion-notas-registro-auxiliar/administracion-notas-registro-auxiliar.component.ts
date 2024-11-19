@@ -30,6 +30,8 @@ export class AdministracionNotasRegistroAuxiliarComponent {
   usuarioId: number | null = null;
   asignaturasFiltradas: AsignaturaDTO[] = [];
 
+  asignaturasFiltradasPorSeccion: AsignaturaDTO[][] = [];
+
   
 
   constructor(
@@ -104,30 +106,24 @@ export class AdministracionNotasRegistroAuxiliarComponent {
   
         // Mapear grados
         this.otherGradoAcademico = data.map(grado => ({
-          id: grado.idGrado,
+          id: typeof grado.idGrado === 'number' ? grado.idGrado : 0,
           nombre: grado.graNombre,
           codigoSalon: grado.graCodigoSalon
         }));
   
         // Construir el mapa de asignaturas por grado
         this.asignaturasPorGrado = {};
-        data.forEach(grado => {
+        this.asignaturasFiltradasPorSeccion = []; // Inicializa las asignaturas filtradas por sección
+  
+        data.forEach((grado, index) => {
           if (typeof grado.idGrado === 'number') {
             this.asignaturasPorGrado[grado.idGrado] = grado.asignaturas || [];
-            this.filtrarAsignaturasPorGrado(grado.idGrado);
+            // Inicializa las asignaturas filtradas por índice
+            this.asignaturasFiltradasPorSeccion[index] = this.asignaturasPorGrado[grado.idGrado] || [];
           }
         });
   
         console.log("Mapa de asignaturas por grado:", this.asignaturasPorGrado);
-  
-        // Filtrar asignaturas para el primer grado automáticamente
-        const firstGradoId = this.otherGradoAcademico[0]?.id;
-        if (typeof firstGradoId === 'number') {
-          this.filtrarAsignaturasPorGrado(firstGradoId);
-        } 
-        else {
-          console.error("El ID del primer grado no es válido:", firstGradoId);
-        }
       },
       (error) => {
         console.error('Error al obtener grados y asignaturas:', error);
@@ -135,17 +131,19 @@ export class AdministracionNotasRegistroAuxiliarComponent {
       }
     );
   }
+  
 
   
   
-  filtrarAsignaturasPorGrado(gradoId: number): void {
+  filtrarAsignaturasPorGrado(gradoId: number, index: number): void {
+    // Filtra asignaturas específicas para el grado actual y almacénalas por índice de sección
     if (this.asignaturasPorGrado[gradoId]) {
-      this.asignaturasFiltradas = this.asignaturasPorGrado[gradoId];
+      this.asignaturasFiltradasPorSeccion[index] = this.asignaturasPorGrado[gradoId];
     } else {
-      this.asignaturasFiltradas = [];
+      this.asignaturasFiltradasPorSeccion[index] = [];
       console.error("No se encontraron asignaturas para el grado con ID:", gradoId);
     }
-    console.log("Asignaturas filtradas para el grado", gradoId, ":", this.asignaturasFiltradas);
+    console.log(`Asignaturas filtradas para la sección ${index} (grado ${gradoId}):`, this.asignaturasFiltradasPorSeccion[index]);
   }
   
   
@@ -172,23 +170,48 @@ export class AdministracionNotasRegistroAuxiliarComponent {
     const selectedPeriodo = this.notasacademicasform.get('selectPeriodo')?.value;
     const selectedBimestre = this.notasacademicasform.get('selectBimestre')?.value;
     const selectedAsignatura = this.notasacademicasform.get('selectAsignatura')?.value;
-
+  
     const selectedGrado = this.otherGradoAcademico[grado - 1];
     const gradoId = selectedGrado ? selectedGrado.id : null;
+  
 
+    if (!selectedPeriodo || !gradoId || !selectedBimestre || !selectedAsignatura) {
+      Swal.fire('Error', 'Debe seleccionar todas las opciones antes de continuar.', 'error');
+      return;
+    }
+
+    if (gradoId === null || gradoId === undefined) {
+      console.error("El ID del grado seleccionado es inválido:", gradoId);
+      return;
+    }
+  
+    const asignaturasParaGrado = this.asignaturasFiltradasPorSeccion[grado - 1] || []; 
+    if (asignaturasParaGrado.length === 0) {
+      console.error("No hay asignaturas disponibles para el grado:", gradoId);
+      return;
+    }
+  
     const bimestre = this.filtrarBimestreAcademico.find(
       (bimestre) => bimestre.idbimestre === selectedBimestre
     );
-    const asignatura = this.asignaturasFiltradas.find(
+
+    const asignatura = asignaturasParaGrado.find(
       (asignatura) => asignatura.idasignatura === selectedAsignatura
     );
-
+    
+    if (!bimestre || !asignatura) {
+      Swal.fire('Error', 'Datos incompletos o inválidos. Verifique las selecciones.', 'error');
+      return;
+    }
+  
+    console.log("Asignatura seleccionada:", asignatura);
     console.log("Datos seleccionados:");
     console.log("ID Periodo:", selectedPeriodo);
     console.log("ID Bimestre:", selectedBimestre);
     console.log("ID Grado:", gradoId);
     console.log("ID asignatura:", selectedAsignatura);
-
+    console.log("Asignatura seleccionada:", asignatura);
+  
     if (!selectedBimestre && !selectedAsignatura) {
       this.MostrarMensajeError('Seleccione un bimestre y una asignatura', 'Error');
     } else if (!selectedBimestre) {
@@ -196,21 +219,24 @@ export class AdministracionNotasRegistroAuxiliarComponent {
     } else if (!selectedAsignatura) {
       this.MostrarMensajeError('Seleccione una asignatura', 'Error');
     } else {
-      const formData = {
-        selectPeriodo: selectedPeriodo,
-        selectBimestre: selectedBimestre,
-        bimestreNombre: bimestre?.biNombre || '', // Agrega el nombre del bimestre
-        selectAsignatura: selectedAsignatura,
-        asignaturaNombre: asignatura?.asigNombre || '', // Agrega el nombre de la asignatura
-        gradoId: gradoId,
-        gradoNombre: selectedGrado?.nombre || '', // Agrega el nombre del grado
-      };
-
-      localStorage.setItem('formData', JSON.stringify(formData));
-      this.route.navigate(['/registro-notas-academicas'], { state: { data: formData } });
-      console.log(formData); 
-    }
+    
+  
+    const formData = {
+      selectPeriodo: selectedPeriodo,
+      selectBimestre: selectedBimestre,
+      bimestreNombre: bimestre?.biNombre || '',
+      selectAsignatura: selectedAsignatura,
+      asignaturaNombre: asignatura?.asigNombre || '',
+      gradoId: gradoId,
+      gradoNombre: selectedGrado?.nombre || '',
+    };
+  
+    localStorage.setItem('formData', JSON.stringify(formData));
+    this.route.navigate(['/registro-notas-academicas'], { state: { data: formData } });
+    console.log(formData);
   }
+  }
+  
 
 
   MostrarMensajeExito(titulo: string, mensaje: string) {

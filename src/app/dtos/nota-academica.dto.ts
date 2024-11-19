@@ -20,7 +20,7 @@ export interface AlumnoNotaDTO {
     nombre: string;
     apellidoPaterno: string;
     apellidoMaterno: string;
-    notas: { [tipoNotaId: number]: number | null };
+    notas: { [semana: number]: { [tipoNotaId: number]: number | null }; };
 }
 
 export interface PromedioDTO {

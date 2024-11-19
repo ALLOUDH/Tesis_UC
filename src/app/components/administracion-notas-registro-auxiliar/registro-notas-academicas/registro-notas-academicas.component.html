@@ -1,181 +1,220 @@
 <div class="breadcrumbs">
-  <div class="breadcrumbs-inner">
-    <div class="row m-0 align-items-center">
-      <!-- Información principal: Título y detalles -->
-      <div class="col-sm-6">
-        <div class="page-header float-left">
-          <div class="page-title user-name-txt">
-            <h1>Registro de Notas Académicas</h1>
-            <p class="mt-2 user-name-txt">
-              Grado: <strong class="user-name-txt">{{ gradoNombre }}</strong> |
-              Bimestre: <strong class="user-name-txt">{{ bimestreNombre }}</strong> |
-              Asignatura: <strong class="user-name-txt">{{ asignaturaNombre }}</strong>
-            </p>
+    <div class="breadcrumbs-inner">
+      <div class="row m-0 align-items-center">
+        <!-- Información principal: Título y detalles -->
+        <div class="col-sm-6">
+          <div class="page-header float-left">
+            <div class="page-title user-name-txt">
+              <h1>Registro de Notas Académicas</h1>
+              <p class="mt-2 user-name-txt">
+                Grado: <strong class="user-name-txt">{{ gradoNombre }}</strong> |
+                Bimestre: <strong class="user-name-txt">{{ bimestreNombre }}</strong> |
+                Asignatura: <strong class="user-name-txt">{{ asignaturaNombre }}</strong>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Breadcrumb alineado a la derecha -->
-      <div class="col-sm-6">
-        <div class="page-header float-right">
-          <div class="page-title">
-            <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
-              <li><a href="#">Inicio</a></li>
-              <li><a href="#">Notas Academicas</a></li>
-              <li class="active">Registro</li>
-            </ol>
+  
+        <!-- Breadcrumb alineado a la derecha -->
+        <div class="col-sm-6">
+          <div class="page-header float-right">
+            <div class="page-title">
+              <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Notas Académicas</a></li>
+                <li class="active">Registro</li>
+              </ol>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-
-
-
-<section id="section-registro-notas-academicas">
-  <form novalidate [formGroup]="notasacademicasform">
+  
+  <section id="section-registro-notas-academicas">
+    <form novalidate [formGroup]="notasacademicasform">
       <div class="content">
-          <div class="animated fadeIn">
-              <div class="row">
-                  <div class="col-lg-12">
-                      <div class="card">
-                          <div class="card-body card-block">
-                              <div class="col-lg-12 col-sm-9">
-                                  <!-- Select Unidad Académica -->
-                                  <div class="row">
-                                      <div class="col-lg-6">
-                                          <div class="mb-3">
-                                              <label for="selectUnidad" class="form-label label-custom-medium user-name-txt">Unidad Académica:</label>
-                                              <dx-select-box
-                                                    *ngIf="unidadesFiltradas.length > 0"
-                                                    placeholder="Seleccione una unidad"
-                                                    class="text-color-placeholder text-center"
-                                                    [dataSource]="unidadesFiltradas"
-                                                    displayExpr="uniNombre"
-                                                    valueExpr="idunidad"
-                                                    [inputAttr]="{ 'aria-label': 'Unidad Académica' }"
-                                                    [showClearButton]="true"
-                                                    formControlName="selectUnidad">
-                                                </dx-select-box>
-                                              <div *ngIf="notasacademicasform.get('selectUnidad')?.invalid && notasacademicasform.get('selectUnidad')?.touched" class="text-error">
-                                                  Unidad Académica es requerida.
-                                              </div>
-                                          </div>
-                                      </div>
-
-                                      <!-- Select Semana Académica -->
-                                      <div class="col-lg-6">
-                                          <div class="mb-3">
-                                              <label for="selectSemana" class="form-label label-custom-medium user-name-txt">Semana Académica:</label>
-                                              <dx-select-box
-                                                    *ngIf="Semanas.length > 0"
-                                                    placeholder="Seleccione una semana"
-                                                    class="text-color-placeholder text-center"
-                                                    [dataSource]="Semanas"
-                                                    displayExpr="nombre"
-                                                    valueExpr="id"
-                                                    [inputAttr]="{ 'aria-label': 'Semana Académica' }"
-                                                    [showClearButton]="true"
-                                                    formControlName="selectSemana">
-                                                </dx-select-box>
-                                              <div *ngIf="notasacademicasform.get('selectSemana')?.invalid && notasacademicasform.get('selectSemana')?.touched" class="text-error">
-                                                  Semana Académica es requerida.
-                                              </div>
-                                          </div>
-                                      </div>
-                                      <!-- Botón Enviar -->
-                                  <div class="row">
-                                    <div class="col-lg-12 text-right">
-                                        <div class="d-flex justify-content-end">
-                                            
-                                            <button type="button" class="btn btn-danger btn-sm button-color-danger mr-4" (click)="notasacademicasform.reset()">
-                                                <i class="fa fa-lg fa-fw fa-eraser"></i> Limpiar
-                                            </button>
-                                        </div>
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card mb-1">
+                <div class="card-body card-block">
+                  <div class="col-lg-12 col-sm-9">
+                    <div class="row mb-1">
+                      <!-- Select Unidad Académica -->
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="selectUnidad" class="form-label label-custom-medium user-name-txt">Unidad Académica:</label>
+                          <dx-select-box
+                            *ngIf="unidadesFiltradas.length > 0"
+                            placeholder="Seleccione una unidad"
+                            class="text-color-placeholder text-center"
+                            [dataSource]="unidadesFiltradas"
+                            displayExpr="uniNombre"
+                            valueExpr="idunidad"
+                            [inputAttr]="{ 'aria-label': 'Unidad Académica' }"
+                            [showClearButton]="true"
+                            formControlName="selectUnidad">
+                          </dx-select-box>
+                          <div *ngIf="notasacademicasform.get('selectUnidad')?.invalid && notasacademicasform.get('selectUnidad')?.touched" class="text-error">
+                            Unidad Académica es requerida.
+                          </div>
+                        </div>
+                      </div>
+  
+                      <!-- Select Semana Académica -->
+                      <div class="col-lg-6">
+                        <div class="mb-3">
+                          <label for="selectSemana" class="form-label label-custom-medium user-name-txt">Semana Académica:</label>
+                          <dx-select-box
+                            *ngIf="Semanas.length > 0"
+                            placeholder="Seleccione una semana"
+                            class="text-color-placeholder text-center"
+                            [dataSource]="Semanas"
+                            displayExpr="nombre"
+                            valueExpr="id"
+                            [inputAttr]="{ 'aria-label': 'Semana Académica' }"
+                            [showClearButton]="true"
+                            formControlName="selectSemana">
+                          </dx-select-box>
+                          <div *ngIf="notasacademicasform.get('selectSemana')?.invalid && notasacademicasform.get('selectSemana')?.touched" class="text-error">
+                            Semana Académica es requerida.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <!-- Botones de acción -->
+                    <div class="row">
+                      <div class="col-lg-12 text-right">
+                        <div class="d-flex justify-content-end">
+                          <button type="button" 
+                                  class="btn btn-primary btn-sm me-2" 
+                                  (click)="obtenerAlumnosYNotas()">
+                            <i class="fa fa-search"></i> Ver Notas
+                          </button>
+                          <button type="button" class="btn btn-danger btn-sm button-color-danger " (click)="notasacademicasform.reset()">
+                            <i class="fa fa-lg fa-fw fa-eraser"></i> Limpiar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                 
+                    <!-- Fin Botones -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+  <section class="text-center" id="section-buscar-alumno">
+    <form novalidate="novalidate" [formGroup]="notasacademicasform">
+        <div class="content">
+            <div class="animated fadeIn">
+                <div class="row justify-content-center mb-2">
+                    <div class="col-lg-12"> 
+                        <div class="card mb-2">
+                            <div class="card-body card-block">
+                                <div class="row justify-content-center"> <!-- Centra los elementos en cada fila -->
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="inputUnidad" class="form-label label-custom-medium">Unidad:</label>
+                                        <input type="text" class="form-control text-center readonly-input"
+                                               formControlName="inputUnidad" readonly>
                                     </div>
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="inputSemana" class="form-label label-custom-medium">Semana:</label>
+                                        <input type="text" class="form-control text-center readonly-input"
+                                               formControlName="inputSemana" readonly>
+                                    </div>
+                                    
                                 </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </section>
 
-<section id="registro-comportamiento">
-  <form [formGroup]="notasacademicasform" >
+  <section id="registro-comportamiento">
+    <form [formGroup]="notasacademicasform" >
       <div class="content">
-          <div class="animated fadeIn">
-              <div class="row">
-                  <div class="col-lg-12">
-                      <div class="card">
-                          <div class="card-body">
-                              <div class="table-stats order-table ov-h">
-                                  <table class="table" id="tablaNotasConducta">
-                                      <thead class="bg-primary text-white">
-                                          <tr>
-                                              <th>#</th>
-                                              <th>Alumno</th>
-                                              <th *ngFor="let tipoNota of tiponota">{{ tipoNota.tipNoNombre }}</th>
-                                              <th>Promedio</th>
-                                          </tr>
-                                      </thead>
-                                      <tbody formArrayName="alumnosFormArray">
-                                          <tr *ngFor="let alumno of alumnos; let i = index" [formGroupName]="i">
-                                              <td>{{ i + 1 }}</td>
-                                              <td>{{ alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno }}</td>
-                                              <td *ngFor="let tipoNota of tiponota">
-                                                  <input type="text" 
-                                                         class="form-control text-center"
-                                                         [formControlName]="'inputNotaComportamiento' + tipoNota.idtipoNotas"
-                                                         placeholder="00.00"
-                                                         maxlength="5"
-                                                         pattern="^\\d{1,2}(\\.\\d{1,2})?$"
-                                                         oninput="this.value = this.value.replace(/[^0-9.]/g, '')
-                                                                 .replace(/(\..*)\./g, '$1')
-                                                                 .replace(/^(\d{1,2})(\.\d{0,2})?.*/, '$1$2');
-                                                                 if (parseFloat(this.value) > 20) {
-                                                                     this.value = '20' + (this.value.includes('.') ? this.value.slice(this.value.indexOf('.')) : '');
-                                                                 }">
-                                              </td>                                                
-                                              <td class="text-center">
-                                                  <input type="text" class="form-control input-nota text-center input-sm w-100 readonly-input"
-                                                         formControlName="inputPromedioNotasComportamiento"
-                                                         placeholder="00.00"
-                                                         pattern="^\d{1,2}(\.\d{0,2})?$"
-                                                         maxlength="5"
-                                                         readonly>
-                                              </td>
-                                          </tr>
-                                      </tbody>
-                                  </table>
-                                  <div class="row">
-                                      <div class="col-lg-12 text-right">
-                                          <div class="d-flex justify-content-end">
-                                              <button type="submit"
-                                                      class="btn btn-success btn-primary btn-sm"
-                                                      title="Guardar notas">
-                                                  <i class="fa fa-lg fa-fw fa-save"></i> Guardar
-                                              </button>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
+        <div class="animated fadeIn">
+          <div class="row mb-1">
+            <div class="col-lg-12">
+              <div class="card mb-1">
+                <div class="card-body">
+                  <div class="table-stats order-table ov-h">
+                    <table class="table" id="tablaNotasConducta">
+                      <thead class="bg-primary text-white">
+                        <tr>
+                          <th>#</th>
+                          <th>Alumno</th>
+                          <th *ngFor="let tipoNota of filtrarTipoNotas">{{ tipoNota.tipNoNombre }}</th>
+                          <th>Promedio</th>
+                        </tr>
+                      </thead>
+                      <tbody formArrayName="alumnosFormArray">
+                        <tr *ngFor="let alumno of alumnosNota; let i = index" [formGroupName]="i">
+                          <td>{{ i + 1 }}</td>
+                          <td>{{ alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno }}</td>
+                          <td *ngFor="let tipoNota of filtrarTipoNotas">
+                            <input
+                              type="text"
+                              class="form-control text-center"
+                              [formControlName]="'inputNota' + tipoNota.idtipoNotas"
+                              (input)="calcularPromedio(i)"
+                              placeholder="00.00"
+                                                           maxlength="5"
+                                                           pattern="^\\d{1,2}(\\.\\d{1,2})?$"
+                                                           oninput="this.value = this.value.replace(/[^0-9.]/g, '')
+                                                                   .replace(/(\..*)\./g, '$1')
+                                                                   .replace(/^(\d{1,2})(\.\d{0,2})?.*/, '$1$2');
+                                                                   if (parseFloat(this.value) > 20) {
+                                                                       this.value = '20' + (this.value.includes('.') ? this.value.slice(this.value.indexOf('.')) : '');
+                                                                   }"
+                            />
+                          </td>
+                          <td class="text-center">
+                            <input
+                              type="text"
+                              class="form-control text-center readonly-input"
+                              formControlName="inputPromedioNota"
+                              readonly
+                            />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    
+                    
+                    <div class="row">
+                      <div class="col-lg-12 text-right">
+                          <div class="d-flex justify-content-end">
+                            <button type="button"
+                            class="btn btn-primary btn-sm me-2"
+                            (click)="volver()">
+                      <i class="fa fa-arrow-left"></i> Volver
+                           </button>
+                            <button
+                            type="button"
+                            class="btn btn-success btn-sm"
+                            (click)="RegistrarTodo()">
+                      <i class="fa fa-lg fa-fw fa-save"></i> Guardar</button>
                           </div>
                       </div>
                   </div>
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
+        </div>
       </div>
-  </form>
-</section>
-
+    </form>
+  </section>
   
-  
-
-
