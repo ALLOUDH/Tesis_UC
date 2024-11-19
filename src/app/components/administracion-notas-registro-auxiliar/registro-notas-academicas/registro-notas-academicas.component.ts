@@ -440,6 +440,7 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
       IdAlumno: alumno.idAlumno,
       IdAsignatura: this.asignaturarecibida,
       IdUnidad: unidadSeleccionada,
+      IdSemana: semanaSeleccionada,
       IdBimestre: this.bimestrerecibido,
       IdPeriodo: this.periodorecibido,
       ValorPromedio: parseFloat(promedio.toFixed(2)),
@@ -516,7 +517,6 @@ volver(): void {
   for (let i = 0; i < alumnosFormArray.length; i++) {
     const alumnoFormGroup = alumnosFormArray.at(i) as FormGroup;
     
-    // Aquí estamos verificando si alguno de los campos de notas en ese grupo ha sido modificado
     const isNotaModified = Object.keys(alumnoFormGroup.controls)
       .some(controlName => controlName.startsWith('inputNota') && alumnoFormGroup.get(controlName)?.dirty);
 
@@ -527,7 +527,6 @@ volver(): void {
   }
 
   if (cambiosDetectados) {
-    // Mostrar un mensaje de confirmación si hay cambios en las notas
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'Tienes cambios no guardados en las notas. Si regresas, se perderán.',
@@ -537,10 +536,9 @@ volver(): void {
       cancelButtonText: 'No, cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Si el usuario confirma, volver a la página anterior
         this.location.back();
       }
-      // Si el usuario cancela, no hacer nada (mantenerse en la página actual)
+      //SI NO HAY NADA SE MANTIENE LA PAGINA ACTUAL
     });
   } else {
     // Si no hay cambios, volver directamente
