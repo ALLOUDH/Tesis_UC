@@ -34,6 +34,7 @@ import { VerAsistenciaAlumnoComponent } from "../components/ver-asistencia-alumn
 import { VerNotaPadreComponent } from "../components/ver-nota-padre/ver-nota-padre.component";
 import { VerComentariosComponent } from "../components/ver-comentarios/ver-comentarios.component";
 import { VerIncidenciasComponent } from "../components/ver-incidencias/ver-incidencias.component";
+import { RegistroNotasAcademicasUnidadComponent } from "../components/administracion-notas-registro-auxiliar/registro-notas-academicas-unidad/registro-notas-academicas-unidad.component";
 
 const routes: Routes = [
     {
@@ -76,6 +77,7 @@ const routes: Routes = [
             { path: 'ver-notas-padre', component: VerNotaPadreComponent},
             { path: 'ver-comentarios', component: VerComentariosComponent},
             { path: 'ver-incidencias', component: VerIncidenciasComponent},
+            {path: 'registro-notas-academicas-unidad', component: RegistroNotasAcademicasUnidadComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },

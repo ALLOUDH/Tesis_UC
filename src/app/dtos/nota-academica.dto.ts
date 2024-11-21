@@ -10,7 +10,7 @@ export interface NotaAcademicaDTO {
     idUnidad: number;
     idBimestre: number;
     idPeriodo: number;
-    idSemana: number;
+    idSemana?: number;
     idtipoNotas: number;
     notas: NotaDTO[];
 }
@@ -29,5 +29,6 @@ export interface PromedioDTO {
     idUnidad?: number;
     idBimestre?: number;
     idPeriodo: number;
+    idSemana?: number;
     valorPromedio: number;
 }

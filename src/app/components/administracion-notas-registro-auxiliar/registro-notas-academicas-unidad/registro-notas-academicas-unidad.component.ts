@@ -22,12 +22,12 @@ import { AccesoService } from '../../../services/acceso.service';
 
 
 @Component({
-  selector: 'app-registro-notas-academicas',
-  templateUrl: './registro-notas-academicas.component.html',
-  styleUrl: './registro-notas-academicas.component.css'
+  selector: 'app-registro-notas-academicas-unidad',
+  templateUrl: './registro-notas-academicas-unidad.component.html',
+  styleUrl: './registro-notas-academicas-unidad.component.css'
 })
-export class RegistroNotasAcademicasComponent {
-  notasacademicasform: FormGroup;
+export class RegistroNotasAcademicasUnidadComponent  {
+  notasacademicasUnidadform: FormGroup;
   alumnosNota: AlumnoNotaDTO[] = [];
 
   unidadAcademica: UnidadAcademicaDTO[]=[];
@@ -43,6 +43,7 @@ export class RegistroNotasAcademicasComponent {
   gradoNombre: string = '';
   bimestreNombre: string = '';
   asignaturaNombre: string = '';
+  unidadNombre: string = '';
 
   gradorecibido: number | null = null;
   periodorecibido: number | null = null;
@@ -53,14 +54,12 @@ export class RegistroNotasAcademicasComponent {
   buscarAlumno: ListaAlumnosDTO[] = [];
 
   filtrarTipoNotas: TipoNotasDTO[] = [];
-  configuracionNotasPorSemana: { [semana: number]: string[] } = {
-    1: ['Tarea', 'Fast Test', 'Aptitudinal', 'Nota Adicional'],
-    2: ['Tarea', 'Fast Test', 'Aptitudinal', 'Nota Adicional'],
-    3: ['Tarea', 'Fast Test', 'Aptitudinal', 'Nota Adicional'],
-    4: ['Rev. de Cuaderno', 'Aptitudinal', 'Rev. de Libro', 'Nota Adicional'],
-  };
+  notasPorUnidad: string[] = ['E.T.A', 'Examen Formativo Mensual'];
+  
 
   guardarCambios: boolean = false; 
+  promediosPorSemana: { [semana: number]: any[] } = {}; 
+
 
   constructor(
     private router: Router,
@@ -75,12 +74,11 @@ export class RegistroNotasAcademicasComponent {
 
   ) {
     this.Semanas = semanaService.ObtenerSemanaAcademico();
-    this.notasacademicasform = this.fb.group({
+    this.notasacademicasUnidadform = this.fb.group({
       inputEstudiante: new FormControl(''),
       selectUnidad: new FormControl('', Validators.required), 
       selectSemana: new FormControl('', Validators.required), 
       inputUnidad:  new FormControl('', Validators.required), 
-      inputSemana: new FormControl('', Validators.required), 
       alumnosFormArray: this.fb.array([])
     });
   }
@@ -117,8 +115,6 @@ export class RegistroNotasAcademicasComponent {
     console.log('Bimestre:', stateData.bimestreNombre);
     console.log('Asignatura:', stateData.asignaturaNombre);
     
-  }else {
-    Swal.fire('Error', 'No se recibieron los datos necesarios para continuar.', 'error');
   }
 
 
@@ -146,12 +142,12 @@ export class RegistroNotasAcademicasComponent {
     forkJoin([
       this.unidadAcademicaService.getUnidad(),
       this.categorianotaservice.getCategorias(), // Primero obtenemos las categorías para encontrar el ID correspondiente
-      this.tipoNotaService.getTiposNota()
+      this.tipoNotaService.getTiposNota(),
+      this.semanaService.ObtenerSemanaAcademico()
   ]).subscribe(
     ([unidadData, categoriasData, tipoNotaData]) => {
       this.unidadAcademica = unidadData;
       this.tiponota = tipoNotaData;
-
       // Encuentra la categoría "Comportamiento" y su idcategoriaNotas
       const categoriaAcademico = categoriasData.find(categoria => categoria.catNombre === 'Registro Auxiliar');
       if (categoriaAcademico) {
@@ -168,11 +164,29 @@ export class RegistroNotasAcademicasComponent {
     },
     (error) => console.error("Error al cargar datos iniciales:", error)
   );
+
+  if (!this.periodorecibido || !this.gradorecibido || !this.bimestrerecibido || !this.asignaturarecibida) {
+    console.error('Datos clave faltantes en ngOnInit:', {
+      periodorecibido: this.periodorecibido,
+      gradorecibido: this.gradorecibido,
+      bimestrerecibido: this.bimestrerecibido,
+      asignaturarecibida: this.asignaturarecibida,
+    });
+    Swal.fire('Error', 'Faltan datos clave para inicializar el formulario.', 'error');
+    return;
+  }
+  if (!this.alumnosNota || this.alumnosNota.length === 0) {
+    return;
+  }
+
+
+
+
   }
   obtenerNombreUnidad(idUnidad: number): void {
     const unidad = this.unidadAcademica.find(b => b.idunidad === idUnidad);
     if (unidad) {
-      this.notasacademicasform.patchValue({ inputUnidad: unidad.uniNombre });
+      this.notasacademicasUnidadform.patchValue({ inputUnidad: unidad.uniNombre });
     } else {
       console.error('Bimestre no encontrado:', idUnidad);
     }
@@ -180,11 +194,14 @@ export class RegistroNotasAcademicasComponent {
   obtenerNombreSemana(idSemana: number): void {
     const semana = this.Semanas.find(b => b.id === idSemana);
     if (semana) {
-      this.notasacademicasform.patchValue({ inputSemana: semana.nombre });
+      this.notasacademicasUnidadform.patchValue({ inputSemana: semana.nombre });
     } else {
-      console.error('Bimestre no encontrado:', idSemana);
+      console.error('Semana no encontrado:', idSemana);
     }
   }
+
+  
+  
 
   // Filtrar unidades basadas en el bimestre
   filtrarUnidadesPorBimestre(): void {
@@ -195,47 +212,42 @@ export class RegistroNotasAcademicasComponent {
   }
   
   obtenerAlumnosYNotas(): void {
-    const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
-    const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
-
-    this.obtenerNombreUnidad(unidadSeleccionada);
-    this.obtenerNombreSemana(semanaSeleccionada);
-
-    // Filtrar tipos de notas según la semana seleccionada
-    this.filtrarTipoNotas = this.obtenerfiltroTipoNotas(semanaSeleccionada);
-
-
-    if (this.gradorecibido && this.periodorecibido && this.bimestrerecibido && this.asignaturarecibida) {
-      this.notasAcademicasService
-        .obtenerNotasAuxiliares(
-          this.gradorecibido,
-          unidadSeleccionada,
-          this.bimestrerecibido,
-          this.periodorecibido,
-          semanaSeleccionada
-        )
-        .subscribe(
-          (data: AlumnoNotaDTO[]) => {
-            this.alumnosNota = data;
-            console.log('Alumnos y notas cargados:', this.alumnosNota);
-            this.actualizarAlumnosFormArray(this.alumnosNota.length);
-            this.cargarNotasEnFormulario();
-          },
-         // (error) => Swal.fire('Error', 'No se pudieron obtener las notas iniciales.', 'error')
-        );
+    const unidadSeleccionada = this.notasacademicasUnidadform.get('selectUnidad')?.value;
+  
+    if (!unidadSeleccionada || !this.gradorecibido || !this.bimestrerecibido || !this.periodorecibido || !this.asignaturarecibida) {
+      return;
     }
-  }
-  validarcambios(): void {
-
-    const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
-  const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
-
-  if (!unidadSeleccionada || !semanaSeleccionada) {
-    Swal.fire('Advertencia', 'Seleccione unidad y semana, por favor.', 'warning');
-    return;
+  
+    this.obtenerNombreUnidad(unidadSeleccionada);
+  
+    // Filtrar tipos de notas según la semana seleccionada
+    this.filtrarTipoNotas = this.obtenerfiltroTipoNotas();
+  
+    this.notasAcademicasService.obtenerNotasAuxiliares(
+      this.gradorecibido,
+      unidadSeleccionada,
+      this.bimestrerecibido,
+      this.periodorecibido
+    ).subscribe({
+      next: (data) => {
+        this.alumnosNota = data;
+        console.log('Alumnos y notas cargados:', this.alumnosNota);
+        this.actualizarAlumnosFormArray(this.alumnosNota.length);
+        this.cargarNotasEnFormulario();
+  
+        // Cargar promedios después de cargar notas
+        this.cargarPromedios(unidadSeleccionada);
+      },
+      error: (error) => {
+        console.error('Error al obtener las notas iniciales:', error);
+        Swal.fire('Error', 'No se pudieron obtener las notas iniciales.', 'error');
+      }
+    });
   }
   
-    const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+
+  validarcambios(): void {
+    const alumnosFormArray = this.notasacademicasUnidadform.get('alumnosFormArray') as FormArray;
     let cambiosDetectados = false;
   
     // Verificar si algún campo de notas ha sido modificado
@@ -270,13 +282,13 @@ export class RegistroNotasAcademicasComponent {
   }
   
   
-obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
-    const nombresNotasSemana = this.configuracionNotasPorSemana[semana] || [];
-    return this.tiponota.filter((tipoNota) => nombresNotasSemana.includes(tipoNota.tipNoNombre));
+  obtenerfiltroTipoNotas(): TipoNotasDTO[] {
+    return this.tiponota.filter((tipoNota) => this.notasPorUnidad.includes(tipoNota.tipNoNombre));
   }
+  
 
   cargarNotasEnFormulario(): void {
-    const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+    const alumnosFormArray = this.notasacademicasUnidadform.get('alumnosFormArray') as FormArray;
   
     this.alumnosNota.forEach((alumno, index) => {
       const alumnoFormGroup = alumnosFormArray.at(index) as FormGroup;
@@ -293,23 +305,36 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
     });
   }
   
-  
   actualizarAlumnosFormArray(cantidadAlumnos: number): void {
-    const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+    const alumnosFormArray = this.notasacademicasUnidadform.get('alumnosFormArray') as FormArray;
     alumnosFormArray.clear();
 
-    for (let i = 0; i < cantidadAlumnos; i++) {
-      const formGroup = this.fb.group({});
-      this.filtrarTipoNotas.forEach((tipoNota) => {
-        formGroup.addControl(
-          `inputNota${tipoNota.idtipoNotas}`,
-          new FormControl('', [Validators.pattern('^\\d{1,2}(\\.\\d{1,2})?$')])
-        );
-      });
-      formGroup.addControl('inputPromedioNota', new FormControl({ value: '', disabled: true }));
-      alumnosFormArray.push(formGroup);
-    }
-  }
+    this.alumnosNota.forEach((alumno, index) => {
+        const formGroup = this.fb.group({});
+
+        // Crear controles dinámicos para promedios de cada semana
+        [1, 2, 3, 4].forEach((semana) => {
+            const promedio = this.promediosPorSemana[alumno.idAlumno]?.find(p => p.idsemana === semana)?.promedio || '';
+            console.log(`Asignando promedio para semana ${semana} del alumno ${alumno.idAlumno}:`, promedio);
+            formGroup.addControl(`promedioSemana${semana}`, new FormControl({ value: promedio, disabled: true }));
+        });
+
+        // Agregar controles para tipos de notas
+        this.notasPorUnidad.forEach(nota => {
+            const tipoNotaId = this.obtenerIdTipoNotaPorNombre(nota);
+            if (tipoNotaId) {
+                formGroup.addControl(`inputNota${tipoNotaId}`, new FormControl('', [Validators.pattern('^\\d{1,2}(\\.\\d{1,2})?$')]));
+            }
+        });
+
+        // Control para el promedio general
+        formGroup.addControl('inputPromedioNota', new FormControl({ value: '', disabled: true }));
+
+        alumnosFormArray.push(formGroup);
+    });
+
+    console.log('Estructura del FormArray:', alumnosFormArray.value);
+}
 
   crearFormGroupAlumno(): FormGroup {
     const formGroup = this.fb.group({});
@@ -329,30 +354,59 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
   }
   
   calcularPromedio(index: number): void {
-    const alumnoFormGroup = (this.notasacademicasform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
+    const alumnoFormGroup = (this.notasacademicasUnidadform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
     let sumaNotas = 0;
     let cantidadNotas = 0;
 
-    this.filtrarTipoNotas.forEach((tipoNota) => {
-      const controlName = `inputNota${tipoNota.idtipoNotas}`;
-      const notaValor = parseFloat(alumnoFormGroup.get(controlName)?.value);
+    // Incluir los promedios de las semanas anteriores en el cálculo
+    [1, 2, 3, 4].forEach((semana) => {
+        const controlName = `promedioSemana${semana}`;
+        const promedioSemanaValor = parseFloat(alumnoFormGroup.get(controlName)?.value);
 
-      if (!isNaN(notaValor)) {
-        sumaNotas += notaValor;
-        cantidadNotas++;
-      }
+        console.log(`Promedio semana ${semana} del alumno ${index + 1}: ${promedioSemanaValor}`); // Debug
+
+        if (!isNaN(promedioSemanaValor)) {
+            sumaNotas += promedioSemanaValor;
+            cantidadNotas++;
+        }
     });
 
+    // Incluir las notas de los inputs actuales (E.T.A, Examen Mensual, etc.)
+    this.filtrarTipoNotas.forEach((tipoNota) => {
+        const controlName = `inputNota${tipoNota.idtipoNotas}`;
+        const notaValor = parseFloat(alumnoFormGroup.get(controlName)?.value);
+
+        console.log(`Nota ${controlName} del alumno ${index + 1}: ${notaValor}`); // Debug
+
+        if (!isNaN(notaValor)) {
+            sumaNotas += notaValor;
+            cantidadNotas++;
+        }
+    });
+
+    // Calcular el promedio total
     const promedio = cantidadNotas > 0 ? sumaNotas / cantidadNotas : 0;
+    console.log(`Promedio total del alumno ${index + 1}: ${promedio}`); // Debug
+
+    // Actualizar el control del promedio general
     alumnoFormGroup.get('inputPromedioNota')?.setValue(promedio.toFixed(2));
+}
+
+  
+  obtenerIdTipoNotaPorNombre(nombre: string): number | '' {
+    if (!this.tiponota || !Array.isArray(this.tiponota)) {
+      return '';
+    }
+    const tipoNota = this.tiponota.find(t => t.tipNoNombre === nombre);
+    return tipoNota ? tipoNota.idtipoNotas : ''; 
   }
+  
 
   RegistrarNotas(): void {
-    const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
-    const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
-  
-    if (!unidadSeleccionada || !semanaSeleccionada) {
-      Swal.fire('Advertencia', 'Seleccione tanto la Unidad Académica como la Semana Académica antes de continuar.', 'warning');
+    const unidadSeleccionada = this.notasacademicasUnidadform.get('selectUnidad')?.value;
+    console.log('Unidad seleccionada:', unidadSeleccionada);
+    if (!unidadSeleccionada ) {
+      Swal.fire('Advertencia', 'Seleccione la Unidad Académica antes de continuar.', 'warning');
       return;
     }
   
@@ -364,15 +418,15 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
   
     const notasAgrupadas: any[] = [];
   
-    this.tiponota.forEach((tipoNota) => {
+    this.filtrarTipoNotas.forEach((tipoNota) => {
       const notasPorTipo: any[] = [];
-  
+    
       this.alumnosNota.forEach((alumno, index) => {
-        const alumnoFormGroup = (this.notasacademicasform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
+        const alumnoFormGroup = (this.notasacademicasUnidadform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
         const notaControlName = `inputNota${tipoNota.idtipoNotas}`;
         const notaValor = alumnoFormGroup.get(notaControlName)?.value;
-  
-        // Solo agregar las notas que tienen valor numérico y no están vacías
+    
+        // Solo registrar las notas visibles y válidas
         if (notaValor !== null && notaValor !== '' && !isNaN(notaValor)) {
           notasPorTipo.push({
             IdAlumno: alumno.idAlumno,
@@ -381,7 +435,9 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
           });
         }
       });
-  
+
+  console.log('Notas por tipo:', notasPorTipo);
+
       if (notasPorTipo.length > 0) {
         notasAgrupadas.push({
           IdTipoNotas: tipoNota.idtipoNotas,
@@ -390,11 +446,13 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
           IdBimestre: this.bimestrerecibido,
           IdPeriodo: this.periodorecibido,
           IdUnidad: unidadSeleccionada,
-          IdSemana: semanaSeleccionada,
+          IdSemana: this.semanarecibido || null,
           Notas: notasPorTipo,
         });
       }
     });
+
+  console.log('Notas agrupadas:', notasAgrupadas);
   
     if (notasAgrupadas.length === 0) {
       Swal.fire('Advertencia', 'No hay notas para registrar o actualizar.', 'warning');
@@ -404,6 +462,12 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
     // Aquí solo enviamos las notas válidas (que contienen valor numérico)
     const requests = notasAgrupadas.map((notaPorTipo) => {
       const isUpdate = notaPorTipo.Notas.some((nota: any) => nota.NotNotaNumerica !== null);
+
+      console.log(
+        isUpdate
+          ? `Actualizando notas para ${notaPorTipo.IdTipoNotas}`
+          : `Registrando notas para ${notaPorTipo.IdTipoNotas}`
+      );
   
       const requestObservable = isUpdate
         ? this.notasAcademicasService.actualizarNotas(usuarioId, notaPorTipo)
@@ -444,10 +508,9 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
   
 
   RegistrarPromedios(): void {
-  const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
-  const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
+  const unidadSeleccionada = this.notasacademicasUnidadform.get('selectUnidad')?.value;
 
-  if (!unidadSeleccionada || !semanaSeleccionada) {
+  if (!unidadSeleccionada ) {
     Swal.fire('Advertencia', 'Seleccione tanto la Unidad Académica como la Semana Académica antes de continuar.', 'warning');
     return;
   }
@@ -458,12 +521,23 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
   }
 
   const promedios: any[] = [];
-  const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+  const alumnosFormArray = this.notasacademicasUnidadform.get('alumnosFormArray') as FormArray;
 
   this.alumnosNota.forEach((alumno, index) => {
     const alumnoFormGroup = alumnosFormArray.at(index) as FormGroup;
     let sumaNotas = 0;
     let cantidadNotas = 0;
+
+    // Incluir valores de los inputs readonly (promedios por semana)
+    [1, 2, 3, 4].forEach((semana) => {
+      const controlName = `promedioSemana${semana}`;
+      const promedioSemanaValor = parseFloat(alumnoFormGroup.get(controlName)?.value);
+
+      if (!isNaN(promedioSemanaValor)) {
+        sumaNotas += promedioSemanaValor;
+        cantidadNotas++;
+      }
+    });
 
     this.filtrarTipoNotas.forEach((tipoNota) => {
       const controlName = `inputNota${tipoNota.idtipoNotas}`;
@@ -482,7 +556,6 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
       IdAlumno: alumno.idAlumno,
       IdAsignatura: this.asignaturarecibida,
       IdUnidad: unidadSeleccionada,
-      IdSemana: semanaSeleccionada,
       IdBimestre: this.bimestrerecibido,
       IdPeriodo: this.periodorecibido,
       ValorPromedio: parseFloat(promedio.toFixed(2)),
@@ -509,10 +582,9 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
 }
 
 RegistrarTodo(): void {
-  const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
-  const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
+  const unidadSeleccionada = this.notasacademicasUnidadform.get('selectUnidad')?.value;
 
-  if (!unidadSeleccionada || !semanaSeleccionada) {
+  if (!unidadSeleccionada ) {
     Swal.fire('Advertencia', 'Seleccione tanto la Unidad Académica como la Semana Académica antes de continuar.', 'warning');
     return;
   }
@@ -552,7 +624,7 @@ RegistrarTodo(): void {
 }
 
 volver(): void {
-  const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+  const alumnosFormArray = this.notasacademicasUnidadform.get('alumnosFormArray') as FormArray;
   let cambiosDetectados = false;
 
   // Verificar si algún campo de notas ha sido modificado
@@ -581,51 +653,62 @@ volver(): void {
     }).then(result => {
       if (result.isConfirmed) {
         // Volver a la página anterior
-        this.location.back(); 
+        this.router.navigate(['/administracion-notas-registro-auxiliar']);
       }
     });
   } else {
     // Si no hay cambios o ya están guardados, simplemente volver
-    this.location.back();
+    this.router.navigate(['/administracion-notas-registro-auxiliar']);
   }
 }
 
-DirigiraRegistroUnidad():void{
-  const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
-  let cambiosDetectados = false;
 
-  // Verificar si algún campo de notas ha sido modificado
-  for (let i = 0; i < alumnosFormArray.length; i++) {
-    const alumnoFormGroup = alumnosFormArray.at(i) as FormGroup;
-  
-    const isNotaModified = Object.keys(alumnoFormGroup.controls)
-      .some(controlName => controlName.startsWith('inputNota') && alumnoFormGroup.get(controlName)?.dirty);
-  
-    if (isNotaModified) {
-      cambiosDetectados = true;
-      break;
-    }
-  }
-
-  // Si hay cambios y no han sido guardados, preguntar al usuario
-  if (cambiosDetectados && !this.guardarCambios) {
-    Swal.fire({
-      title: 'Cambios detectados',
-      text: 'Tiene cambios sin guardar. ¿Desea continuar y perder los cambios?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, continuar',
-      cancelButtonText: 'Cancelar'
-    }).then(result => {
-      if (result.isConfirmed) {
-        // Si el usuario acepta, se redirige
-        this.router.navigate(['/registro-notas-academicas-unidad']);
-      }
+cargarPromedios(idUnidad: number): void {
+  if (!idUnidad || !this.bimestrerecibido || !this.periodorecibido || !this.asignaturarecibida) {
+    console.error('Datos faltantes para cargar promedios:', {
+      idUnidad,
+      bimestrerecibido: this.bimestrerecibido,
+      periodorecibido: this.periodorecibido,
+      asignaturarecibida: this.asignaturarecibida,
     });
-  } else {
-    // Si no hay cambios o ya están guardados, redirigir sin pedir confirmación
-    this.router.navigate(['/registro-notas-academicas-unidad']);
+    Swal.fire('Error', 'Faltan datos clave para cargar los promedios.', 'error');
+    return;
   }
+
+  this.notasAcademicasService.obtenerPromediosPorSemana(
+    idUnidad,
+    this.bimestrerecibido,
+    this.periodorecibido,
+    this.asignaturarecibida
+  ).subscribe({
+    next: (promediosData) => {
+      console.log('Promedios por semana cargados:', promediosData);
+
+      // Procesar los datos de promedios
+      this.alumnosNota.forEach((alumno, index) => {
+        const alumnoPromedios = promediosData.find(p => p.idAlumno === alumno.idAlumno);
+        const alumnoFormGroup = (this.notasacademicasUnidadform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
+
+        if (alumnoPromedios && alumnoPromedios.promediosPorSemana) {
+          alumnoPromedios.promediosPorSemana.forEach((semana: any) => {
+            if (semana.idsemana !== null) {
+              const controlName = `promedioSemana${semana.idsemana}`;
+              if (alumnoFormGroup.get(controlName)) {
+                alumnoFormGroup.get(controlName)?.setValue(semana.promedio || '');
+                console.log(`Asignando promedio para semana ${semana.idsemana} del alumno ${alumno.idAlumno}: ${semana.promedio}`);
+              } else {
+                console.warn(`Control ${controlName} no encontrado en el FormGroup del alumno ${alumno.idAlumno}`);
+              }
+            }
+          });
+        }
+      });
+    },
+    error: (error) => {
+      console.error('Error al cargar los promedios por semana:', error);
+      Swal.fire('Error', 'No se pudieron cargar los promedios por semana.', 'error');
+    }
+  });
 }
 
   MostrarMensajeExito(titulo: string, mensaje: string) {

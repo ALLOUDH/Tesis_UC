@@ -23,15 +23,40 @@ export class NotasAcademicasService {
   }
 
   // Obtener notas auxiliares por filtros
-  obtenerNotasAuxiliares(idGrado: number, idSemana: number, idUnidad: number, idBimestre: number, idPeriodo: number): Observable<AlumnoNotaDTO[]> {
-    return this.http.get<AlumnoNotaDTO[]>(`${this.baseUrl}/ObtenerNotasAuxiliares?idGrado=${idGrado}&idSemana=${idSemana}&idUnidad=${idUnidad}&idBimestre=${idBimestre}&idPeriodo=${idPeriodo}`);
+  obtenerNotasAuxiliares(
+  idGrado: number,
+  idUnidad: number,
+  idBimestre: number,
+  idPeriodo: number,
+  idSemana?: number // Parámetro opcional
+): Observable<AlumnoNotaDTO[]> {
+  let url = `${this.baseUrl}/ObtenerNotasAuxiliares?idGrado=${idGrado}&idUnidad=${idUnidad}&idBimestre=${idBimestre}&idPeriodo=${idPeriodo}`;
+
+  if (idSemana !== undefined && idSemana !== null) {
+    url += `&idSemana=${idSemana}`;
   }
+
+  return this.http.get<AlumnoNotaDTO[]>(url);
+}
+
 
   guardarOActualizarPromedios(promedios: any[]): Observable<any> {
     return this.http.post(`${this.baseUrl}/GuardarOActualizarPromedios`, promedios);
+  }
+
+  obtenerPromediosPorSemana(
+    idUnidad: number,
+    idBimestre: number,
+    idPeriodo: number,
+    idAsignatura: number
+  ): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/ObtenerPromediosPorSemana?idUnidad=${idUnidad}&idBimestre=${idBimestre}&idPeriodo=${idPeriodo}&idasignatura=${idAsignatura}`
+    );
   }
   
   obtenerGradosYAsignaturas(usuarioId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/ObtenerGradosYAsignaturas?usuarioId=${usuarioId}`);
   }
+
 }
