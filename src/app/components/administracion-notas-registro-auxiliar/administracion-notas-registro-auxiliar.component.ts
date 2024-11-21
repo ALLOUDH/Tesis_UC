@@ -12,6 +12,8 @@ import { AsignaturaDTO } from '../../dtos/asignatura.dto';
 import { AsignaturaService } from '../../services/asignatura.service';
 import { AccesoService } from '../../services/acceso.service';
 import { NotasAcademicasService } from '../../services/nota-academica.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ModalRegistroComponent } from './modal-registro/modal-registro.component';
 
 @Component({
   selector: 'app-administracion-notas-registro-auxiliar',
@@ -32,7 +34,7 @@ export class AdministracionNotasRegistroAuxiliarComponent {
 
   asignaturasFiltradasPorSeccion: AsignaturaDTO[][] = [];
 
-  
+  modalRef?: BsModalRef;
 
   constructor(
     private route: Router,
@@ -41,7 +43,8 @@ export class AdministracionNotasRegistroAuxiliarComponent {
     private bimestreAcademicoService: BimestreAcademicoService,
     private asignaturaService: AsignaturaService,
     private acccesoService: AccesoService,
-    private notasacademicasService: NotasAcademicasService
+    private notasacademicasService: NotasAcademicasService,
+    private modalService: BsModalService
   ) {
     this.otherGradoAcademico = gradoAcademicoService.ObtenerGradoAcademico();
     this.notasacademicasform = new FormGroup({
@@ -232,12 +235,16 @@ export class AdministracionNotasRegistroAuxiliarComponent {
     };
   
     localStorage.setItem('formData', JSON.stringify(formData));
-    this.route.navigate(['/registro-notas-academicas'], { state: { data: formData } });
+    this.modalRef = this.modalService.show(ModalRegistroComponent, { initialState: { formData } ,backdrop: 'static',keyboard: false});
     console.log(formData);
   }
   }
-  
 
+  
+  
+  
+  
+  
 
   MostrarMensajeExito(titulo: string, mensaje: string) {
     Swal.fire({
