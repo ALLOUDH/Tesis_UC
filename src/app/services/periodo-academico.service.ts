@@ -9,7 +9,7 @@ import { appsetings } from './auth.connection.services';
 })
 export class PeriodoAcademicoService {
   //private baseUrl = 'http://localhost:5010/api/CicloAcademico';
-  private baseUrl:String = appsetings.apiUrl + 'CicleAcademico';
+  private baseUrl:String = appsetings.apiUrl + 'CicloAcademico';
 
   constructor(private http: HttpClient) { }
 
