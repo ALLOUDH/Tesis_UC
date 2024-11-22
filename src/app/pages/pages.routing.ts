@@ -35,6 +35,9 @@ import { VerNotaPadreComponent } from "../components/ver-nota-padre/ver-nota-pad
 import { VerComentariosComponent } from "../components/ver-comentarios/ver-comentarios.component";
 import { VerIncidenciasComponent } from "../components/ver-incidencias/ver-incidencias.component";
 import { RegistroNotasAcademicasUnidadComponent } from "../components/administracion-notas-registro-auxiliar/registro-notas-academicas-unidad/registro-notas-academicas-unidad.component";
+import { NotaBimestralComponent } from "../components/nota-bimestral/nota-bimestral.component";
+import { VerNotasBimestralesComponent } from "../components/nota-bimestral/ver-notas-bimestrales/ver-notas-bimestrales.component";
+import { VerNotaAcademicosComponent } from "../components/ver-nota-academicos/ver-nota-academicos.component";
 
 const routes: Routes = [
     {
@@ -78,6 +81,9 @@ const routes: Routes = [
             { path: 'ver-comentarios', component: VerComentariosComponent},
             { path: 'ver-incidencias', component: VerIncidenciasComponent},
             {path: 'registro-notas-academicas-unidad', component: RegistroNotasAcademicasUnidadComponent},
+            {path: 'lista-notas-bimestral', component: NotaBimestralComponent},
+            {path: 'ver-notas-bimestral', component: VerNotasBimestralesComponent},
+            {path: 'ver-notas-academicas', component: VerNotaAcademicosComponent},
             {path:'', redirectTo:'/dashboard', pathMatch:'full'}
         ]
     },

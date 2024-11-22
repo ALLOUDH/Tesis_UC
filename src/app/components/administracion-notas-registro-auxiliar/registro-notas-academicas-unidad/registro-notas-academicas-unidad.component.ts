@@ -293,6 +293,8 @@ export class RegistroNotasAcademicasUnidadComponent  {
     this.alumnosNota.forEach((alumno, index) => {
       const alumnoFormGroup = alumnosFormArray.at(index) as FormGroup;
   
+
+      
       this.tiponota.forEach((tipoNota) => {
         const controlName = `inputNota${tipoNota.idtipoNotas}`;
         const nota = alumno.notas[tipoNota.idtipoNotas]; 
@@ -301,8 +303,9 @@ export class RegistroNotasAcademicasUnidadComponent  {
           alumnoFormGroup.get(controlName)?.setValue(nota);
         }
       });
-      this.calcularPromedio(index);
+      
     });
+    this.alumnosNota.forEach((_, index) => this.calcularPromedio(index));
   }
   
   actualizarAlumnosFormArray(cantidadAlumnos: number): void {
@@ -336,15 +339,16 @@ export class RegistroNotasAcademicasUnidadComponent  {
     console.log('Estructura del FormArray:', alumnosFormArray.value);
 }
 
-  crearFormGroupAlumno(): FormGroup {
-    const formGroup = this.fb.group({});
-    this.tiponota.forEach((tipoNota, index) => {
-      const controlName = `inputNota${tipoNota.idtipoNotas}`;
-      formGroup.addControl(controlName, new FormControl('', [Validators.pattern('^\\d{1,2}(\\.\\d{1,2})?$')]));
-    });
-    formGroup.addControl('inputPromedioNota', new FormControl({ value: '', disabled: true }, Validators.pattern('^\\d{1,2}(\\.\\d{1,2})?$')));
-    return formGroup;
-  }
+  crearFormGroupAlumno(alumno: AlumnoNotaDTO): FormGroup {
+  const formGroup = this.fb.group({});
+  this.tiponota.forEach((tipoNota) => {
+    const controlName = `inputNota${tipoNota.idtipoNotas}`;
+    const nota = alumno.notas[tipoNota.idtipoNotas] ?? 0; // Predeterminado a 0 si no existe
+    formGroup.addControl(controlName, new FormControl(nota, [Validators.pattern('^\\d{1,2}(\\.\\d{1,2})?$')]));
+  });
+  formGroup.addControl('inputPromedioNota', new FormControl({ value: '', disabled: true })); // Campo para promedio
+  return formGroup;
+}
 
   private formatFecha(date: Date): string {
     const year = date.getFullYear();
@@ -358,12 +362,11 @@ export class RegistroNotasAcademicasUnidadComponent  {
     let sumaNotas = 0;
     let cantidadNotas = 0;
 
-    // Incluir los promedios de las semanas anteriores en el cálculo
+    
+    // Promedios de las semanas
     [1, 2, 3, 4].forEach((semana) => {
         const controlName = `promedioSemana${semana}`;
         const promedioSemanaValor = parseFloat(alumnoFormGroup.get(controlName)?.value);
-
-        console.log(`Promedio semana ${semana} del alumno ${index + 1}: ${promedioSemanaValor}`); // Debug
 
         if (!isNaN(promedioSemanaValor)) {
             sumaNotas += promedioSemanaValor;
@@ -371,12 +374,10 @@ export class RegistroNotasAcademicasUnidadComponent  {
         }
     });
 
-    // Incluir las notas de los inputs actuales (E.T.A, Examen Mensual, etc.)
-    this.filtrarTipoNotas.forEach((tipoNota) => {
-        const controlName = `inputNota${tipoNota.idtipoNotas}`;
+    // Notas adicionales (E.T.A, Examen Mensual, etc.)
+    this.notasPorUnidad.forEach((nota) => {
+        const controlName = `inputNota${this.obtenerIdTipoNotaPorNombre(nota)}`;
         const notaValor = parseFloat(alumnoFormGroup.get(controlName)?.value);
-
-        console.log(`Nota ${controlName} del alumno ${index + 1}: ${notaValor}`); // Debug
 
         if (!isNaN(notaValor)) {
             sumaNotas += notaValor;
@@ -384,13 +385,15 @@ export class RegistroNotasAcademicasUnidadComponent  {
         }
     });
 
-    // Calcular el promedio total
+    // Calcular promedio general sin redondear
     const promedio = cantidadNotas > 0 ? sumaNotas / cantidadNotas : 0;
+
     console.log(`Promedio total del alumno ${index + 1}: ${promedio}`); // Debug
 
-    // Actualizar el control del promedio general
+    // Actualizar el promedio en el formulario sin redondear
     alumnoFormGroup.get('inputPromedioNota')?.setValue(promedio.toFixed(2));
 }
+
 
   
   obtenerIdTipoNotaPorNombre(nombre: string): number | '' {

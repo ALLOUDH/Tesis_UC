@@ -1,0 +1,114 @@
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <div class="row m-0">
+        <div class="col-sm-4">
+          <div class="page-header float-left">
+            <div class="page-title user-name-txt">
+              <h1>Notas Bimestrales</h1>
+              <p class="mt-2 user-name-txt">
+                Grado: <strong class="user-name-txt">{{ gradoNombre }}</strong> |
+                Bimestre: <strong class="user-name-txt">{{ bimestreNombre }}</strong> |
+                Asignatura: <strong class="user-name-txt">{{ asignaturaNombre }}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div class="page-header float-right">
+            <div class="page-title">
+              <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
+                <li><a href="#">Inicio</a></li>
+                <li class="active">Notas Por Bimestre</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Tabla de notas -->
+<section id="ver-nota-comportamiento">
+    <form [formGroup]="alumnosNotasBimestreForm" >
+    <div class="content">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-stats order-table ov-h">
+                  <!-- Verifica si hay datos en alumnosNota -->
+                  <div *ngIf="alumnosNota && alumnosNota.length > 0; else sinDatos">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Alumno</th>
+                          <th *ngFor="let unidad of unidades">Unidad {{ unidad }}</th>
+                          <th>Promedio</th>
+                          <th>Calificación</th>
+                        </tr>
+                      </thead>
+                      <tbody formArrayName="alumnosFormArray">
+                        <!-- Iterar sobre los alumnos -->
+                        <tr *ngFor="let alumno of alumnosNota; let i = index" [formGroupName]="i">
+                          <!-- Columna para el nombre del alumno -->
+                          <td>
+                            {{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}
+                          </td>
+                          <!-- Columnas para los promedios de cada unidad -->
+                          <td *ngFor="let unidad of unidades">
+                            {{
+                              obtenerPromedio(alumno, unidad) || 'N/A'
+                            }}
+                          </td>
+                          <td>
+                            <span [ngClass]="obtenerColorNota(calcularPromedio(alumno) ?? 'N/A')">
+                              {{ calcularPromedio(alumno) ?? 'N/A' }}
+                            </span>
+                          </td>
+                          
+                          <td>
+                            {{
+                              asignarCalificacion(calcularPromedio(alumno))
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-lg-12 text-right">
+                            <div class="d-flex justify-content-end">
+                              <button type="button"
+                              class="btn btn-primary btn-sm me-2"
+                              (click)="volver()">
+                        <i class="fa fa-arrow-left"></i> Volver
+                             </button>
+                             <button type="button"
+                              class="btn btn-success btn-sm me-2"
+                              (click)="RegistrarPromedioGeneral()">
+                        <i class="fa fa-lg fa-fw fa-save"></i> Confirmar Notas
+                             </button>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+  
+                  <!-- Mensaje si no hay datos disponibles -->
+                  <ng-template #sinDatos>
+                    <div class="text-center mt-4">
+                      <p>No hay datos disponibles para los criterios seleccionados.</p>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</form>
+  </section>
+  
+  
+  
+  

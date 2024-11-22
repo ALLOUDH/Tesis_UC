@@ -59,7 +59,11 @@
                     <a (click)="AdministrarNotasPadre()" style="cursor: pointer;"><i
                             class="menu-icon fa fa-bar-chart"></i>Notas del Padre</a>
                 </li>
-
+                <li>
+                    <a (click)="VerNotasBimestre()" style="cursor: pointer;">
+                        <i class="menu-icon fa fa-bar-chart"></i>Notas Bimestrales
+                    </a>
+                </li>
 
                 <li class="menu-title">Asistencia</li><!-- /.menu-title -->
                 <li>
@@ -151,8 +155,10 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Ver Boleta de Notas</a>
+                <li *ngIf="!esUsuarioAutorizado">
+                    <a (click)="VerNotasBimestre()" style="cursor: pointer;">
+                        <i class="menu-icon fa fa-bar-chart"></i>Notas Bimestrales
+                    </a>
                 </li>
 
                 <li class="menu-title">Asistencia</li><!-- /.menu-title -->
@@ -183,7 +189,8 @@
 
                 <li class="menu-title">Notas</li><!-- /.menu-title -->
                 <li>
-                    <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Notas Academicas</a>
+                    <a (click)="VerNotasAcademicas()" style="cursor: pointer;"><i
+                            class="menu-icon fa fa-bar-chart"></i>Notas Academicas</a>
                 </li>
                 <li>
                     <a (click)="VerNotasConductaAlumno()" style="cursor: pointer;"><i

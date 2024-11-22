@@ -1,0 +1,145 @@
+
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <div class="row m-0">
+        <div class="col-sm-4">
+          <div class="page-header float-left">
+            <div class="page-title user-name-txt">
+              <h1>Ver Notas Bimestrales</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div class="page-header float-right">
+            <div class="page-title">
+              <ol class="breadcrumb d-flex justify-content-end user-surname-txt">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Ver Notas Bimestrales</a></li>
+                <li class="active">Notas Bimestrales</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <div class="row m-0 align-items-center">
+        <div class="col-sm-4">
+          <div class="page-header float-left">
+            <div class="page-title user-name-txt d-flex align-items-center justify-content-start">
+              <i class="fa fa-calendar mr-3"></i>
+              <h1 class="user-name-txt mb-0">Periodo:</h1>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Selector de periodo alineado a la derecha -->
+        <div class="col-sm-8 text-right">
+          <form [formGroup]="notasbimestrales" class="d-inline-block">
+            <div class="form-group mb-0">
+                <dx-select-box placeholder="Seleccione una opción."
+                class="text-color-placeholder" displayExpr="peNombre"
+                valueExpr="idperiodo" [dataSource]="periodoAcademico"
+                [inputAttr]="{ 'aria-label': 'Periodo' }"
+                formControlName="selectPeriodo"></dx-select-box>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <section id="section-buscar-registro-auxiliar">
+    <form novalidate [formGroup]="notasbimestrales">
+      <div class="content">
+        <div class="animated fadeIn">
+          <div class="row">
+            <!-- Grado Seleccionado -->
+            <div class="col-lg-3" *ngFor="let grado of otherGradoAcademico; let i = index">
+              <div class="card mb-4">
+                <div class="card-body card-block">
+                  <div class="col-lg-12 col-sm-9">
+                    <!-- Selección de Periodo -->
+                    <!-- <div class="col-lg-3 mx-auto">
+                      <div class="mb-3 text-center">
+                        <label for="selectPeriodo" class="form-label label-custom-medium">Periodo:</label>
+                        <dx-select-box placeholder="Seleccione una opción"
+                          displayExpr="peNombre"
+                          valueExpr="idperiodo"
+                          [dataSource]="periodoAcademico"
+                          [inputAttr]="{ 'aria-label': 'Periodo' }"
+                          formControlName="selectPeriodo">
+                        </dx-select-box>
+                      </div>
+                    </div>-->
+  
+                    <!-- Mostrar Grado -->
+                    <div class="col-lg-8 mx-auto">
+                      <div class="mb-3 text-center">
+                        <label for="selectGrado{{i + 1}}" class="form-label label-custom-medium">Grado:</label>
+                        <select id="selectGrado{{i + 1}}" class="form-control" disabled>
+                          <option selected>{{ grado.nombre }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+  
+                    <!-- Selección de Bimestre -->
+                    <div class="col-lg-8 mx-auto">
+                      <div class="mb-3 text-center">
+                        <label for="selectBimestre{{ i }}" class="form-label label-custom-medium">Bimestre:</label>
+                        <dx-select-box *ngIf="filtrarBimestreAcademico.length > 0"
+                            placeholder="Seleccione una opción."
+                            class="text-color-placeholder text-center"
+                            [dataSource]="filtrarBimestreAcademico"
+                            displayExpr="biNombre" valueExpr="idbimestre"
+                            [inputAttr]="{ 'aria-label': 'Bimestre' }"
+                            [showClearButton]="true" formControlName="selectBimestre">
+                        </dx-select-box>
+                        <span *ngIf="filtrarBimestreAcademico.length === 0">No hay bimestres disponibles</span>
+                      </div>
+                    </div>
+                    <!-- Selección de Asignatura -->
+                    <div class="col-lg-8 mx-auto">
+                      <div class="mb-3 text-center">
+                        <label for="selectAsignatura{{ i }}" class="form-label label-custom-medium">Asignatura:</label>
+                        <dx-select-box
+                          [placeholder]="'Seleccione una asignatura'"
+                          [dataSource]="asignaturasFiltradasPorSeccion[i]"
+                          displayExpr="asigNombre"
+                          valueExpr="idasignatura"
+                          [inputAttr]="{ 'aria-label': 'Asignatura' }"
+                          [showClearButton]="true"
+                          formControlName="selectAsignatura"
+                        >
+                        </dx-select-box>
+                        <span *ngIf="asignaturasFiltradasPorSeccion[i]?.length === 0">No hay asignaturas disponibles</span>
+                      </div>
+                    </div>
+  
+                   
+                    
+                    
+                    
+                  </div>
+                </div>
+  
+                <!-- Botón para redirigir a otra pantalla -->
+                <div class="col-lg-12 text-center mb-3">
+                  <button type="button" class="btn btn-primary btn-sm"
+                      data-toggle="tooltip" data-placement="top" title="Ir a Registro de Notas"
+                      (click)="EnviarDatos(i + 1 )">
+                      <i class="fa fa-lg fa-fw fa-search"></i> Continuar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Grado -->
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>

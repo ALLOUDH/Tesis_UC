@@ -95,6 +95,16 @@ export class SidebarComponent {
       window.location.reload();
     });;
   };
+  VerNotasAcademicas() {
+    this.router.navigate(['/ver-notas-academicas']).then(() => {
+      window.location.reload();
+    });;
+  };
+  VerNotasBimestre() {
+    this.router.navigate(['/lista-notas-bimestral']).then(() => {
+      window.location.reload();
+    });;
+  };
   AdministrarNotasConducta() {
     this.router.navigate(['/administracion-notas-conducta']).then(() => {
       window.location.reload();
