@@ -42,6 +42,11 @@ import { VerAsistenciaAlumnoComponent } from './ver-asistencia-alumno/ver-asiste
 import { VerNotaPadreComponent } from './ver-nota-padre/ver-nota-padre.component';
 import { VerComentariosComponent } from './ver-comentarios/ver-comentarios.component';
 import { VerIncidenciasComponent } from './ver-incidencias/ver-incidencias.component';
+import { RegistroNotasAcademicasUnidadComponent } from './administracion-notas-registro-auxiliar/registro-notas-academicas-unidad/registro-notas-academicas-unidad.component';
+import { ModalRegistroComponent } from './administracion-notas-registro-auxiliar/modal-registro/modal-registro.component';
+import { NotaBimestralComponent } from './nota-bimestral/nota-bimestral.component';
+import { VerNotasBimestralesComponent } from './nota-bimestral/ver-notas-bimestrales/ver-notas-bimestrales.component';
+import { VerNotaAcademicosComponent } from './ver-nota-academicos/ver-nota-academicos.component';
 
 
 @NgModule({
@@ -85,7 +90,12 @@ import { VerIncidenciasComponent } from './ver-incidencias/ver-incidencias.compo
     VerNotaPadreComponent,
     VerIncidenciasComponent,
     RegistroNotasAcademicasComponent,
-    VerAsistenciaAlumnoComponent
+    VerAsistenciaAlumnoComponent,
+    RegistroNotasAcademicasUnidadComponent,
+    ModalRegistroComponent,
+    NotaBimestralComponent,
+    VerNotasBimestralesComponent,
+    VerNotaAcademicosComponent
   ],
   imports: [
     CommonModule,

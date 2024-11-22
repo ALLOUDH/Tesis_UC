@@ -10,7 +10,7 @@ export interface NotaAcademicaDTO {
     idUnidad: number;
     idBimestre: number;
     idPeriodo: number;
-    idSemana: number;
+    idSemana?: number;
     idtipoNotas: number;
     notas: NotaDTO[];
 }
@@ -20,7 +20,7 @@ export interface AlumnoNotaDTO {
     nombre: string;
     apellidoPaterno: string;
     apellidoMaterno: string;
-    notas: { [tipoNotaId: number]: number | null };
+    notas: { [semana: number]: { [tipoNotaId: number]: number | null }; };
 }
 
 export interface PromedioDTO {
@@ -29,5 +29,6 @@ export interface PromedioDTO {
     idUnidad?: number;
     idBimestre?: number;
     idPeriodo: number;
+    idSemana?: number;
     valorPromedio: number;
 }

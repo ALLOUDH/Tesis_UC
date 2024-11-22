@@ -1,0 +1,16 @@
+<!-- Modal Dialog con clase para tamaño más grande -->
+<div class="modal-dialog modal-lg" >
+    <div class="modal-content">
+        <div class="modal-header text-center">
+            <h4 class="modal-title w-100 fw-bold user-name-txt">SELECCIONA EL REGISTRO A REALIZAR</h4>
+        </div>
+        <div class="modal-body text-center">
+            <button type="button" class="btn btn-primary btn-lg shadow m-2" (click)="irANotasPorSemana()">Notas por Semana</button>
+            <button type="button" class="btn btn-secondary btn-lg shadow m-2" (click)="irANotasPorUnidad()">Notas por Unidad</button>
+        </div>
+        <div class="modal-footer justify-content-end">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+</div>
+

@@ -23,6 +23,8 @@ export class AdministracionNotasPadreComponent {
   bimestreAcademico: BimestreAcademicoDTO[] = [];
   periodoAcademico: PeriodoAcademicoDTO[] = [];
 
+  bimestresFiltrados: BimestreAcademicoDTO[] = [];
+
   constructor(
     private route: Router,
     private bimestreAcademicoService: BimestreAcademicoService,
@@ -61,6 +63,7 @@ export class AdministracionNotasPadreComponent {
         console.error("Error al obtener los periodos:", error);
       }
     );
+    this.suscribirCambioPeriodo();
   }
 
   private setDefaultPeriodo(): void {
@@ -74,7 +77,25 @@ export class AdministracionNotasPadreComponent {
       this.adminnotaspadre.patchValue({
         selectPeriodo: periodoEncontrado.idperiodo, // O puedes usar periodoEncontrado.peNombre según lo que necesites
       });
+      this.filtrarBimestres(periodoEncontrado.idperiodo);
     }
+  }
+
+  private filtrarBimestres(idPeriodo: number): void {
+    this.bimestresFiltrados = this.bimestreAcademico.filter(bimestre => bimestre.idperiodo === idPeriodo);
+    if (this.bimestresFiltrados.length === 0) {
+      console.warn(`No se encontraron bimestres para el periodo con ID: ${idPeriodo}`);
+    }
+  }
+
+  private suscribirCambioPeriodo(): void {
+    this.adminnotaspadre.get('selectPeriodo')?.valueChanges.subscribe((idPeriodo: number) => {
+      if (idPeriodo) {
+        this.filtrarBimestres(idPeriodo);
+      } else {
+        this.bimestresFiltrados = [];
+      }
+    });
   }
 
   EnviarDatos(grado: number) {

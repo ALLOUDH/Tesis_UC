@@ -5,7 +5,7 @@
         <div class="col-sm-6">
           <div class="page-header float-left">
             <div class="page-title user-name-txt">
-              <h1>Registro de Notas Académicas</h1>
+              <h1>Registro de Notas Académicas Por Unidad</h1>
               <p class="mt-2 user-name-txt">
                 Grado: <strong class="user-name-txt">{{ gradoNombre }}</strong> |
                 Bimestre: <strong class="user-name-txt">{{ bimestreNombre }}</strong> |
@@ -32,7 +32,7 @@
   </div>
   
   <section id="section-registro-notas-academicas">
-    <form novalidate [formGroup]="notasacademicasform">
+    <form novalidate [formGroup]="notasacademicasUnidadform">
       <div class="content">
         <div class="animated fadeIn">
           <div class="row">
@@ -41,7 +41,7 @@
                 <div class="card-body card-block">
                   <div class="col-lg-12 col-sm-9">
                     <div class="row mb-1">
-                      <strong for="selectUnidad" class="form-label label-custom-medium user-name-txt">SELECCIONE UNA UNIDAD Y UNA SEMANA PARA VER EL REGISTRO:</strong>                             
+                      <strong for="selectUnidad" class="form-label label-custom-medium user-name-txt">SELECCIONE UNA UNIDAD Y UNA SEMANA PARA VER EL REGISTRO:</strong>                                                   
                       <!-- Select Unidad Académica -->
                       <div class="col-lg-6">
                         <div class="mb-3">
@@ -57,32 +57,12 @@
                             [showClearButton]="true"
                             formControlName="selectUnidad">
                           </dx-select-box>
-                          <div *ngIf="notasacademicasform.get('selectUnidad')?.invalid && notasacademicasform.get('selectUnidad')?.touched" class="text-error">
+                          <div *ngIf="notasacademicasUnidadform.get('selectUnidad')?.invalid && notasacademicasUnidadform.get('selectUnidad')?.touched" class="text-error">
                             Unidad Académica es requerida.
                           </div>
                         </div>
                       </div>
   
-                      <!-- Select Semana Académica -->
-                      <div class="col-lg-6">
-                        <div class="mb-3">
-                          <label for="selectSemana" class="form-label label-custom-medium user-name-txt">Semana Académica:</label>
-                          <dx-select-box
-                            *ngIf="Semanas.length > 0"
-                            placeholder="Seleccione una semana"
-                            class="text-color-placeholder text-center"
-                            [dataSource]="Semanas"
-                            displayExpr="nombre"
-                            valueExpr="id"
-                            [inputAttr]="{ 'aria-label': 'Semana Académica' }"
-                            [showClearButton]="true"
-                            formControlName="selectSemana">
-                          </dx-select-box>
-                          <div *ngIf="notasacademicasform.get('selectSemana')?.invalid && notasacademicasform.get('selectSemana')?.touched" class="text-error">
-                            Semana Académica es requerida.
-                          </div>
-                        </div>
-                      </div>
                     </div>
   
                     <!-- Botones de acción -->
@@ -94,7 +74,7 @@
                                   (click)="validarcambios()">
                             <i class="fa fa-search"></i> Ver Notas
                           </button>
-                          <button type="button" class="btn btn-danger btn-sm button-color-danger " (click)="notasacademicasform.reset()">
+                          <button type="button" class="btn btn-danger btn-sm button-color-danger " (click)="notasacademicasUnidadform.reset()">
                             <i class="fa fa-lg fa-fw fa-eraser"></i> Limpiar
                           </button>
                         </div>
@@ -111,9 +91,9 @@
       </div>
     </form>
   </section>
-
+  
   <section class="text-center" id="section-buscar-alumno">
-    <form novalidate="novalidate" [formGroup]="notasacademicasform">
+    <form novalidate="novalidate" [formGroup]="notasacademicasUnidadform">
         <div class="content">
             <div class="animated fadeIn">
                 <div class="row justify-content-center mb-2">
@@ -133,12 +113,6 @@
                                         style="text-transform: uppercase; font-weight: bold; font-size: 1.1rem;"
                                                formControlName="inputUnidad" readonly>
                                   </div>
-                                  <div class="col-lg-3 mb-3">
-                                        <label for="inputSemana" class="form-label label-custom-medium">Semana:</label>
-                                        <input type="text" class="form-control text-center readonly-input"
-                                        style="text-transform: uppercase; font-weight: bold; font-size: 1.1rem;"
-                                               formControlName="inputSemana" readonly>
-                                  </div>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +124,7 @@
 </section>
 
   <section id="registro-comportamiento">
-    <form [formGroup]="notasacademicasform" >
+    <form [formGroup]="notasacademicasUnidadform" >
       <div class="content">
         <div class="animated fadeIn">
           <div class="row mb-1">
@@ -163,7 +137,8 @@
                         <tr>
                           <th>#</th>
                           <th>Alumno</th>
-                          <th *ngFor="let tipoNota of filtrarTipoNotas">{{ tipoNota.tipNoNombre }}</th>
+                          <th *ngFor="let semana of [1, 2, 3, 4]">Semana {{ semana }}</th>
+                          <th *ngFor="let nota of notasPorUnidad">{{ nota }}</th>
                           <th>Promedio</th>
                         </tr>
                       </thead>
@@ -171,11 +146,19 @@
                         <tr *ngFor="let alumno of alumnosNota; let i = index" [formGroupName]="i">
                           <td>{{ i + 1 }}</td>
                           <td>{{ alumno.nombre + " " + alumno.apellidoPaterno + " " + alumno.apellidoMaterno }}</td>
-                          <td *ngFor="let tipoNota of filtrarTipoNotas">
+                          <td *ngFor="let semana of [1, 2, 3, 4]">
                             <input
                               type="text"
                               class="form-control text-center"
-                              [formControlName]="'inputNota' + tipoNota.idtipoNotas"
+                              [formControlName]="'promedioSemana' + semana"
+                              [disabled]="true"
+                            />
+                          </td>
+                          <td *ngFor="let nota of notasPorUnidad">
+                            <input
+                              type="text"
+                              class="form-control text-center"
+                              [formControlName]="'inputNota' + obtenerIdTipoNotaPorNombre(nota)"
                               (input)="calcularPromedio(i)"
                               placeholder="00.00"
                               maxlength="5"
@@ -226,31 +209,4 @@
       </div>
     </form>
   </section>
-
- <!-- <section id="section-registro-notas-academicas">
-    <form novalidate [formGroup]="notasacademicasform">
-      <div class="breadcrumbs">
-        <div class="breadcrumbs-inner">
-          <div class="row m-0 justify-content-center align-items-center">
-             Información principal: Título y detalles
-            <div class="col-sm-8 text-center">
-              <div class="page-header">
-                <div class="page-title user-name-txt">
-                  <h1>Registrar y ver notas por unidad</h1>
-                  <button
-                    type="button"
-                    class="btn btn-success btn-sm mt-3"
-                    (click)="DirigiraRegistroUnidad()"
-                  >
-                    <i class="fa fa-lg fa-fw fa-arrow-right"></i> Ir a Registro notas por unidad
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-  </section>-->
   
- 
