@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 import { NotaComportamientoDTO } from '../dtos/notacomportamiento.dto';
 import { NotasPorAlumnoDTO } from '../dtos/listanotacomportamiento.dto';
 import { AlumnoNotaComportamientoDTO } from '../dtos/ver-nota-comportamiento.dto';
+import { appsetings } from './auth.connection.services';
 
 @Injectable({
     providedIn: 'root'
 })
 export class NotasComportamientoService {
-    private apiUrl = 'http://localhost:5010/api/NotasComportamiento/'; 
+    //private apiUrl = 'http://localhost:5010/api/NotasComportamiento/'; 
+    private apiUrl:String = appsetings.apiUrl + 'NotasComportamiento/';
 
     constructor(private http: HttpClient) { }
 

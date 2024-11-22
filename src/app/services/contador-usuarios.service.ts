@@ -4,12 +4,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChangeDetectorRef } from '@angular/core';
+import { appsetings } from './auth.connection.services';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'http://localhost:5010/api/acceso'; // Asegúrate de que esta ruta coincida con tu API
+  //private apiUrl = 'http://localhost:5010/api/acceso';
+  private apiUrl:String = appsetings.apiUrl + 'acceso';
+ 
 
   constructor(private http: HttpClient) {}
 

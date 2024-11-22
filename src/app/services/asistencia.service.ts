@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { AsistenciaDTO } from '../dtos/asistencia.dto';
 import { map, Observable } from 'rxjs';
 import { ResumenAsistenciaDTO } from '../dtos/resumenasistencia.dto';
+import { appsetings } from './auth.connection.services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AsistenciaService {
-  private baseUrl = 'http://localhost:5010/api/Asistencia';
+  //private baseUrl = 'http://localhost:5010/api/Asistencia';
+  private baseUrl:String = appsetings.apiUrl + 'Asistencia';
+
 
   constructor(private http: HttpClient) { }
 

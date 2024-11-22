@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AreaDTO } from '../dtos/area.dto';
+import { appsetings } from './auth.connection.services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AreaService {
-  private baseUrl = 'http://localhost:5010/api/PlanEstudio';
+  //private baseUrl = 'http://localhost:5010/api/PlanEstudio';
+  private baseUrl:String = appsetings.apiUrl + 'PlanEstudio';
 
   constructor(private http: HttpClient) { }
 

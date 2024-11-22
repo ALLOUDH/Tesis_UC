@@ -2,12 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TipoNotasDTO } from '../dtos/tiponotas.dto';
 import { Observable } from 'rxjs';
+import { appsetings } from './auth.connection.services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TiponotasService {
-  private baseUrl = 'http://localhost:5010/api/EsquemaDeEvaluacion/tipos';
+  //private baseUrl = 'http://localhost:5010/api/EsquemaDeEvaluacion/tipos';
+  private baseUrl: string = appsetings.apiUrl + 'EsquemaDeEvaluacion/tipos';
+
 
   constructor(private http: HttpClient) { }
 

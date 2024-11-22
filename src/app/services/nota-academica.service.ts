@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NotaAcademicaDTO,PromedioDTO,AlumnoNotaDTO, NotaDTO } from '../dtos/nota-academica.dto';
+import { appsetings } from './auth.connection.services';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotasAcademicasService {
-  private baseUrl = 'http://localhost:5010/api/NotasAcademicas';
+  //private baseUrl = 'http://localhost:5010/api/NotasAcademicas';
+  private baseUrl:String = appsetings.apiUrl + 'NotasAcademicas';
+
 
   constructor(private http: HttpClient) {}
 

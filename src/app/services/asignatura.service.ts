@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AsignaturaDTO } from '../dtos/asignatura.dto';
+import { appsetings } from './auth.connection.services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AsignaturaService {
-  private apiUrl = 'http://localhost:5010/api/PlanEstudio/asignatura';
+  //private apiUrl = 'http://localhost:5010/api/PlanEstudio/asignatura';
+  private apiUrl: string = appsetings.apiUrl + 'PlanEstudio/asignatura';
 
   constructor(private http: HttpClient) { }
 

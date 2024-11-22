@@ -2,12 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PeriodoAcademicoDTO } from '../dtos/periodoacademico.dto';
+import { appsetings } from './auth.connection.services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeriodoAcademicoService {
-  private baseUrl = 'http://localhost:5010/api/CicloAcademico';
+  //private baseUrl = 'http://localhost:5010/api/CicloAcademico';
+  private baseUrl:String = appsetings.apiUrl + 'CicleAcademico';
+
   constructor(private http: HttpClient) { }
 
   getPeriodo(): Observable<PeriodoAcademicoDTO[]> {
