@@ -13,6 +13,7 @@ import { TipoNotasDTO } from '../../../dtos/tiponotas.dto';
 import { CategorianotasService } from '../../../services/categorianotas.service';
 import { ListaAlumnosDTO } from '../../../dtos/lista-alumnos.dto';
 import { forkJoin } from 'rxjs';
+import { AuditoriaService } from '../../../services/auditoria.service';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class RegistroNotasComportamientoComponent implements OnInit {
     private unidadAcademicaService: UnidadAcademicoService,
     private tipoNotaService: TiponotasService,
     private categorianotaservice: CategorianotasService,
+    private auditoriaService: AuditoriaService,
   ) {
     this.notasComportamientoForm = this.fb.group({
       inputEstudiante: new FormControl(''),
@@ -56,36 +58,36 @@ export class RegistroNotasComportamientoComponent implements OnInit {
       this.gradorecibido = datos.gradoId;
       this.unidadrecibida = datos.selectUnidad;
     }
-    
 
-// Método modificado para cargar los datos y filtrar por nombre de categoría
-forkJoin([
-    this.unidadAcademicaService.getUnidad(),
-    this.categorianotaservice.getCategorias(), // Primero obtenemos las categorías para encontrar el ID correspondiente
-    this.tipoNotaService.getTiposNota()
-]).subscribe(
-  ([unidadData, categoriasData, tipoNotaData]) => {
-    this.unidadAcademica = unidadData;
 
-    // Encuentra la categoría "Comportamiento" y su idcategoriaNotas
-    const categoriaComportamiento = categoriasData.find(categoria => categoria.catNombre === 'Comportamiento');
-    if (categoriaComportamiento) {
-      const idCategoriaComportamiento = categoriaComportamiento.idcategoriaNotas;
+    // Método modificado para cargar los datos y filtrar por nombre de categoría
+    forkJoin([
+      this.unidadAcademicaService.getUnidad(),
+      this.categorianotaservice.getCategorias(), // Primero obtenemos las categorías para encontrar el ID correspondiente
+      this.tipoNotaService.getTiposNota()
+    ]).subscribe(
+      ([unidadData, categoriasData, tipoNotaData]) => {
+        this.unidadAcademica = unidadData;
 
-      // Filtra los tipos de notas que pertenecen a la categoría "Comportamiento" usando el ID encontrado
-      this.tiponota = tipoNotaData.filter(tipo => tipo.idcategoriaNotas === idCategoriaComportamiento);
+        // Encuentra la categoría "Comportamiento" y su idcategoriaNotas
+        const categoriaComportamiento = categoriasData.find(categoria => categoria.catNombre === 'Comportamiento');
+        if (categoriaComportamiento) {
+          const idCategoriaComportamiento = categoriaComportamiento.idcategoriaNotas;
 
-      // Encuentra el nombre de la unidad seleccionada
-      const unidadSeleccionada = this.unidadAcademica.find(unidad => unidad.idunidad === this.unidadrecibida);
-      this.unidadNombre = unidadSeleccionada ? unidadSeleccionada.uniNombre : 'Sin nombre';
-      
-      this.obtenerNotasComportamiento();
-    } else {
-      console.error("La categoría 'Comportamiento' no fue encontrada.");
-    }
-  },
-  (error) => console.error("Error al cargar datos iniciales:", error)
-);
+          // Filtra los tipos de notas que pertenecen a la categoría "Comportamiento" usando el ID encontrado
+          this.tiponota = tipoNotaData.filter(tipo => tipo.idcategoriaNotas === idCategoriaComportamiento);
+
+          // Encuentra el nombre de la unidad seleccionada
+          const unidadSeleccionada = this.unidadAcademica.find(unidad => unidad.idunidad === this.unidadrecibida);
+          this.unidadNombre = unidadSeleccionada ? unidadSeleccionada.uniNombre : 'Sin nombre';
+
+          this.obtenerNotasComportamiento();
+        } else {
+          console.error("La categoría 'Comportamiento' no fue encontrada.");
+        }
+      },
+      (error) => console.error("Error al cargar datos iniciales:", error)
+    );
 
   }
 
@@ -95,13 +97,13 @@ forkJoin([
         (data: NotasPorAlumnoDTO[]) => {
           this.alumnos = data;
           this.actualizarAlumnosFormArray(this.alumnos.length);
-          
+
           this.alumnos.forEach((alumno, index) => {
             const alumnoFormGroup = (this.notasComportamientoForm.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
-            
+
             this.tiponota.forEach(tipoNota => {
               const controlName = `inputNotaComportamiento${tipoNota.idtipoNotas}`;
-              const notaValor = alumno.notas[tipoNota.idtipoNotas] !== undefined 
+              const notaValor = alumno.notas[tipoNota.idtipoNotas] !== undefined
                 ? alumno.notas[tipoNota.idtipoNotas]
                 : '';
               alumnoFormGroup.get(controlName)?.setValue(notaValor);
@@ -157,63 +159,103 @@ forkJoin([
 
     // Iterar sobre cada tipo de nota y cada alumno
     this.tiponota.forEach(tipoNota => {
-        const notasPorTipoIndividual: NotaDTO[] = [];
+      const notasPorTipoIndividual: NotaDTO[] = [];
 
-        alumnos.forEach((alumno, index) => {
-            const alumnoFormGroup = (this.notasComportamientoForm.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
-            const notaControlName = `inputNotaComportamiento${tipoNota.idtipoNotas}`;
-            const notaValor = alumnoFormGroup.get(notaControlName)?.value;
+      alumnos.forEach((alumno, index) => {
+        const alumnoFormGroup = (this.notasComportamientoForm.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
+        const notaControlName = `inputNotaComportamiento${tipoNota.idtipoNotas}`;
+        const notaValor = alumnoFormGroup.get(notaControlName)?.value;
 
-            if (notaValor !== null && notaValor !== '') {  // Si hay una nota válida, agregarla
-                notasPorTipoIndividual.push({
-                    idalumno: alumno.idalumno,
-                    NotNotaNumerica: Number(notaValor),
-                });
-            }
-        });
-
-        if (notasPorTipoIndividual.length > 0) {
-            notasPorTipo.push({
-                IdasignarDocente: null,
-                IdtipoNotas: tipoNota.idtipoNotas,
-                Idunidad: idUnidad!,
-                Idgrado: idGrado!,
-                Notas: notasPorTipoIndividual
-            });
+        if (notaValor !== null && notaValor !== '') {  // Si hay una nota válida, agregarla
+          notasPorTipoIndividual.push({
+            idalumno: alumno.idalumno,
+            NotNotaNumerica: Number(notaValor),
+          });
         }
+      });
+
+      if (notasPorTipoIndividual.length > 0) {
+        notasPorTipo.push({
+          IdasignarDocente: null,
+          IdtipoNotas: tipoNota.idtipoNotas,
+          Idunidad: idUnidad!,
+          Idgrado: idGrado!,
+          Notas: notasPorTipoIndividual
+        });
+      }
     });
 
     console.log('Notas agrupadas por tipo de nota:', notasPorTipo);
 
     if (notasPorTipo.length > 0) {
-        // Procesar cada agrupación de notas individualmente para determinar si se debe hacer POST o PUT
-        const requests = notasPorTipo.map(notaPorTipo => {
-            const isUpdate = notaPorTipo.Notas.some(nota => nota.NotNotaNumerica !== null);
+      // Procesar cada agrupación de notas individualmente para determinar si se debe hacer POST o PUT
+      const requests = notasPorTipo.map(notaPorTipo => {
+        const isUpdate = notaPorTipo.Notas.some(nota => nota.NotNotaNumerica !== null);
 
-            const requestObservable = isUpdate
-                ? this.notasComportamientoService.actualizarNotas(notaPorTipo) 
-                : this.notasComportamientoService.registrarNotasComportamiento(notaPorTipo);  
+        const requestObservable = isUpdate
+          ? this.notasComportamientoService.actualizarNotas(notaPorTipo)
+          : this.notasComportamientoService.registrarNotasComportamiento(notaPorTipo);
 
-            return requestObservable.toPromise()
-                .then(response => {
-                    console.log(isUpdate ? `Notas actualizadas para IdtipoNotas ${notaPorTipo.IdtipoNotas}:` : `Notas registradas para IdtipoNotas ${notaPorTipo.IdtipoNotas}:`, response);
-                })
-                .catch(error => {
-                    console.error(isUpdate ? `Error al actualizar notas para IdtipoNotas ${notaPorTipo.IdtipoNotas}:` : `Error al registrar notas para IdtipoNotas ${notaPorTipo.IdtipoNotas}:`, error);
-                    Swal.fire('Error', `No se pudieron procesar las notas para el tipo ${notaPorTipo.IdtipoNotas}.`, 'error');
-                });
-        });
+        return requestObservable.toPromise()
+          .then(response => {
+            console.log(isUpdate ? `Notas actualizadas para IdtipoNotas ${notaPorTipo.IdtipoNotas}:` : `Notas registradas para IdtipoNotas ${notaPorTipo.IdtipoNotas}:`, response);
 
-        // Esperar a que todos los requests finalicen
-        Promise.all(requests).then(() => {
-            this.alumnos.forEach((_, index) => this.calcularPromedio(index));
-            this.MostrarMensajeExito('Notas guardadas', 'Todas las notas se guardaron o actualizaron con éxito.');
-        });
+            // Llamada al servicio de auditoría en caso de éxito
+            this.auditoriaService.auditoriaregistrarNotaComportamiento(true).subscribe(
+              (auditoriaResponse) => {
+                console.log('Auditoría de notas de comportamiento realizada:', auditoriaResponse);
+              },
+              (auditoriaError) => {
+                console.error('Error al registrar auditoría de notas de comportamiento:', auditoriaError);
+              }
+            );
+          })
+          .catch(error => {
+            console.error(isUpdate ? `Error al actualizar notas para IdtipoNotas ${notaPorTipo.IdtipoNotas}:` : `Error al registrar notas para IdtipoNotas ${notaPorTipo.IdtipoNotas}:`, error);
+            Swal.fire('Error', `No se pudieron procesar las notas para el tipo ${notaPorTipo.IdtipoNotas}.`, 'error');
+
+            // Llamada al servicio de auditoría en caso de error
+            this.auditoriaService.auditoriaregistrarNotaComportamiento(false).subscribe(
+              (auditoriaResponse) => {
+                console.log('Auditoría de notas de comportamiento realizada:', auditoriaResponse);
+              },
+              (auditoriaError) => {
+                console.error('Error al registrar auditoría de notas de comportamiento:', auditoriaError);
+              }
+            );
+          });
+      });
+
+      // Esperar a que todos los requests finalicen
+      Promise.all(requests).then(() => {
+        this.alumnos.forEach((_, index) => this.calcularPromedio(index));
+        this.MostrarMensajeExito('Notas guardadas', 'Todas las notas se guardaron o actualizaron con éxito.');
+
+        // Llamada de auditoría después de que todas las notas hayan sido procesadas
+        this.auditoriaService.auditoriaregistrarNotaComportamiento(true).subscribe(
+          (auditoriaResponse) => {
+            console.log('Auditoría finalizada después de guardar/actualizar todas las notas de comportamiento:', auditoriaResponse);
+          },
+          (auditoriaError) => {
+            console.error('Error finalizando auditoría después de guardar/actualizar notas de comportamiento:', auditoriaError);
+          }
+        );
+      });
     } else {
-        console.warn('No hay alumnos y/o notas registradas');
-        this.MostrarMensajeError('No hay alumnos y/o notas registradas.', 'Error');
+      console.warn('No hay alumnos y/o notas registradas');
+      this.MostrarMensajeError('No hay alumnos y/o notas registradas.', 'Error');
+
+      // Llamar al servicio de auditoría si no hay notas para procesar
+      this.auditoriaService.auditoriaregistrarNotaComportamiento(false).subscribe(
+        (auditoriaResponse) => {
+          console.log('Auditoría de intento de registro de notas de comportamiento (sin notas) realizada:', auditoriaResponse);
+        },
+        (auditoriaError) => {
+          console.error('Error al registrar auditoría de intento de registro de notas sin notas de comportamiento:', auditoriaError);
+        }
+      );
     }
-}
+  }
 
 
   MostrarMensajeExito(titulo: string, mensaje: string) {

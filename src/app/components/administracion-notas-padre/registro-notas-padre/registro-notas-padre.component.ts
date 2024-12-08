@@ -17,6 +17,7 @@ import { CategoriaNotasDTO } from '../../../dtos/categorianotas.dto';
 import { CategorianotasService } from '../../../services/categorianotas.service';
 import { PeriodoAcademicoDTO } from '../../../dtos/periodoacademico.dto';
 import { PeriodoAcademicoService } from '../../../services/periodo-academico.service';
+import { AuditoriaService } from '../../../services/auditoria.service';
 
 @Component({
   selector: 'app-registro-notas-padre',
@@ -50,6 +51,7 @@ export class RegistroNotasPadreComponent implements OnInit {
     gradoAcademicoService: GradoAcademicoService,
     private tipoNotaService: TiponotasService,
     private categorianotaservice: CategorianotasService,
+    private auditoriaService: AuditoriaService,
   ) {
     this.otherGradoAcademico = gradoAcademicoService.ObtenerGradoAcademico();
     this.notaspadreform = this.fb.group({
@@ -242,7 +244,7 @@ export class RegistroNotasPadreComponent implements OnInit {
       // Itera solo sobre los tipos de nota válidos
       // Itera sobre el arreglo de tiposDeNotaIds para acceder a cada tipo de nota correcto
       for (let tipoNotaIndex = 0; tipoNotaIndex < tiposDeNotaIds.length; tipoNotaIndex++) {
-        const tipoNota = tiposDeNotaIds[tipoNotaIndex]; 
+        const tipoNota = tiposDeNotaIds[tipoNotaIndex];
         const notaControlName = `inputNotaPadre${tipoNotaIndex + 1}`; // Correspondencia con el nombre del input (1, 2, 3)
         const nota = alumnoFormGroup.get(notaControlName)?.value;
         console.log(`Nota para tipoNota ID ${tipoNota} de alumno ${idalumno}:`, nota);
@@ -292,10 +294,30 @@ export class RegistroNotasPadreComponent implements OnInit {
             console.log('Notas registradas con éxito:', response);
             this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
             this.obtenerNotasPadre();
+
+            // Llamar al servicio de auditoría después de registrar con éxito
+            this.auditoriaService.auditoriaregistrarNotaPadre(true).subscribe(
+              (auditoriaResponse) => {
+                console.log('Auditoría de registro de notas padre realizada:', auditoriaResponse);
+              },
+              (auditoriaError) => {
+                console.error('Error al registrar auditoría de notas padre:', auditoriaError);
+              }
+            );
           },
           (error) => {
             console.error('Error al registrar notas:', error);
             this.MostrarMensajeError('No se pudieron registrar las notas.', 'Error');
+
+            // Llamar al servicio de auditoría si la actualización no fue exitosa
+            this.auditoriaService.auditoriaregistrarNotaPadre(false).subscribe(
+              (auditoriaResponse) => {
+                console.log('Auditoría de actualización de notas padre realizada:', auditoriaResponse);
+              },
+              (auditoriaError) => {
+                console.error('Error al registrar auditoría de notas padre:', auditoriaError);
+              }
+            );
           }
         );
       } else {
@@ -305,16 +327,46 @@ export class RegistroNotasPadreComponent implements OnInit {
             console.log('Notas actualizadas con éxito:', response);
             this.MostrarMensajeExito('Notas guardadas', 'Las notas se guardaron con éxito.');
             this.obtenerNotasPadre();
+
+            // Llamar al servicio de auditoría después de registrar con éxito
+            this.auditoriaService.auditoriaregistrarNotaPadre(true).subscribe(
+              (auditoriaResponse) => {
+                console.log('Auditoría de registro de notas padre realizada:', auditoriaResponse);
+              },
+              (auditoriaError) => {
+                console.error('Error al registrar auditoría de notas padre:', auditoriaError);
+              }
+            );
           },
           (error) => {
             console.error('Error al actualizar notas:', error);
             this.MostrarMensajeError('No se pudieron actualizar las notas.', 'Error');
+
+            // Llamar al servicio de auditoría si la actualización no fue exitosa
+            this.auditoriaService.auditoriaregistrarNotaPadre(false).subscribe(
+              (auditoriaResponse) => {
+                console.log('Auditoría de actualización de notas padre realizada:', auditoriaResponse);
+              },
+              (auditoriaError) => {
+                console.error('Error al registrar auditoría de notas padre:', auditoriaError);
+              }
+            );
           }
         );
       }
     } else {
       console.warn('No hay alumnos y/o notas registradas'); // Mensaje si no hay notas
       this.MostrarMensajeError('No hay alumnos y/o notas registradas.', 'Error');
+
+      // Llamar al servicio de auditoría si la actualización no fue exitosa
+      this.auditoriaService.auditoriaregistrarNotaPadre(false).subscribe(
+        (auditoriaResponse) => {
+          console.log('Auditoría de actualización de notas padre realizada:', auditoriaResponse);
+        },
+        (auditoriaError) => {
+          console.error('Error al registrar auditoría de notas padre:', auditoriaError);
+        }
+      );
     }
   }
 

@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 import { NotasAcademicasService } from '../../../services/nota-academica.service';
 import { BimestreAcademicoDTO } from '../../../dtos/bimestreacademico.dto';
 import { AccesoService } from '../../../services/acceso.service';
+import { AuditoriaService } from '../../../services/auditoria.service';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class RegistroNotasAcademicasComponent {
   notasacademicasform: FormGroup;
   alumnosNota: AlumnoNotaDTO[] = [];
 
-  unidadAcademica: UnidadAcademicaDTO[]=[];
+  unidadAcademica: UnidadAcademicaDTO[] = [];
   bimestreAcademico: BimestreAcademicoDTO[] = [];
   asignaturaAcademica: AsignaturaDTO[] = [];
   Semanas: OthersIntDTO[] = [];
@@ -48,7 +49,7 @@ export class RegistroNotasAcademicasComponent {
   periodorecibido: number | null = null;
   asignaturarecibida: number | null = null;
   bimestrerecibido: number | null = null;
-  stateData: any = {}; 
+  stateData: any = {};
   tiponota: TipoNotasDTO[] = [];
   buscarAlumno: ListaAlumnosDTO[] = [];
 
@@ -60,7 +61,7 @@ export class RegistroNotasAcademicasComponent {
     4: ['Rev. de Cuaderno', 'Aptitudinal', 'Rev. de Libro', 'Nota Adicional'],
   };
 
-  guardarCambios: boolean = false; 
+  guardarCambios: boolean = false;
 
   constructor(
     private router: Router,
@@ -71,20 +72,21 @@ export class RegistroNotasAcademicasComponent {
     private categorianotaservice: CategorianotasService,
     private semanaService: SemanaAcademicoService,
     private notasAcademicasService: NotasAcademicasService,
-    private accesoService: AccesoService
+    private accesoService: AccesoService,
+    private auditoriaService: AuditoriaService,
 
   ) {
     this.Semanas = semanaService.ObtenerSemanaAcademico();
     this.notasacademicasform = this.fb.group({
       inputEstudiante: new FormControl(''),
-      selectUnidad: new FormControl('', Validators.required), 
-      selectSemana: new FormControl('', Validators.required), 
-      inputUnidad:  new FormControl('', Validators.required), 
-      inputSemana: new FormControl('', Validators.required), 
+      selectUnidad: new FormControl('', Validators.required),
+      selectSemana: new FormControl('', Validators.required),
+      inputUnidad: new FormControl('', Validators.required),
+      inputSemana: new FormControl('', Validators.required),
       alumnosFormArray: this.fb.array([])
     });
   }
- 
+
   ngOnInit(): void {
 
     // Recibe datos del componente padre
@@ -102,24 +104,24 @@ export class RegistroNotasAcademicasComponent {
     }
 
     const stateData = history.state?.data;
-     if (stateData) {
+    if (stateData) {
       this.periodorecibido = stateData.selectPeriodo || this.periodorecibido;
       this.gradorecibido = stateData.gradoId || this.gradorecibido;
       this.bimestrerecibido = stateData.selectBimestre || this.bimestrerecibido;
       this.asignaturarecibida = stateData.selectAsignatura || this.asignaturarecibida;
-    // Asignar nombres directamente si están disponibles
-    this.gradoNombre = stateData.gradoNombre || this.gradoNombre;
-    this.bimestreNombre = stateData.bimestreNombre || this.bimestreNombre;
-    this.asignaturaNombre = stateData.asignaturaNombre || this.asignaturaNombre;
+      // Asignar nombres directamente si están disponibles
+      this.gradoNombre = stateData.gradoNombre || this.gradoNombre;
+      this.bimestreNombre = stateData.bimestreNombre || this.bimestreNombre;
+      this.asignaturaNombre = stateData.asignaturaNombre || this.asignaturaNombre;
 
-    // Puedes usar directamente los nombres en el hijo
-    console.log('Grado:', stateData.gradoNombre);
-    console.log('Bimestre:', stateData.bimestreNombre);
-    console.log('Asignatura:', stateData.asignaturaNombre);
-    
-  }else {
-    Swal.fire('Error', 'No se recibieron los datos necesarios para continuar.', 'error');
-  }
+      // Puedes usar directamente los nombres en el hijo
+      console.log('Grado:', stateData.gradoNombre);
+      console.log('Bimestre:', stateData.bimestreNombre);
+      console.log('Asignatura:', stateData.asignaturaNombre);
+
+    } else {
+      Swal.fire('Error', 'No se recibieron los datos necesarios para continuar.', 'error');
+    }
 
 
     // Cargar unidades académicas
@@ -147,27 +149,27 @@ export class RegistroNotasAcademicasComponent {
       this.unidadAcademicaService.getUnidad(),
       this.categorianotaservice.getCategorias(), // Primero obtenemos las categorías para encontrar el ID correspondiente
       this.tipoNotaService.getTiposNota()
-  ]).subscribe(
-    ([unidadData, categoriasData, tipoNotaData]) => {
-      this.unidadAcademica = unidadData;
-      this.tiponota = tipoNotaData;
+    ]).subscribe(
+      ([unidadData, categoriasData, tipoNotaData]) => {
+        this.unidadAcademica = unidadData;
+        this.tiponota = tipoNotaData;
 
-      // Encuentra la categoría "Comportamiento" y su idcategoriaNotas
-      const categoriaAcademico = categoriasData.find(categoria => categoria.catNombre === 'Registro Auxiliar');
-      if (categoriaAcademico) {
-        const idCategoriaAcademico = categoriaAcademico.idcategoriaNotas;
-  
-        // Filtra los tipos de notas que pertenecen a la categoría "Comportamiento" usando el ID encontrado
-        this.tiponota = tipoNotaData.filter(tipo => tipo.idcategoriaNotas === idCategoriaAcademico);
-  
-      
-        
-      } else {
-        console.error("La categoría 'Registro Auxiliar' no fue encontrada.");
-      }
-    },
-    (error) => console.error("Error al cargar datos iniciales:", error)
-  );
+        // Encuentra la categoría "Comportamiento" y su idcategoriaNotas
+        const categoriaAcademico = categoriasData.find(categoria => categoria.catNombre === 'Registro Auxiliar');
+        if (categoriaAcademico) {
+          const idCategoriaAcademico = categoriaAcademico.idcategoriaNotas;
+
+          // Filtra los tipos de notas que pertenecen a la categoría "Comportamiento" usando el ID encontrado
+          this.tiponota = tipoNotaData.filter(tipo => tipo.idcategoriaNotas === idCategoriaAcademico);
+
+
+
+        } else {
+          console.error("La categoría 'Registro Auxiliar' no fue encontrada.");
+        }
+      },
+      (error) => console.error("Error al cargar datos iniciales:", error)
+    );
   }
   obtenerNombreUnidad(idUnidad: number): void {
     const unidad = this.unidadAcademica.find(b => b.idunidad === idUnidad);
@@ -193,7 +195,7 @@ export class RegistroNotasAcademicasComponent {
       console.log('Unidades filtradas por bimestre:', this.unidadesFiltradas);
     }
   }
-  
+
   obtenerAlumnosYNotas(): void {
     const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
     const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
@@ -221,36 +223,36 @@ export class RegistroNotasAcademicasComponent {
             this.actualizarAlumnosFormArray(this.alumnosNota.length);
             this.cargarNotasEnFormulario();
           },
-         // (error) => Swal.fire('Error', 'No se pudieron obtener las notas iniciales.', 'error')
+          // (error) => Swal.fire('Error', 'No se pudieron obtener las notas iniciales.', 'error')
         );
     }
   }
   validarcambios(): void {
 
     const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
-  const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
+    const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
 
-  if (!unidadSeleccionada || !semanaSeleccionada) {
-    Swal.fire('Advertencia', 'Seleccione unidad y semana, por favor.', 'warning');
-    return;
-  }
-  
+    if (!unidadSeleccionada || !semanaSeleccionada) {
+      Swal.fire('Advertencia', 'Seleccione unidad y semana, por favor.', 'warning');
+      return;
+    }
+
     const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
     let cambiosDetectados = false;
-  
+
     // Verificar si algún campo de notas ha sido modificado
     for (let i = 0; i < alumnosFormArray.length; i++) {
       const alumnoFormGroup = alumnosFormArray.at(i) as FormGroup;
-  
+
       const isNotaModified = Object.keys(alumnoFormGroup.controls)
         .some(controlName => controlName.startsWith('inputNota') && alumnoFormGroup.get(controlName)?.dirty);
-  
+
       if (isNotaModified) {
         cambiosDetectados = true;
         break;
       }
     }
-  
+
     if (cambiosDetectados && !this.guardarCambios) {
       Swal.fire({
         title: 'Cambios detectados',
@@ -268,23 +270,23 @@ export class RegistroNotasAcademicasComponent {
       this.obtenerAlumnosYNotas();
     }
   }
-  
-  
-obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
+
+
+  obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
     const nombresNotasSemana = this.configuracionNotasPorSemana[semana] || [];
     return this.tiponota.filter((tipoNota) => nombresNotasSemana.includes(tipoNota.tipNoNombre));
   }
 
   cargarNotasEnFormulario(): void {
     const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
-  
+
     this.alumnosNota.forEach((alumno, index) => {
       const alumnoFormGroup = alumnosFormArray.at(index) as FormGroup;
-  
+
       this.tiponota.forEach((tipoNota) => {
         const controlName = `inputNota${tipoNota.idtipoNotas}`;
-        const nota = alumno.notas[tipoNota.idtipoNotas]; 
-  
+        const nota = alumno.notas[tipoNota.idtipoNotas];
+
         if (nota !== undefined && nota !== null) {
           alumnoFormGroup.get(controlName)?.setValue(nota);
         }
@@ -292,8 +294,8 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
       this.calcularPromedio(index);
     });
   }
-  
-  
+
+
   actualizarAlumnosFormArray(cantidadAlumnos: number): void {
     const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
     alumnosFormArray.clear();
@@ -327,7 +329,7 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-  
+
   calcularPromedio(index: number): void {
     const alumnoFormGroup = (this.notasacademicasform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
     let sumaNotas = 0;
@@ -350,28 +352,28 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
   RegistrarNotas(): void {
     const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
     const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
-  
+
     if (!unidadSeleccionada || !semanaSeleccionada) {
       Swal.fire('Advertencia', 'Seleccione tanto la Unidad Académica como la Semana Académica antes de continuar.', 'warning');
       return;
     }
-  
+
     const usuarioId = this.accesoService.getUserID();
     if (!usuarioId) {
       Swal.fire('Error', 'No se pudo obtener el ID del usuario loggeado.', 'error');
       return;
     }
-  
+
     const notasAgrupadas: any[] = [];
-  
+
     this.tiponota.forEach((tipoNota) => {
       const notasPorTipo: any[] = [];
-  
+
       this.alumnosNota.forEach((alumno, index) => {
         const alumnoFormGroup = (this.notasacademicasform.get('alumnosFormArray') as FormArray).at(index) as FormGroup;
         const notaControlName = `inputNota${tipoNota.idtipoNotas}`;
         const notaValor = alumnoFormGroup.get(notaControlName)?.value;
-  
+
         // Solo agregar las notas que tienen valor numérico y no están vacías
         if (notaValor !== null && notaValor !== '' && !isNaN(notaValor)) {
           notasPorTipo.push({
@@ -381,7 +383,7 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
           });
         }
       });
-  
+
       if (notasPorTipo.length > 0) {
         notasAgrupadas.push({
           IdTipoNotas: tipoNota.idtipoNotas,
@@ -395,20 +397,20 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
         });
       }
     });
-  
+
     if (notasAgrupadas.length === 0) {
       Swal.fire('Advertencia', 'No hay notas para registrar o actualizar.', 'warning');
       return;
     }
-  
+
     // Aquí solo enviamos las notas válidas (que contienen valor numérico)
     const requests = notasAgrupadas.map((notaPorTipo) => {
       const isUpdate = notaPorTipo.Notas.some((nota: any) => nota.NotNotaNumerica !== null);
-  
+
       const requestObservable = isUpdate
         ? this.notasAcademicasService.actualizarNotas(usuarioId, notaPorTipo)
         : this.notasAcademicasService.registrarNotas(usuarioId, notaPorTipo);
-  
+
       return requestObservable
         .toPromise()
         .then((response) => {
@@ -434,199 +436,219 @@ obtenerfiltroTipoNotas(semana: number): TipoNotasDTO[] {
           );
         });
     });
-  
+
     // Si no hay errores, mostrar mensaje de éxito
     Promise.all(requests).then(() => {
     }).catch(() => {
       Swal.fire('Error', 'Ocurrió un error al procesar algunas notas. Por favor, revise los datos.', 'error');
     });
   }
-  
+
 
   RegistrarPromedios(): void {
-  const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
-  const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
+    const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
+    const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
 
-  if (!unidadSeleccionada || !semanaSeleccionada) {
-    Swal.fire('Advertencia', 'Seleccione tanto la Unidad Académica como la Semana Académica antes de continuar.', 'warning');
-    return;
+    if (!unidadSeleccionada || !semanaSeleccionada) {
+      Swal.fire('Advertencia', 'Seleccione tanto la Unidad Académica como la Semana Académica antes de continuar.', 'warning');
+      return;
+    }
+
+    if (!this.asignaturarecibida || !this.bimestrerecibido || !this.periodorecibido) {
+      Swal.fire('Error', 'Faltan datos clave como asignatura, bimestre o periodo.', 'error');
+      return;
+    }
+
+    const promedios: any[] = [];
+    const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+
+    this.alumnosNota.forEach((alumno, index) => {
+      const alumnoFormGroup = alumnosFormArray.at(index) as FormGroup;
+      let sumaNotas = 0;
+      let cantidadNotas = 0;
+
+      this.filtrarTipoNotas.forEach((tipoNota) => {
+        const controlName = `inputNota${tipoNota.idtipoNotas}`;
+        const notaValor = parseFloat(alumnoFormGroup.get(controlName)?.value);
+
+        if (!isNaN(notaValor)) {
+          sumaNotas += notaValor;
+          cantidadNotas++;
+        }
+      });
+
+      const promedio = cantidadNotas > 0 ? sumaNotas / cantidadNotas : 0;
+      alumnoFormGroup.get('inputPromedioNota')?.setValue(promedio.toFixed(2));
+
+      promedios.push({
+        IdAlumno: alumno.idAlumno,
+        IdAsignatura: this.asignaturarecibida,
+        IdUnidad: unidadSeleccionada,
+        IdSemana: semanaSeleccionada,
+        IdBimestre: this.bimestrerecibido,
+        IdPeriodo: this.periodorecibido,
+        ValorPromedio: parseFloat(promedio.toFixed(2)),
+      });
+    });
+
+    if (promedios.length === 0) {
+      Swal.fire('Advertencia', 'No hay datos válidos para registrar o actualizar promedios.', 'warning');
+      return;
+    }
+
+    this.notasAcademicasService.guardarOActualizarPromedios(promedios).subscribe({
+      next: (response) => {
+        if (response.isSuccess) {
+        } else {
+          Swal.fire('Advertencia', response.message || 'Hubo un problema en el registro o actualización.', 'warning');
+        }
+      },
+      error: (error) => {
+        console.error('Error al registrar o actualizar promedios:', error);
+        Swal.fire('Error', 'No se pudieron guardar o actualizar los promedios.', 'error');
+      }
+    });
   }
 
-  if (!this.asignaturarecibida || !this.bimestrerecibido || !this.periodorecibido) {
-    Swal.fire('Error', 'Faltan datos clave como asignatura, bimestre o periodo.', 'error');
-    return;
-  }
+  RegistrarTodo(): void {
+    const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
+    const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
 
-  const promedios: any[] = [];
-  const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+    if (!unidadSeleccionada || !semanaSeleccionada) {
+      Swal.fire('Advertencia', 'Seleccione tanto la Unidad Académica como la Semana Académica antes de continuar.', 'warning');
+      return;
+    }
 
-  this.alumnosNota.forEach((alumno, index) => {
-    const alumnoFormGroup = alumnosFormArray.at(index) as FormGroup;
-    let sumaNotas = 0;
-    let cantidadNotas = 0;
+    if (!this.asignaturarecibida || !this.bimestrerecibido || !this.periodorecibido) {
+      Swal.fire('Error', 'Faltan datos clave como asignatura, bimestre o periodo.', 'error');
+      return;
+    }
 
-    this.filtrarTipoNotas.forEach((tipoNota) => {
-      const controlName = `inputNota${tipoNota.idtipoNotas}`;
-      const notaValor = parseFloat(alumnoFormGroup.get(controlName)?.value);
-
-      if (!isNaN(notaValor)) {
-        sumaNotas += notaValor;
-        cantidadNotas++;
+    const registrarNotas = new Promise<void>((resolve, reject) => {
+      try {
+        this.RegistrarNotas();
+        resolve();
+      } catch (error) {
+        console.error('Error al registrar notas:', error);
+        reject(error);
       }
     });
 
-    const promedio = cantidadNotas > 0 ? sumaNotas / cantidadNotas : 0;
-    alumnoFormGroup.get('inputPromedioNota')?.setValue(promedio.toFixed(2));
-
-    promedios.push({
-      IdAlumno: alumno.idAlumno,
-      IdAsignatura: this.asignaturarecibida,
-      IdUnidad: unidadSeleccionada,
-      IdSemana: semanaSeleccionada,
-      IdBimestre: this.bimestrerecibido,
-      IdPeriodo: this.periodorecibido,
-      ValorPromedio: parseFloat(promedio.toFixed(2)),
-    });
-  });
-
-  if (promedios.length === 0) {
-    Swal.fire('Advertencia', 'No hay datos válidos para registrar o actualizar promedios.', 'warning');
-    return;
-  }
-
-  this.notasAcademicasService.guardarOActualizarPromedios(promedios).subscribe({
-    next: (response) => {
-      if (response.isSuccess) {
-      } else {
-        Swal.fire('Advertencia', response.message || 'Hubo un problema en el registro o actualización.', 'warning');
-      }
-    },
-    error: (error) => {
-      console.error('Error al registrar o actualizar promedios:', error);
-      Swal.fire('Error', 'No se pudieron guardar o actualizar los promedios.', 'error');
-    }
-  });
-}
-
-RegistrarTodo(): void {
-  const unidadSeleccionada = this.notasacademicasform.get('selectUnidad')?.value;
-  const semanaSeleccionada = this.notasacademicasform.get('selectSemana')?.value;
-
-  if (!unidadSeleccionada || !semanaSeleccionada) {
-    Swal.fire('Advertencia', 'Seleccione tanto la Unidad Académica como la Semana Académica antes de continuar.', 'warning');
-    return;
-  }
-
-  if (!this.asignaturarecibida || !this.bimestrerecibido || !this.periodorecibido) {
-    Swal.fire('Error', 'Faltan datos clave como asignatura, bimestre o periodo.', 'error');
-    return;
-  }
-
-  const registrarNotas = new Promise<void>((resolve, reject) => {
-    try {
-      this.RegistrarNotas();
-      resolve();
-    } catch (error) {
-      console.error('Error al registrar notas:', error);
-      reject(error);
-    }
-  });
-
-  const registrarPromedios = new Promise<void>((resolve, reject) => {
-    try {
-      this.RegistrarPromedios();
-      resolve();
-    } catch (error) {
-      console.error('Error al registrar promedios:', error);
-      reject(error);
-    }
-  });
-  Promise.all([registrarNotas, registrarPromedios])
-    .then(() => {
-      this.guardarCambios = true;
-      Swal.fire('Éxito', 'Notas y promedios guardados correctamente.', 'success');
-    })
-    .catch((error) => {
-      Swal.fire('Error', 'Ocurrió un error al registrar notas o promedios.', 'error');
-    });
-}
-
-volver(): void {
-  const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
-  let cambiosDetectados = false;
-
-  // Verificar si algún campo de notas ha sido modificado
-  for (let i = 0; i < alumnosFormArray.length; i++) {
-    const alumnoFormGroup = alumnosFormArray.at(i) as FormGroup;
-    
-    // Detecta si alguna nota ha sido modificada
-    const isNotaModified = Object.keys(alumnoFormGroup.controls)
-      .some(controlName => controlName.startsWith('inputNota') && alumnoFormGroup.get(controlName)?.dirty);
-
-    if (isNotaModified) {
-      cambiosDetectados = true;
-      break;
-    }
-  }
-
-  // Si hay cambios y no han sido guardados, preguntar al usuario
-  if (cambiosDetectados && !this.guardarCambios) {
-    Swal.fire({
-      title: '¿Está seguro de volver?',
-      text: 'Tiene cambios sin guardar, ¿desea volver sin guardarlos?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, volver',
-      cancelButtonText: 'Cancelar'
-    }).then(result => {
-      if (result.isConfirmed) {
-        // Volver a la página anterior
-        this.location.back(); 
+    const registrarPromedios = new Promise<void>((resolve, reject) => {
+      try {
+        this.RegistrarPromedios();
+        resolve();
+      } catch (error) {
+        console.error('Error al registrar promedios:', error);
+        reject(error);
       }
     });
-  } else {
-    // Si no hay cambios o ya están guardados, simplemente volver
-    this.location.back();
+    Promise.all([registrarNotas, registrarPromedios])
+      .then(() => {
+        this.guardarCambios = true;
+        Swal.fire('Éxito', 'Notas y promedios guardados correctamente.', 'success');
+
+        // Llamada de auditoría después de que todas las notas hayan sido procesadas
+        this.auditoriaService.auditoriaregistrarNotaAuxiliar(true).subscribe(
+          (auditoriaResponse) => {
+            console.log('Auditoría finalizada después de guardar/actualizar todas las notas auxiliares:', auditoriaResponse);
+          },
+          (auditoriaError) => {
+            console.error('Error finalizando auditoría después de guardar/actualizar notas auxiliares:', auditoriaError);
+          }
+        );
+      })
+      .catch((error) => {
+        Swal.fire('Error', 'Ocurrió un error al registrar notas o promedios.', 'error');
+
+        // Llamar al servicio de auditoría si no hay notas para procesar
+        this.auditoriaService.auditoriaregistrarNotaAuxiliar(false).subscribe(
+          (auditoriaResponse) => {
+            console.log('Auditoría de intento de registro de notas auxiliares (sin notas) realizada:', auditoriaResponse);
+          },
+          (auditoriaError) => {
+            console.error('Error al registrar auditoría de intento de registro de notas sin notas auxiliares:', auditoriaError);
+          }
+        );
+      });
   }
-}
 
-DirigiraRegistroUnidad():void{
-  const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
-  let cambiosDetectados = false;
+  volver(): void {
+    const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+    let cambiosDetectados = false;
 
-  // Verificar si algún campo de notas ha sido modificado
-  for (let i = 0; i < alumnosFormArray.length; i++) {
-    const alumnoFormGroup = alumnosFormArray.at(i) as FormGroup;
-  
-    const isNotaModified = Object.keys(alumnoFormGroup.controls)
-      .some(controlName => controlName.startsWith('inputNota') && alumnoFormGroup.get(controlName)?.dirty);
-  
-    if (isNotaModified) {
-      cambiosDetectados = true;
-      break;
+    // Verificar si algún campo de notas ha sido modificado
+    for (let i = 0; i < alumnosFormArray.length; i++) {
+      const alumnoFormGroup = alumnosFormArray.at(i) as FormGroup;
+
+      // Detecta si alguna nota ha sido modificada
+      const isNotaModified = Object.keys(alumnoFormGroup.controls)
+        .some(controlName => controlName.startsWith('inputNota') && alumnoFormGroup.get(controlName)?.dirty);
+
+      if (isNotaModified) {
+        cambiosDetectados = true;
+        break;
+      }
+    }
+
+    // Si hay cambios y no han sido guardados, preguntar al usuario
+    if (cambiosDetectados && !this.guardarCambios) {
+      Swal.fire({
+        title: '¿Está seguro de volver?',
+        text: 'Tiene cambios sin guardar, ¿desea volver sin guardarlos?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, volver',
+        cancelButtonText: 'Cancelar'
+      }).then(result => {
+        if (result.isConfirmed) {
+          // Volver a la página anterior
+          this.location.back();
+        }
+      });
+    } else {
+      // Si no hay cambios o ya están guardados, simplemente volver
+      this.location.back();
     }
   }
 
-  // Si hay cambios y no han sido guardados, preguntar al usuario
-  if (cambiosDetectados && !this.guardarCambios) {
-    Swal.fire({
-      title: 'Cambios detectados',
-      text: 'Tiene cambios sin guardar. ¿Desea continuar y perder los cambios?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, continuar',
-      cancelButtonText: 'Cancelar'
-    }).then(result => {
-      if (result.isConfirmed) {
-        // Si el usuario acepta, se redirige
-        this.router.navigate(['/registro-notas-academicas-unidad']);
+  DirigiraRegistroUnidad(): void {
+    const alumnosFormArray = this.notasacademicasform.get('alumnosFormArray') as FormArray;
+    let cambiosDetectados = false;
+
+    // Verificar si algún campo de notas ha sido modificado
+    for (let i = 0; i < alumnosFormArray.length; i++) {
+      const alumnoFormGroup = alumnosFormArray.at(i) as FormGroup;
+
+      const isNotaModified = Object.keys(alumnoFormGroup.controls)
+        .some(controlName => controlName.startsWith('inputNota') && alumnoFormGroup.get(controlName)?.dirty);
+
+      if (isNotaModified) {
+        cambiosDetectados = true;
+        break;
       }
-    });
-  } else {
-    // Si no hay cambios o ya están guardados, redirigir sin pedir confirmación
-    this.router.navigate(['/registro-notas-academicas-unidad']);
+    }
+
+    // Si hay cambios y no han sido guardados, preguntar al usuario
+    if (cambiosDetectados && !this.guardarCambios) {
+      Swal.fire({
+        title: 'Cambios detectados',
+        text: 'Tiene cambios sin guardar. ¿Desea continuar y perder los cambios?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, continuar',
+        cancelButtonText: 'Cancelar'
+      }).then(result => {
+        if (result.isConfirmed) {
+          // Si el usuario acepta, se redirige
+          this.router.navigate(['/registro-notas-academicas-unidad']);
+        }
+      });
+    } else {
+      // Si no hay cambios o ya están guardados, redirigir sin pedir confirmación
+      this.router.navigate(['/registro-notas-academicas-unidad']);
+    }
   }
-}
 
   MostrarMensajeExito(titulo: string, mensaje: string) {
     Swal.fire({

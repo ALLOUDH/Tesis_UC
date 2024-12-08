@@ -71,4 +71,20 @@ export class AuditoriaService {
   obtenerUsuarioPorId(idUsuario: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}Auditoria/ObtenerUsuarioPorId/${idUsuario}`);
   }
+
+  auditoriaregistrarNotaPadre(exitoso: boolean): Observable<ResponseAppDTO> {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Auditoria/RegistrarNotaPadre`, { exitoso });
+  }
+  
+  auditoriaregistrarNotaComportamiento(exitoso: boolean): Observable<ResponseAppDTO> {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Auditoria/RegistrarNotaComportamiento`, { exitoso });
+  }
+  
+  auditoriaregistrarNotaAsistencia(exitoso: boolean): Observable<ResponseAppDTO> {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Auditoria/RegistrarNotaAsistencia`, { exitoso });
+  }
+  
+  auditoriaregistrarNotaAuxiliar(exitoso: boolean): Observable<ResponseAppDTO> {
+    return this.http.post<ResponseAppDTO>(`${this.baseUrl}Auditoria/RegistrarNotaAuxiliar`, { exitoso });
+  }
 }

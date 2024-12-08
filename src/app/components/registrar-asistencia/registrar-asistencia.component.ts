@@ -7,6 +7,7 @@ import { VistasService } from '../../services/vistas.service';
 import { GradoAcademicoService } from '../../services/grados.service';
 import { AsistenciaService } from '../../services/asistencia.service';
 import Swal from 'sweetalert2';
+import { AuditoriaService } from '../../services/auditoria.service';
 
 @Component({
   selector: 'app-registrar-asistencia',
@@ -19,13 +20,14 @@ export class RegistrarAsistenciaComponent implements OnInit {
   alumnos: ListaAlumnosDTO[] = [];
   otherGradoAcademico: OthersIntDTO[] = [];
   buscarAlumno: ListaAlumnosDTO[] = [];
-  asistenciaSeleccionada: { [id: number]: number } = {}; 
-  descripcionAsistencia: { [id: number]: string } = {}; 
+  asistenciaSeleccionada: { [id: number]: number } = {};
+  descripcionAsistencia: { [id: number]: string } = {};
 
   constructor(
     private vistasService: VistasService,
     private gradoAcademicoService: GradoAcademicoService,
-    private asistenciaService: AsistenciaService
+    private asistenciaService: AsistenciaService,
+    private auditoriaService: AuditoriaService,
   ) {
     this.otherGradoAcademico = this.gradoAcademicoService.ObtenerGradoAcademico();
     this.listaasistenciaform = new FormGroup({
@@ -45,24 +47,24 @@ export class RegistrarAsistenciaComponent implements OnInit {
     this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.valueChanges.subscribe(() => {
       this.autoRellenarAsistencia(); // Llama a la función al cambiar la fecha
       this.desmarcarCheckbox(); // Desmarcar checkbox
-  });
+    });
   }
-  
+
   // Formatear la fecha para enviarla al backend
   formatearFecha(fecha: Date): string {
     const year = fecha.getUTCFullYear();
     const month = ('0' + (fecha.getUTCMonth() + 1)).slice(-2);
     const day = ('0' + fecha.getUTCDate()).slice(-2);
-  
+
     return `${year}-${month}-${day}`;
-}
-  
+  }
+
 
   // Obtener alumnos por grado seleccionado
   obtenerAlumnos() {
     const gradoAcademico = this.listaasistenciaform.get('selectGradoAcademico')?.value;
     if (!gradoAcademico) {
-        return;
+      return;
     }
 
     this.vistasService.obtenerAlumnos().subscribe(
@@ -90,32 +92,32 @@ export class RegistrarAsistenciaComponent implements OnInit {
     const fechaRegistro = this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.value;
 
     if (fechaRegistro) {
-        const fechaFormateada = this.formatearFecha(new Date(fechaRegistro));
+      const fechaFormateada = this.formatearFecha(new Date(fechaRegistro));
 
-        // Llamada al servicio para obtener asistencia por fecha
-        this.asistenciaService.obtenerAsistenciaPorFecha(fechaFormateada).subscribe(
-            (asistencias: AsistenciaDTO[]) => {
-                // Limpiar valores previos
-                  this.asistenciaSeleccionada = {};
-                  this.descripcionAsistencia = {};
-                // Rellenar radio buttons y descripciones según los datos obtenidos
-                asistencias.forEach(asistencia => {
-                    this.asistenciaSeleccionada[asistencia.idalumno] = asistencia.asisTipo === 'Asistio' ? 1 :
-                                                                      asistencia.asisTipo === 'Tarde' ? 2 : 3;
-                    this.descripcionAsistencia[asistencia.idalumno] = asistencia.asisDescripcion;
-                });
-            },
-            (error) => {
-                console.error('Error al obtener asistencia por fecha', error);
-                Swal.fire('Error', 'No se pudo cargar la asistencia previa.', 'error');
-            }
-        );
+      // Llamada al servicio para obtener asistencia por fecha
+      this.asistenciaService.obtenerAsistenciaPorFecha(fechaFormateada).subscribe(
+        (asistencias: AsistenciaDTO[]) => {
+          // Limpiar valores previos
+          this.asistenciaSeleccionada = {};
+          this.descripcionAsistencia = {};
+          // Rellenar radio buttons y descripciones según los datos obtenidos
+          asistencias.forEach(asistencia => {
+            this.asistenciaSeleccionada[asistencia.idalumno] = asistencia.asisTipo === 'Asistio' ? 1 :
+              asistencia.asisTipo === 'Tarde' ? 2 : 3;
+            this.descripcionAsistencia[asistencia.idalumno] = asistencia.asisDescripcion;
+          });
+        },
+        (error) => {
+          console.error('Error al obtener asistencia por fecha', error);
+          Swal.fire('Error', 'No se pudo cargar la asistencia previa.', 'error');
+        }
+      );
     }
   }
 
   rellenarAsistencia(event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
-  
+
     if (checked) {
       this.alumnos.forEach(alumno => {
         this.asistenciaSeleccionada[alumno.idalumno] = 1; // "Asistió" corresponde a 1
@@ -127,7 +129,7 @@ export class RegistrarAsistenciaComponent implements OnInit {
       });
     }
   }
-  
+
   // Guardar la asistencia de los alumnos
   GuardarAsistencia() {
     const tipoAsistenciaMap: { [key: number]: string } = {
@@ -135,13 +137,13 @@ export class RegistrarAsistenciaComponent implements OnInit {
       2: 'Tarde',
       3: 'Falto'
     };
-  
+
     const fechaRegistro = (this.listaasistenciaform.get('inputFechaRegistroAsistencia')?.value);
     if (!fechaRegistro) {
       Swal.fire('Error', 'Por favor, selecciona una fecha de registro', 'error');
       return;
     }
-  
+
     // Verificar si todos los alumnos tienen una asistencia seleccionada
     const incompletos = this.alumnos.some(alumno => !this.asistenciaSeleccionada[alumno.idalumno]);
     if (incompletos) {
@@ -182,10 +184,30 @@ export class RegistrarAsistenciaComponent implements OnInit {
           this.asistenciaService.createAsistencia(nuevasAsistencias).subscribe(
             response => {
               Swal.fire('Éxito', 'Asistencia registrada exitosamente', 'success');
+
+              // Registrar la auditoría si la operación fue exitosa
+              this.auditoriaService.auditoriaregistrarNotaAsistencia(true).subscribe(
+                auditoriaResponse => {
+                  console.log('Auditoría registrada con éxito:', auditoriaResponse);
+                },
+                auditoriaError => {
+                  console.error('Error al registrar auditoría:', auditoriaError);
+                }
+              );
             },
             error => {
               console.error('Error al registrar asistencia', error);
               Swal.fire('Error', 'Ocurrió un error al registrar la asistencia', 'error');
+
+              // Registrar la auditoría con el estado de error
+              this.auditoriaService.auditoriaregistrarNotaAsistencia(false).subscribe(
+                auditoriaResponse => {
+                  console.log('Auditoría registrada con éxito:', auditoriaResponse);
+                },
+                auditoriaError => {
+                  console.error('Error al registrar auditoría:', auditoriaError);
+                }
+              );
             }
           );
         }
@@ -195,10 +217,30 @@ export class RegistrarAsistenciaComponent implements OnInit {
           this.asistenciaService.updateAsistencia(asistenciasAActualizar).subscribe(
             response => {
               Swal.fire('Éxito', 'Asistencia actualizada exitosamente', 'success');
+
+              // Registrar la auditoría si la operación fue exitosa
+              this.auditoriaService.auditoriaregistrarNotaAsistencia(true).subscribe(
+                auditoriaResponse => {
+                  console.log('Auditoría registrada con éxito:', auditoriaResponse);
+                },
+                auditoriaError => {
+                  console.error('Error al registrar auditoría:', auditoriaError);
+                }
+              );
             },
             error => {
               console.error('Error al actualizar asistencia', error);
               Swal.fire('Error', 'Ocurrió un error al actualizar la asistencia', 'error');
+
+              // Registrar la auditoría con el estado de error
+              this.auditoriaService.auditoriaregistrarNotaAsistencia(false).subscribe(
+                auditoriaResponse => {
+                  console.log('Auditoría registrada con éxito:', auditoriaResponse);
+                },
+                auditoriaError => {
+                  console.error('Error al registrar auditoría:', auditoriaError);
+                }
+              );
             }
           );
         }
@@ -209,7 +251,7 @@ export class RegistrarAsistenciaComponent implements OnInit {
       }
     );
   }
-  
+
   LimpiarFormulario() {
     this.listaasistenciaform.reset();
     this.alumnos = [];
